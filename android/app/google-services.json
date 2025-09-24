@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1046179528753",
+    "project_id": "walaa-ab66f",
+    "storage_bucket": "walaa-ab66f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1046179528753:android:76f16d5f167c1af0eb9510",
+        "android_client_info": {
+          "package_name": "com.azsolutions.wala"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYSJV6-D6h252M1WbzYOJWPL9Mm3TKouk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1046179528753:android:002497ffbbd6a5b3eb9510",
+        "android_client_info": {
+          "package_name": "com.azsolutions.wala"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYSJV6-D6h252M1WbzYOJWPL9Mm3TKouk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
