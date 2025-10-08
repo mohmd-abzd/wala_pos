@@ -21,8 +21,6 @@ CustomerResponse _$CustomerResponseFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CustomerResponse {
-  @JsonKey(name: 'status')
-  String get status => throw _privateConstructorUsedError;
   @JsonKey(name: 'data')
   CustomerData get data => throw _privateConstructorUsedError;
 
@@ -43,10 +41,7 @@ abstract class $CustomerResponseCopyWith<$Res> {
     $Res Function(CustomerResponse) then,
   ) = _$CustomerResponseCopyWithImpl<$Res, CustomerResponse>;
   @useResult
-  $Res call({
-    @JsonKey(name: 'status') String status,
-    @JsonKey(name: 'data') CustomerData data,
-  });
+  $Res call({@JsonKey(name: 'data') CustomerData data});
 
   $CustomerDataCopyWith<$Res> get data;
 }
@@ -65,13 +60,9 @@ class _$CustomerResponseCopyWithImpl<$Res, $Val extends CustomerResponse>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? status = null, Object? data = null}) {
+  $Res call({Object? data = null}) {
     return _then(
       _value.copyWith(
-            status: null == status
-                ? _value.status
-                : status // ignore: cast_nullable_to_non_nullable
-                      as String,
             data: null == data
                 ? _value.data
                 : data // ignore: cast_nullable_to_non_nullable
@@ -101,10 +92,7 @@ abstract class _$$CustomerResponseImplCopyWith<$Res>
   ) = __$$CustomerResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({
-    @JsonKey(name: 'status') String status,
-    @JsonKey(name: 'data') CustomerData data,
-  });
+  $Res call({@JsonKey(name: 'data') CustomerData data});
 
   @override
   $CustomerDataCopyWith<$Res> get data;
@@ -123,13 +111,9 @@ class __$$CustomerResponseImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? status = null, Object? data = null}) {
+  $Res call({Object? data = null}) {
     return _then(
       _$CustomerResponseImpl(
-        status: null == status
-            ? _value.status
-            : status // ignore: cast_nullable_to_non_nullable
-                  as String,
         data: null == data
             ? _value.data
             : data // ignore: cast_nullable_to_non_nullable
@@ -142,24 +126,18 @@ class __$$CustomerResponseImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$CustomerResponseImpl implements _CustomerResponse {
-  const _$CustomerResponseImpl({
-    @JsonKey(name: 'status') required this.status,
-    @JsonKey(name: 'data') required this.data,
-  });
+  const _$CustomerResponseImpl({@JsonKey(name: 'data') required this.data});
 
   factory _$CustomerResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$CustomerResponseImplFromJson(json);
 
-  @override
-  @JsonKey(name: 'status')
-  final String status;
   @override
   @JsonKey(name: 'data')
   final CustomerData data;
 
   @override
   String toString() {
-    return 'CustomerResponse(status: $status, data: $data)';
+    return 'CustomerResponse(data: $data)';
   }
 
   @override
@@ -167,13 +145,12 @@ class _$CustomerResponseImpl implements _CustomerResponse {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CustomerResponseImpl &&
-            (identical(other.status, status) || other.status == status) &&
             (identical(other.data, data) || other.data == data));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, status, data);
+  int get hashCode => Object.hash(runtimeType, data);
 
   /// Create a copy of CustomerResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -194,16 +171,12 @@ class _$CustomerResponseImpl implements _CustomerResponse {
 
 abstract class _CustomerResponse implements CustomerResponse {
   const factory _CustomerResponse({
-    @JsonKey(name: 'status') required final String status,
     @JsonKey(name: 'data') required final CustomerData data,
   }) = _$CustomerResponseImpl;
 
   factory _CustomerResponse.fromJson(Map<String, dynamic> json) =
       _$CustomerResponseImpl.fromJson;
 
-  @override
-  @JsonKey(name: 'status')
-  String get status;
   @override
   @JsonKey(name: 'data')
   CustomerData get data;

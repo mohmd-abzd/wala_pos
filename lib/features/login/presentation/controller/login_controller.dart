@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/common/exception/failure.dart';
+import 'package:walaa_pos/common/util/run_guarded.dart';
 import '../../domain/login_usecase.dart';
 import '/features/login/presentation/state/login_state.dart';
 
@@ -29,22 +29,17 @@ class LoginController extends AutoDisposeNotifier<LoginState> {
   /// The login response is the result of calling
   /// [loginService.login] with the login request.
   Future<void> login() async {
-    // update the state - isLoading = true and error = null
     state = state.copyWith(isLoading: true, error: null);
 
-    final username = state.loginForm['username'];
-    final password = state.loginForm['password'];
+    await runGuarded(
+      () => ref
+          .read(loginUseCaseProvider)
+          .execute(state.loginForm['username'], state.loginForm['password']),
+      (msg) => state = state.copyWith(isLoading: false, error: msg),
+    );
 
-    try {
-      await ref.read(loginUseCaseProvider).execute(username, password);
-
-      // update the state - isLoading = false and isLoginSuccess = response
+    if (state.error == null) {
       state = state.copyWith(isLoading: false, isLoginSuccess: true);
-    } on Failure catch (f) {
-      state = state.copyWith(isLoading: false, error: f.message);
-    } catch (e) {
-      // unexpected error
-      state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 

@@ -9,13 +9,12 @@ part of 'customer_response.dart';
 _$CustomerResponseImpl _$$CustomerResponseImplFromJson(
   Map<String, dynamic> json,
 ) => _$CustomerResponseImpl(
-  status: json['status'] as String,
   data: CustomerData.fromJson(json['data'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$$CustomerResponseImplToJson(
   _$CustomerResponseImpl instance,
-) => <String, dynamic>{'status': instance.status, 'data': instance.data};
+) => <String, dynamic>{'data': instance.data};
 
 _$CustomerDataImpl _$$CustomerDataImplFromJson(Map<String, dynamic> json) =>
     _$CustomerDataImpl(

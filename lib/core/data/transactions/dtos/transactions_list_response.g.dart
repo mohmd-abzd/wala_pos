@@ -9,20 +9,27 @@ part of 'transactions_list_response.dart';
 _$TransactionsListResponseImpl _$$TransactionsListResponseImplFromJson(
   Map<String, dynamic> json,
 ) => _$TransactionsListResponseImpl(
-  status: json['status'] as String,
   message: json['message'] as String?,
-  data: (json['data'] as List<dynamic>)
+  data: TransactionsData.fromJson(json['data'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$$TransactionsListResponseImplToJson(
+  _$TransactionsListResponseImpl instance,
+) => <String, dynamic>{'message': instance.message, 'data': instance.data};
+
+_$TransactionsDataImpl _$$TransactionsDataImplFromJson(
+  Map<String, dynamic> json,
+) => _$TransactionsDataImpl(
+  transactions: (json['transactions'] as List<dynamic>)
       .map((e) => TransactionDto.fromJson(e as Map<String, dynamic>))
       .toList(),
   total: (json['total'] as num).toInt(),
 );
 
-Map<String, dynamic> _$$TransactionsListResponseImplToJson(
-  _$TransactionsListResponseImpl instance,
+Map<String, dynamic> _$$TransactionsDataImplToJson(
+  _$TransactionsDataImpl instance,
 ) => <String, dynamic>{
-  'status': instance.status,
-  'message': instance.message,
-  'data': instance.data,
+  'transactions': instance.transactions,
   'total': instance.total,
 };
 

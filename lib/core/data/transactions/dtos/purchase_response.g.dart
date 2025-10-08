@@ -9,18 +9,13 @@ part of 'purchase_response.dart';
 _$PurchaseResponseImpl _$$PurchaseResponseImplFromJson(
   Map<String, dynamic> json,
 ) => _$PurchaseResponseImpl(
-  status: json['status'] as String,
   message: json['message'] as String?,
   data: PurchaseData.fromJson(json['data'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$$PurchaseResponseImplToJson(
   _$PurchaseResponseImpl instance,
-) => <String, dynamic>{
-  'status': instance.status,
-  'message': instance.message,
-  'data': instance.data,
-};
+) => <String, dynamic>{'message': instance.message, 'data': instance.data};
 
 _$PurchaseDataImpl _$$PurchaseDataImplFromJson(Map<String, dynamic> json) =>
     _$PurchaseDataImpl(

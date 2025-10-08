@@ -24,7 +24,6 @@ RegisterCustomerResponse _$RegisterCustomerResponseFromJson(
 /// @nodoc
 mixin _$RegisterCustomerResponse {
   String? get message => throw _privateConstructorUsedError;
-  String get status => throw _privateConstructorUsedError;
   RegisterCustomerData get data => throw _privateConstructorUsedError;
 
   /// Serializes this RegisterCustomerResponse to a JSON map.
@@ -44,7 +43,7 @@ abstract class $RegisterCustomerResponseCopyWith<$Res> {
     $Res Function(RegisterCustomerResponse) then,
   ) = _$RegisterCustomerResponseCopyWithImpl<$Res, RegisterCustomerResponse>;
   @useResult
-  $Res call({String? message, String status, RegisterCustomerData data});
+  $Res call({String? message, RegisterCustomerData data});
 
   $RegisterCustomerDataCopyWith<$Res> get data;
 }
@@ -66,21 +65,13 @@ class _$RegisterCustomerResponseCopyWithImpl<
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? message = freezed,
-    Object? status = null,
-    Object? data = null,
-  }) {
+  $Res call({Object? message = freezed, Object? data = null}) {
     return _then(
       _value.copyWith(
             message: freezed == message
                 ? _value.message
                 : message // ignore: cast_nullable_to_non_nullable
                       as String?,
-            status: null == status
-                ? _value.status
-                : status // ignore: cast_nullable_to_non_nullable
-                      as String,
             data: null == data
                 ? _value.data
                 : data // ignore: cast_nullable_to_non_nullable
@@ -110,7 +101,7 @@ abstract class _$$RegisterCustomerResponseImplCopyWith<$Res>
   ) = __$$RegisterCustomerResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? message, String status, RegisterCustomerData data});
+  $Res call({String? message, RegisterCustomerData data});
 
   @override
   $RegisterCustomerDataCopyWith<$Res> get data;
@@ -133,21 +124,13 @@ class __$$RegisterCustomerResponseImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? message = freezed,
-    Object? status = null,
-    Object? data = null,
-  }) {
+  $Res call({Object? message = freezed, Object? data = null}) {
     return _then(
       _$RegisterCustomerResponseImpl(
         message: freezed == message
             ? _value.message
             : message // ignore: cast_nullable_to_non_nullable
                   as String?,
-        status: null == status
-            ? _value.status
-            : status // ignore: cast_nullable_to_non_nullable
-                  as String,
         data: null == data
             ? _value.data
             : data // ignore: cast_nullable_to_non_nullable
@@ -160,11 +143,7 @@ class __$$RegisterCustomerResponseImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$RegisterCustomerResponseImpl implements _RegisterCustomerResponse {
-  const _$RegisterCustomerResponseImpl({
-    this.message,
-    required this.status,
-    required this.data,
-  });
+  const _$RegisterCustomerResponseImpl({this.message, required this.data});
 
   factory _$RegisterCustomerResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$RegisterCustomerResponseImplFromJson(json);
@@ -172,13 +151,11 @@ class _$RegisterCustomerResponseImpl implements _RegisterCustomerResponse {
   @override
   final String? message;
   @override
-  final String status;
-  @override
   final RegisterCustomerData data;
 
   @override
   String toString() {
-    return 'RegisterCustomerResponse(message: $message, status: $status, data: $data)';
+    return 'RegisterCustomerResponse(message: $message, data: $data)';
   }
 
   @override
@@ -187,13 +164,12 @@ class _$RegisterCustomerResponseImpl implements _RegisterCustomerResponse {
         (other.runtimeType == runtimeType &&
             other is _$RegisterCustomerResponseImpl &&
             (identical(other.message, message) || other.message == message) &&
-            (identical(other.status, status) || other.status == status) &&
             (identical(other.data, data) || other.data == data));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, message, status, data);
+  int get hashCode => Object.hash(runtimeType, message, data);
 
   /// Create a copy of RegisterCustomerResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -215,7 +191,6 @@ class _$RegisterCustomerResponseImpl implements _RegisterCustomerResponse {
 abstract class _RegisterCustomerResponse implements RegisterCustomerResponse {
   const factory _RegisterCustomerResponse({
     final String? message,
-    required final String status,
     required final RegisterCustomerData data,
   }) = _$RegisterCustomerResponseImpl;
 
@@ -224,8 +199,6 @@ abstract class _RegisterCustomerResponse implements RegisterCustomerResponse {
 
   @override
   String? get message;
-  @override
-  String get status;
   @override
   RegisterCustomerData get data;
 

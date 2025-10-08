@@ -6,7 +6,6 @@ part 'purchase_response.g.dart';
 @freezed
 class PurchaseResponse with _$PurchaseResponse {
   const factory PurchaseResponse({
-    required String status,
     String? message,
     required PurchaseData data,
   }) = _PurchaseResponse;

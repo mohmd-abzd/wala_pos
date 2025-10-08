@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:walaa_pos/common/util/run_guarded.dart';
 import 'package:walaa_pos/features/register_customer/domain/register_customer_usecase.dart';
 import 'package:walaa_pos/features/register_customer/presentation/state/register_customer_state.dart';
 // import 'package:walaa_pos/features/register_customer/domain/register_customer_usecase.dart';
@@ -22,45 +23,30 @@ class RegisterCustomerController
   }
 
   Future<void> registerCustomer() async {
-    // Reset error, set loading
     state = state.copyWith(isLoading: true, error: null);
 
-    // --- Read fields exactly as your form sends them ---
-    final name = state.registrationForm['name'];
-    final email = state.registrationForm['email'];
-    final phoneNumber = state.registrationForm['phoneNumber'];
-    final birthdate =
-        state.registrationForm['birthdate']; // "YYYY/MM/DD" or null
-    final gender = (state.registrationForm['gender'] as bool)
-        ? "MALE"
-        : "FEMALE"; // null=unspecified, true=male, false=female
-
-    try {
-      final result = await ref
+    final result = await runGuarded(
+      () => ref
           .read(registerCustomerUseCaseProvider)
           .execute(
-            name: name,
-            email: email,
-            phoneNumber: phoneNumber,
-            birthdate: birthdate,
-            gender: gender,
-          );
+            name: state.registrationForm['name'],
+            email: state.registrationForm['email'],
+            phoneNumber: state.registrationForm['phoneNumber'],
+            birthdate: state.registrationForm['birthdate'], // "YYYY/MM/DD"
+            gender: (state.registrationForm['gender'] as bool)
+                ? "MALE"
+                : "FEMALE",
+          ),
+      (msg) => state = state.copyWith(isLoading: false, error: msg),
+    );
 
-      // If it succeeds:
+    if (result != null) {
       state = state.copyWith(
         isLoading: false,
         isRegisterCustomerSuccess: true,
         successMessage: result.message,
         vcid: result.vcid,
       );
-    } catch (e, st) {
-      // Wrap any error in a friendly message for the UI SnackBar
-      // (If you have a Failure type, map to it here)
-      state = state.copyWith(
-        isLoading: false,
-        error: 'حدث خطأ غير متوقع. حاول مرة أخرى.',
-      );
-      // Optional: log e/st somewhere (Crashlytics/console)
     }
   }
 

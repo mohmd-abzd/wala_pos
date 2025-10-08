@@ -2,9 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:toastification/toastification.dart';
+import 'package:walaa_pos/common/exception/failure.dart';
 import 'package:walaa_pos/core/route/route_name.dart';
 import 'package:walaa_pos/features/customer/presentation/controller/customer_controller.dart';
 import 'package:go_router/go_router.dart';
+import 'package:walaa_pos/features/customer/shared/reward_item.dart';
 
 final _rewardImages = [
   'https://picsum.photos/300/300', // coffee
@@ -22,11 +25,26 @@ class CustomerScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final stateAsync = ref.watch(customerControllerProvider(vcid));
 
+    ref.listen(customerControllerProvider(vcid), (previous, next) {
+      next.whenOrNull(
+        error: (err, stack) {
+          toastification.show(
+            context: context,
+            type: ToastificationType.error,
+            title: const Text("خطأ"),
+            description: Text(err is Failure ? err.message : err.toString()),
+            alignment: Alignment.center,
+            autoCloseDuration: const Duration(seconds: 4),
+          );
+        },
+      );
+    });
+
     return Scaffold(
       appBar: AppBar(title: const Text('حساب الزبون')),
       body: stateAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, s) => Center(child: Text(e.toString())),
+        error: (e, s) => const SizedBox.shrink(),
         data: (state) {
           final c = state.customer;
 
@@ -219,7 +237,7 @@ class CustomerScreen extends ConsumerWidget {
                                 child: hasEnoughPoints
                                     ? InkWell(
                                         onTap: () {
-                                          // TODO: handle redeem click
+                                          _redeem(context, ref, r);
                                         },
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
@@ -290,5 +308,58 @@ class CustomerScreen extends ConsumerWidget {
         },
       ),
     );
+  }
+
+  _redeem(BuildContext context, WidgetRef ref, RewardItem r) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('تأكيد الاستبدال'),
+        content: Text(
+          'هل تريد استبدال ${r.pointsRequired} نقطة بمكافأة "${r.name}"؟',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('إلغاء'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('تأكيد'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true) return;
+
+    try {
+      final result = await ref
+          .read(customerControllerProvider(vcid).notifier)
+          .redeemReward(rewardId: r.id);
+
+      toastification.show(
+        context: context,
+        type: ToastificationType.success,
+        title: const Text('تم الاستبدال بنجاح'),
+        description: Text(
+          'رمز الاستبدال: ${result.redemptionCode}\n'
+          'النقاط المتبقية: ${result.remainingPoints}',
+        ),
+        alignment: Alignment.center,
+        autoCloseDuration: const Duration(seconds: 5),
+      );
+    } catch (e) {
+      toastification.show(
+        context: context,
+        type: ToastificationType.error,
+        title: const Text('فشل الاستبدال'),
+        description: Text(
+          e is Failure ? e.message : 'حدث خطأ أثناء تنفيذ العملية',
+        ),
+        alignment: Alignment.center,
+        autoCloseDuration: const Duration(seconds: 5),
+      );
+    }
   }
 }

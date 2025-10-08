@@ -21,8 +21,6 @@ RefreshTokenResponse _$RefreshTokenResponseFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$RefreshTokenResponse {
-  @JsonKey(name: "status")
-  String get status => throw _privateConstructorUsedError;
   @JsonKey(name: "data")
   Data get data => throw _privateConstructorUsedError;
 
@@ -43,10 +41,7 @@ abstract class $RefreshTokenResponseCopyWith<$Res> {
     $Res Function(RefreshTokenResponse) then,
   ) = _$RefreshTokenResponseCopyWithImpl<$Res, RefreshTokenResponse>;
   @useResult
-  $Res call({
-    @JsonKey(name: "status") String status,
-    @JsonKey(name: "data") Data data,
-  });
+  $Res call({@JsonKey(name: "data") Data data});
 
   $DataCopyWith<$Res> get data;
 }
@@ -68,13 +63,9 @@ class _$RefreshTokenResponseCopyWithImpl<
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? status = null, Object? data = null}) {
+  $Res call({Object? data = null}) {
     return _then(
       _value.copyWith(
-            status: null == status
-                ? _value.status
-                : status // ignore: cast_nullable_to_non_nullable
-                      as String,
             data: null == data
                 ? _value.data
                 : data // ignore: cast_nullable_to_non_nullable
@@ -104,10 +95,7 @@ abstract class _$$RefreshTokenResponseImplCopyWith<$Res>
   ) = __$$RefreshTokenResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({
-    @JsonKey(name: "status") String status,
-    @JsonKey(name: "data") Data data,
-  });
+  $Res call({@JsonKey(name: "data") Data data});
 
   @override
   $DataCopyWith<$Res> get data;
@@ -126,13 +114,9 @@ class __$$RefreshTokenResponseImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? status = null, Object? data = null}) {
+  $Res call({Object? data = null}) {
     return _then(
       _$RefreshTokenResponseImpl(
-        status: null == status
-            ? _value.status
-            : status // ignore: cast_nullable_to_non_nullable
-                  as String,
         data: null == data
             ? _value.data
             : data // ignore: cast_nullable_to_non_nullable
@@ -145,24 +129,18 @@ class __$$RefreshTokenResponseImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$RefreshTokenResponseImpl implements _RefreshTokenResponse {
-  const _$RefreshTokenResponseImpl({
-    @JsonKey(name: "status") required this.status,
-    @JsonKey(name: "data") required this.data,
-  });
+  const _$RefreshTokenResponseImpl({@JsonKey(name: "data") required this.data});
 
   factory _$RefreshTokenResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$RefreshTokenResponseImplFromJson(json);
 
-  @override
-  @JsonKey(name: "status")
-  final String status;
   @override
   @JsonKey(name: "data")
   final Data data;
 
   @override
   String toString() {
-    return 'RefreshTokenResponse(status: $status, data: $data)';
+    return 'RefreshTokenResponse(data: $data)';
   }
 
   @override
@@ -170,13 +148,12 @@ class _$RefreshTokenResponseImpl implements _RefreshTokenResponse {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RefreshTokenResponseImpl &&
-            (identical(other.status, status) || other.status == status) &&
             (identical(other.data, data) || other.data == data));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, status, data);
+  int get hashCode => Object.hash(runtimeType, data);
 
   /// Create a copy of RefreshTokenResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -198,16 +175,12 @@ class _$RefreshTokenResponseImpl implements _RefreshTokenResponse {
 
 abstract class _RefreshTokenResponse implements RefreshTokenResponse {
   const factory _RefreshTokenResponse({
-    @JsonKey(name: "status") required final String status,
     @JsonKey(name: "data") required final Data data,
   }) = _$RefreshTokenResponseImpl;
 
   factory _RefreshTokenResponse.fromJson(Map<String, dynamic> json) =
       _$RefreshTokenResponseImpl.fromJson;
 
-  @override
-  @JsonKey(name: "status")
-  String get status;
   @override
   @JsonKey(name: "data")
   Data get data;

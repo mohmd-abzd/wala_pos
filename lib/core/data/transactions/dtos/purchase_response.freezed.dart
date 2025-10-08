@@ -21,7 +21,6 @@ PurchaseResponse _$PurchaseResponseFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PurchaseResponse {
-  String get status => throw _privateConstructorUsedError;
   String? get message => throw _privateConstructorUsedError;
   PurchaseData get data => throw _privateConstructorUsedError;
 
@@ -42,7 +41,7 @@ abstract class $PurchaseResponseCopyWith<$Res> {
     $Res Function(PurchaseResponse) then,
   ) = _$PurchaseResponseCopyWithImpl<$Res, PurchaseResponse>;
   @useResult
-  $Res call({String status, String? message, PurchaseData data});
+  $Res call({String? message, PurchaseData data});
 
   $PurchaseDataCopyWith<$Res> get data;
 }
@@ -61,17 +60,9 @@ class _$PurchaseResponseCopyWithImpl<$Res, $Val extends PurchaseResponse>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? status = null,
-    Object? message = freezed,
-    Object? data = null,
-  }) {
+  $Res call({Object? message = freezed, Object? data = null}) {
     return _then(
       _value.copyWith(
-            status: null == status
-                ? _value.status
-                : status // ignore: cast_nullable_to_non_nullable
-                      as String,
             message: freezed == message
                 ? _value.message
                 : message // ignore: cast_nullable_to_non_nullable
@@ -105,7 +96,7 @@ abstract class _$$PurchaseResponseImplCopyWith<$Res>
   ) = __$$PurchaseResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String status, String? message, PurchaseData data});
+  $Res call({String? message, PurchaseData data});
 
   @override
   $PurchaseDataCopyWith<$Res> get data;
@@ -124,17 +115,9 @@ class __$$PurchaseResponseImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? status = null,
-    Object? message = freezed,
-    Object? data = null,
-  }) {
+  $Res call({Object? message = freezed, Object? data = null}) {
     return _then(
       _$PurchaseResponseImpl(
-        status: null == status
-            ? _value.status
-            : status // ignore: cast_nullable_to_non_nullable
-                  as String,
         message: freezed == message
             ? _value.message
             : message // ignore: cast_nullable_to_non_nullable
@@ -151,17 +134,11 @@ class __$$PurchaseResponseImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$PurchaseResponseImpl implements _PurchaseResponse {
-  const _$PurchaseResponseImpl({
-    required this.status,
-    this.message,
-    required this.data,
-  });
+  const _$PurchaseResponseImpl({this.message, required this.data});
 
   factory _$PurchaseResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$PurchaseResponseImplFromJson(json);
 
-  @override
-  final String status;
   @override
   final String? message;
   @override
@@ -169,7 +146,7 @@ class _$PurchaseResponseImpl implements _PurchaseResponse {
 
   @override
   String toString() {
-    return 'PurchaseResponse(status: $status, message: $message, data: $data)';
+    return 'PurchaseResponse(message: $message, data: $data)';
   }
 
   @override
@@ -177,14 +154,13 @@ class _$PurchaseResponseImpl implements _PurchaseResponse {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PurchaseResponseImpl &&
-            (identical(other.status, status) || other.status == status) &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.data, data) || other.data == data));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, status, message, data);
+  int get hashCode => Object.hash(runtimeType, message, data);
 
   /// Create a copy of PurchaseResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -205,7 +181,6 @@ class _$PurchaseResponseImpl implements _PurchaseResponse {
 
 abstract class _PurchaseResponse implements PurchaseResponse {
   const factory _PurchaseResponse({
-    required final String status,
     final String? message,
     required final PurchaseData data,
   }) = _$PurchaseResponseImpl;
@@ -213,8 +188,6 @@ abstract class _PurchaseResponse implements PurchaseResponse {
   factory _PurchaseResponse.fromJson(Map<String, dynamic> json) =
       _$PurchaseResponseImpl.fromJson;
 
-  @override
-  String get status;
   @override
   String? get message;
   @override

@@ -10,6 +10,7 @@ class TransactionsState with _$TransactionsState {
     required bool isLoading,
     required bool hasMore,
     required int page,
+    String? error,
   }) = _TransactionsState;
 
   factory TransactionsState.initial() => const TransactionsState(
@@ -17,5 +18,6 @@ class TransactionsState with _$TransactionsState {
     isLoading: false,
     hasMore: true,
     page: 1,
+    error: null,
   );
 }

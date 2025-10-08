@@ -36,8 +36,13 @@ mixin DioExceptionMapper {
           stackTrace: stackTrace,
         );
       case DioExceptionType.badResponse:
+        final backendMessage = e.response?.data?['message'];
+        print(backendMessage);
         return Failure(
-          message: _getErrorMessageForStatusCode(e.response?.statusCode),
+          // ✅ Prefer backend message if it exists, fallback otherwise
+          message:
+              backendMessage ??
+              _getErrorMessageForStatusCode(e.response?.statusCode),
           exception: e,
           stackTrace: stackTrace,
         );

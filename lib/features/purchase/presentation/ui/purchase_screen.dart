@@ -1,6 +1,7 @@
 // features/purchase/presentation/ui/purchase_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:toastification/toastification.dart';
 import 'package:walaa_pos/features/customer/presentation/controller/customer_controller.dart';
 import '../../presentation/controller/purchase_controller.dart';
 
@@ -44,17 +45,34 @@ class _PurchaseScreenState extends ConsumerState<PurchaseScreen> {
       purchaseControllerProvider(
         widget.customerId,
       ).select((s) => s.successMessage),
-      (_, msg) async {
+      (_, msg) {
         if (msg != null) {
           final local = context;
-          final snack = ScaffoldMessenger.of(local).showSnackBar(
-            SnackBar(content: Text(msg), duration: const Duration(seconds: 2)),
+
+          toastification.show(
+            context: local,
+            title: Text("نجحت العملية"),
+            description: Text(msg),
+            autoCloseDuration: const Duration(seconds: 4),
           );
-          await snack.closed;
-          if (!local.mounted) return;
+
           ref.invalidate(customerControllerProvider(widget.vcid));
 
-          Navigator.of(local).pop(); // back to customer screen
+          Navigator.of(local).pop(); // screen closes, toast still shows
+        }
+      },
+    );
+    ref.listen(
+      purchaseControllerProvider(widget.customerId).select((s) => s.error),
+      (_, error) {
+        if (error != null) {
+          toastification.show(
+            context: context,
+            type: ToastificationType.error, // 🔴 red style
+            title: const Text("خطأ"),
+            description: Text(error),
+            autoCloseDuration: const Duration(seconds: 4),
+          );
         }
       },
     );
@@ -97,13 +115,7 @@ class _PurchaseScreenState extends ConsumerState<PurchaseScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  if (state.error != null) ...[
-                    Text(
-                      state.error!,
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                    const SizedBox(height: 8),
-                  ],
+
                   SizedBox(
                     width: double.infinity,
                     child: FilledButton.icon(

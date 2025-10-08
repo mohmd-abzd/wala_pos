@@ -7,7 +7,6 @@ part 'register_customer_response.freezed.dart';
 class RegisterCustomerResponse with _$RegisterCustomerResponse {
   const factory RegisterCustomerResponse({
     String? message,
-    required String status,
     required RegisterCustomerData data,
   }) = _RegisterCustomerResponse;
 

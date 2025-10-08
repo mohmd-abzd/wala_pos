@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:walaa_pos/features/bind_card/presentation/ui/bind_card_screen.dart';
+import 'package:walaa_pos/features/change_password/presentation/ui/change_password_screen.dart';
 import 'package:walaa_pos/features/customer/presentation/ui/customer_screen.dart';
 import 'package:walaa_pos/features/purchase/presentation/ui/purchase_screen.dart';
 import 'package:walaa_pos/features/refund/presentation/ui/refund_screen.dart';
@@ -43,6 +44,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             path: 'setting',
             name: settingRoute,
             builder: (context, state) => const SettingScreen(),
+            routes: [
+              GoRoute(
+                path: 'change-password',
+                name: changePasswordRoute,
+                builder: (context, state) => const ChangePasswordScreen(),
+              ),
+            ],
           ),
           GoRoute(
             path: 'register-customer',

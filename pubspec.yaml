@@ -56,7 +56,10 @@ dependencies:
   multiple_result: ^5.1.0
   multi_masked_formatter: ^1.0.0 
   flutter_nfc_kit: ^3.3.0
+  toastification: ^3.0.3
   firebase_core: ^4.0.0
+  device_info_plus: ^12.1.0
+
   flutter_localizations:
     sdk: flutter
 

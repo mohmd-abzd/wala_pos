@@ -9,7 +9,6 @@ part 'customer_response.g.dart';
 @freezed
 class CustomerResponse with _$CustomerResponse {
   const factory CustomerResponse({
-    @JsonKey(name: 'status') required String status,
     @JsonKey(name: 'data') required CustomerData data,
   }) = _CustomerResponse;
 

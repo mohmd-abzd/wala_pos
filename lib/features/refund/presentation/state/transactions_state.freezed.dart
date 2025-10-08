@@ -21,6 +21,7 @@ mixin _$TransactionsState {
   bool get isLoading => throw _privateConstructorUsedError;
   bool get hasMore => throw _privateConstructorUsedError;
   int get page => throw _privateConstructorUsedError;
+  String? get error => throw _privateConstructorUsedError;
 
   /// Create a copy of TransactionsState
   /// with the given fields replaced by the non-null parameter values.
@@ -41,6 +42,7 @@ abstract class $TransactionsStateCopyWith<$Res> {
     bool isLoading,
     bool hasMore,
     int page,
+    String? error,
   });
 }
 
@@ -63,6 +65,7 @@ class _$TransactionsStateCopyWithImpl<$Res, $Val extends TransactionsState>
     Object? isLoading = null,
     Object? hasMore = null,
     Object? page = null,
+    Object? error = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -82,6 +85,10 @@ class _$TransactionsStateCopyWithImpl<$Res, $Val extends TransactionsState>
                 ? _value.page
                 : page // ignore: cast_nullable_to_non_nullable
                       as int,
+            error: freezed == error
+                ? _value.error
+                : error // ignore: cast_nullable_to_non_nullable
+                      as String?,
           )
           as $Val,
     );
@@ -102,6 +109,7 @@ abstract class _$$TransactionsStateImplCopyWith<$Res>
     bool isLoading,
     bool hasMore,
     int page,
+    String? error,
   });
 }
 
@@ -123,6 +131,7 @@ class __$$TransactionsStateImplCopyWithImpl<$Res>
     Object? isLoading = null,
     Object? hasMore = null,
     Object? page = null,
+    Object? error = freezed,
   }) {
     return _then(
       _$TransactionsStateImpl(
@@ -142,6 +151,10 @@ class __$$TransactionsStateImplCopyWithImpl<$Res>
             ? _value.page
             : page // ignore: cast_nullable_to_non_nullable
                   as int,
+        error: freezed == error
+            ? _value.error
+            : error // ignore: cast_nullable_to_non_nullable
+                  as String?,
       ),
     );
   }
@@ -155,6 +168,7 @@ class _$TransactionsStateImpl implements _TransactionsState {
     required this.isLoading,
     required this.hasMore,
     required this.page,
+    this.error,
   }) : _transactions = transactions;
 
   final List<TransactionDto> _transactions;
@@ -171,10 +185,12 @@ class _$TransactionsStateImpl implements _TransactionsState {
   final bool hasMore;
   @override
   final int page;
+  @override
+  final String? error;
 
   @override
   String toString() {
-    return 'TransactionsState(transactions: $transactions, isLoading: $isLoading, hasMore: $hasMore, page: $page)';
+    return 'TransactionsState(transactions: $transactions, isLoading: $isLoading, hasMore: $hasMore, page: $page, error: $error)';
   }
 
   @override
@@ -189,7 +205,8 @@ class _$TransactionsStateImpl implements _TransactionsState {
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             (identical(other.hasMore, hasMore) || other.hasMore == hasMore) &&
-            (identical(other.page, page) || other.page == page));
+            (identical(other.page, page) || other.page == page) &&
+            (identical(other.error, error) || other.error == error));
   }
 
   @override
@@ -199,6 +216,7 @@ class _$TransactionsStateImpl implements _TransactionsState {
     isLoading,
     hasMore,
     page,
+    error,
   );
 
   /// Create a copy of TransactionsState
@@ -219,6 +237,7 @@ abstract class _TransactionsState implements TransactionsState {
     required final bool isLoading,
     required final bool hasMore,
     required final int page,
+    final String? error,
   }) = _$TransactionsStateImpl;
 
   @override
@@ -229,6 +248,8 @@ abstract class _TransactionsState implements TransactionsState {
   bool get hasMore;
   @override
   int get page;
+  @override
+  String? get error;
 
   /// Create a copy of TransactionsState
   /// with the given fields replaced by the non-null parameter values.

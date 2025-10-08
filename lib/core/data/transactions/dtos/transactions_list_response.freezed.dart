@@ -23,10 +23,9 @@ TransactionsListResponse _$TransactionsListResponseFromJson(
 
 /// @nodoc
 mixin _$TransactionsListResponse {
-  String get status => throw _privateConstructorUsedError;
-  String? get message => throw _privateConstructorUsedError;
-  List<TransactionDto> get data => throw _privateConstructorUsedError;
-  int get total => throw _privateConstructorUsedError;
+  String? get message =>
+      throw _privateConstructorUsedError; // 👇 Nest `data` as its own model
+  TransactionsData get data => throw _privateConstructorUsedError;
 
   /// Serializes this TransactionsListResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -45,12 +44,9 @@ abstract class $TransactionsListResponseCopyWith<$Res> {
     $Res Function(TransactionsListResponse) then,
   ) = _$TransactionsListResponseCopyWithImpl<$Res, TransactionsListResponse>;
   @useResult
-  $Res call({
-    String status,
-    String? message,
-    List<TransactionDto> data,
-    int total,
-  });
+  $Res call({String? message, TransactionsData data});
+
+  $TransactionsDataCopyWith<$Res> get data;
 }
 
 /// @nodoc
@@ -70,18 +66,9 @@ class _$TransactionsListResponseCopyWithImpl<
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? status = null,
-    Object? message = freezed,
-    Object? data = null,
-    Object? total = null,
-  }) {
+  $Res call({Object? message = freezed, Object? data = null}) {
     return _then(
       _value.copyWith(
-            status: null == status
-                ? _value.status
-                : status // ignore: cast_nullable_to_non_nullable
-                      as String,
             message: freezed == message
                 ? _value.message
                 : message // ignore: cast_nullable_to_non_nullable
@@ -89,14 +76,20 @@ class _$TransactionsListResponseCopyWithImpl<
             data: null == data
                 ? _value.data
                 : data // ignore: cast_nullable_to_non_nullable
-                      as List<TransactionDto>,
-            total: null == total
-                ? _value.total
-                : total // ignore: cast_nullable_to_non_nullable
-                      as int,
+                      as TransactionsData,
           )
           as $Val,
     );
+  }
+
+  /// Create a copy of TransactionsListResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TransactionsDataCopyWith<$Res> get data {
+    return $TransactionsDataCopyWith<$Res>(_value.data, (value) {
+      return _then(_value.copyWith(data: value) as $Val);
+    });
   }
 }
 
@@ -109,12 +102,10 @@ abstract class _$$TransactionsListResponseImplCopyWith<$Res>
   ) = __$$TransactionsListResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({
-    String status,
-    String? message,
-    List<TransactionDto> data,
-    int total,
-  });
+  $Res call({String? message, TransactionsData data});
+
+  @override
+  $TransactionsDataCopyWith<$Res> get data;
 }
 
 /// @nodoc
@@ -134,30 +125,17 @@ class __$$TransactionsListResponseImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? status = null,
-    Object? message = freezed,
-    Object? data = null,
-    Object? total = null,
-  }) {
+  $Res call({Object? message = freezed, Object? data = null}) {
     return _then(
       _$TransactionsListResponseImpl(
-        status: null == status
-            ? _value.status
-            : status // ignore: cast_nullable_to_non_nullable
-                  as String,
         message: freezed == message
             ? _value.message
             : message // ignore: cast_nullable_to_non_nullable
                   as String?,
         data: null == data
-            ? _value._data
+            ? _value.data
             : data // ignore: cast_nullable_to_non_nullable
-                  as List<TransactionDto>,
-        total: null == total
-            ? _value.total
-            : total // ignore: cast_nullable_to_non_nullable
-                  as int,
+                  as TransactionsData,
       ),
     );
   }
@@ -166,34 +144,20 @@ class __$$TransactionsListResponseImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$TransactionsListResponseImpl implements _TransactionsListResponse {
-  const _$TransactionsListResponseImpl({
-    required this.status,
-    this.message,
-    required final List<TransactionDto> data,
-    required this.total,
-  }) : _data = data;
+  const _$TransactionsListResponseImpl({this.message, required this.data});
 
   factory _$TransactionsListResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$TransactionsListResponseImplFromJson(json);
 
   @override
-  final String status;
-  @override
   final String? message;
-  final List<TransactionDto> _data;
+  // 👇 Nest `data` as its own model
   @override
-  List<TransactionDto> get data {
-    if (_data is EqualUnmodifiableListView) return _data;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_data);
-  }
-
-  @override
-  final int total;
+  final TransactionsData data;
 
   @override
   String toString() {
-    return 'TransactionsListResponse(status: $status, message: $message, data: $data, total: $total)';
+    return 'TransactionsListResponse(message: $message, data: $data)';
   }
 
   @override
@@ -201,21 +165,13 @@ class _$TransactionsListResponseImpl implements _TransactionsListResponse {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$TransactionsListResponseImpl &&
-            (identical(other.status, status) || other.status == status) &&
             (identical(other.message, message) || other.message == message) &&
-            const DeepCollectionEquality().equals(other._data, _data) &&
-            (identical(other.total, total) || other.total == total));
+            (identical(other.data, data) || other.data == data));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    status,
-    message,
-    const DeepCollectionEquality().hash(_data),
-    total,
-  );
+  int get hashCode => Object.hash(runtimeType, message, data);
 
   /// Create a copy of TransactionsListResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -236,23 +192,17 @@ class _$TransactionsListResponseImpl implements _TransactionsListResponse {
 
 abstract class _TransactionsListResponse implements TransactionsListResponse {
   const factory _TransactionsListResponse({
-    required final String status,
     final String? message,
-    required final List<TransactionDto> data,
-    required final int total,
+    required final TransactionsData data,
   }) = _$TransactionsListResponseImpl;
 
   factory _TransactionsListResponse.fromJson(Map<String, dynamic> json) =
       _$TransactionsListResponseImpl.fromJson;
 
   @override
-  String get status;
+  String? get message; // 👇 Nest `data` as its own model
   @override
-  String? get message;
-  @override
-  List<TransactionDto> get data;
-  @override
-  int get total;
+  TransactionsData get data;
 
   /// Create a copy of TransactionsListResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -260,6 +210,193 @@ abstract class _TransactionsListResponse implements TransactionsListResponse {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TransactionsListResponseImplCopyWith<_$TransactionsListResponseImpl>
   get copyWith => throw _privateConstructorUsedError;
+}
+
+TransactionsData _$TransactionsDataFromJson(Map<String, dynamic> json) {
+  return _TransactionsData.fromJson(json);
+}
+
+/// @nodoc
+mixin _$TransactionsData {
+  List<TransactionDto> get transactions => throw _privateConstructorUsedError;
+  int get total => throw _privateConstructorUsedError;
+
+  /// Serializes this TransactionsData to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of TransactionsData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $TransactionsDataCopyWith<TransactionsData> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TransactionsDataCopyWith<$Res> {
+  factory $TransactionsDataCopyWith(
+    TransactionsData value,
+    $Res Function(TransactionsData) then,
+  ) = _$TransactionsDataCopyWithImpl<$Res, TransactionsData>;
+  @useResult
+  $Res call({List<TransactionDto> transactions, int total});
+}
+
+/// @nodoc
+class _$TransactionsDataCopyWithImpl<$Res, $Val extends TransactionsData>
+    implements $TransactionsDataCopyWith<$Res> {
+  _$TransactionsDataCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of TransactionsData
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? transactions = null, Object? total = null}) {
+    return _then(
+      _value.copyWith(
+            transactions: null == transactions
+                ? _value.transactions
+                : transactions // ignore: cast_nullable_to_non_nullable
+                      as List<TransactionDto>,
+            total: null == total
+                ? _value.total
+                : total // ignore: cast_nullable_to_non_nullable
+                      as int,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$TransactionsDataImplCopyWith<$Res>
+    implements $TransactionsDataCopyWith<$Res> {
+  factory _$$TransactionsDataImplCopyWith(
+    _$TransactionsDataImpl value,
+    $Res Function(_$TransactionsDataImpl) then,
+  ) = __$$TransactionsDataImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({List<TransactionDto> transactions, int total});
+}
+
+/// @nodoc
+class __$$TransactionsDataImplCopyWithImpl<$Res>
+    extends _$TransactionsDataCopyWithImpl<$Res, _$TransactionsDataImpl>
+    implements _$$TransactionsDataImplCopyWith<$Res> {
+  __$$TransactionsDataImplCopyWithImpl(
+    _$TransactionsDataImpl _value,
+    $Res Function(_$TransactionsDataImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of TransactionsData
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? transactions = null, Object? total = null}) {
+    return _then(
+      _$TransactionsDataImpl(
+        transactions: null == transactions
+            ? _value._transactions
+            : transactions // ignore: cast_nullable_to_non_nullable
+                  as List<TransactionDto>,
+        total: null == total
+            ? _value.total
+            : total // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$TransactionsDataImpl implements _TransactionsData {
+  const _$TransactionsDataImpl({
+    required final List<TransactionDto> transactions,
+    required this.total,
+  }) : _transactions = transactions;
+
+  factory _$TransactionsDataImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TransactionsDataImplFromJson(json);
+
+  final List<TransactionDto> _transactions;
+  @override
+  List<TransactionDto> get transactions {
+    if (_transactions is EqualUnmodifiableListView) return _transactions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_transactions);
+  }
+
+  @override
+  final int total;
+
+  @override
+  String toString() {
+    return 'TransactionsData(transactions: $transactions, total: $total)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TransactionsDataImpl &&
+            const DeepCollectionEquality().equals(
+              other._transactions,
+              _transactions,
+            ) &&
+            (identical(other.total, total) || other.total == total));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+    runtimeType,
+    const DeepCollectionEquality().hash(_transactions),
+    total,
+  );
+
+  /// Create a copy of TransactionsData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TransactionsDataImplCopyWith<_$TransactionsDataImpl> get copyWith =>
+      __$$TransactionsDataImplCopyWithImpl<_$TransactionsDataImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$TransactionsDataImplToJson(this);
+  }
+}
+
+abstract class _TransactionsData implements TransactionsData {
+  const factory _TransactionsData({
+    required final List<TransactionDto> transactions,
+    required final int total,
+  }) = _$TransactionsDataImpl;
+
+  factory _TransactionsData.fromJson(Map<String, dynamic> json) =
+      _$TransactionsDataImpl.fromJson;
+
+  @override
+  List<TransactionDto> get transactions;
+  @override
+  int get total;
+
+  /// Create a copy of TransactionsData
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$TransactionsDataImplCopyWith<_$TransactionsDataImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 TransactionDto _$TransactionDtoFromJson(Map<String, dynamic> json) {
