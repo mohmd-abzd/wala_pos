@@ -26,7 +26,12 @@ class CreatePurchaseUseCase {
   Future<CreatePurchaseResult> execute({
     required int customerId,
     required double amount,
+    String? invoiceId,
   }) {
-    return _repo.createPurchase(customerId: customerId, amount: amount);
+    return _repo.createPurchase(
+      customerId: customerId,
+      amount: amount,
+      invoiceId: invoiceId,
+    );
   }
 }

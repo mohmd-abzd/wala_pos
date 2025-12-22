@@ -18,18 +18,27 @@ class PurchaseController extends AutoDisposeFamilyNotifier<PurchaseState, int> {
     return PurchaseState();
   }
 
-  Future<void> submit({required double amount}) async {
+  Future<void> submit({required double amount, String? invoiceId}) async {
     state = state.copyWith(isLoading: true, error: null, successMessage: null);
 
     final result = await runGuarded(
       () => ref
           .read(createPurchaseUseCaseProvider)
-          .execute(customerId: _customerId, amount: amount),
+          .execute(
+            customerId: _customerId,
+            amount: amount,
+            invoiceId: invoiceId,
+          ),
       (msg) => state = state.copyWith(isLoading: false, error: msg),
     );
 
     if (result != null) {
-      state = state.copyWith(isLoading: false, successMessage: result.message);
+      state = state.copyWith(
+        isLoading: false,
+        successMessage: result.message,
+        newTotalPoints: result.newTotalPoints,
+        changed: true,
+      );
     }
   }
 }

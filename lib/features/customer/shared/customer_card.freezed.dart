@@ -26,6 +26,9 @@ mixin _$CustomerCard {
   String get phoneNumber => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   int get totalPoints => throw _privateConstructorUsedError;
+  String get cardNumber => throw _privateConstructorUsedError;
+  String get merchantName => throw _privateConstructorUsedError;
+  DateTime? get lastTransaction => throw _privateConstructorUsedError;
 
   /// Serializes this CustomerCard to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -50,6 +53,9 @@ abstract class $CustomerCardCopyWith<$Res> {
     String phoneNumber,
     String email,
     int totalPoints,
+    String cardNumber,
+    String merchantName,
+    DateTime? lastTransaction,
   });
 }
 
@@ -73,6 +79,9 @@ class _$CustomerCardCopyWithImpl<$Res, $Val extends CustomerCard>
     Object? phoneNumber = null,
     Object? email = null,
     Object? totalPoints = null,
+    Object? cardNumber = null,
+    Object? merchantName = null,
+    Object? lastTransaction = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -96,6 +105,18 @@ class _$CustomerCardCopyWithImpl<$Res, $Val extends CustomerCard>
                 ? _value.totalPoints
                 : totalPoints // ignore: cast_nullable_to_non_nullable
                       as int,
+            cardNumber: null == cardNumber
+                ? _value.cardNumber
+                : cardNumber // ignore: cast_nullable_to_non_nullable
+                      as String,
+            merchantName: null == merchantName
+                ? _value.merchantName
+                : merchantName // ignore: cast_nullable_to_non_nullable
+                      as String,
+            lastTransaction: freezed == lastTransaction
+                ? _value.lastTransaction
+                : lastTransaction // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
           )
           as $Val,
     );
@@ -117,6 +138,9 @@ abstract class _$$CustomerCardImplCopyWith<$Res>
     String phoneNumber,
     String email,
     int totalPoints,
+    String cardNumber,
+    String merchantName,
+    DateTime? lastTransaction,
   });
 }
 
@@ -139,6 +163,9 @@ class __$$CustomerCardImplCopyWithImpl<$Res>
     Object? phoneNumber = null,
     Object? email = null,
     Object? totalPoints = null,
+    Object? cardNumber = null,
+    Object? merchantName = null,
+    Object? lastTransaction = freezed,
   }) {
     return _then(
       _$CustomerCardImpl(
@@ -162,6 +189,18 @@ class __$$CustomerCardImplCopyWithImpl<$Res>
             ? _value.totalPoints
             : totalPoints // ignore: cast_nullable_to_non_nullable
                   as int,
+        cardNumber: null == cardNumber
+            ? _value.cardNumber
+            : cardNumber // ignore: cast_nullable_to_non_nullable
+                  as String,
+        merchantName: null == merchantName
+            ? _value.merchantName
+            : merchantName // ignore: cast_nullable_to_non_nullable
+                  as String,
+        lastTransaction: freezed == lastTransaction
+            ? _value.lastTransaction
+            : lastTransaction // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
       ),
     );
   }
@@ -176,6 +215,9 @@ class _$CustomerCardImpl implements _CustomerCard {
     required this.phoneNumber,
     required this.email,
     required this.totalPoints,
+    required this.cardNumber,
+    required this.merchantName,
+    required this.lastTransaction,
   });
 
   factory _$CustomerCardImpl.fromJson(Map<String, dynamic> json) =>
@@ -191,10 +233,16 @@ class _$CustomerCardImpl implements _CustomerCard {
   final String email;
   @override
   final int totalPoints;
+  @override
+  final String cardNumber;
+  @override
+  final String merchantName;
+  @override
+  final DateTime? lastTransaction;
 
   @override
   String toString() {
-    return 'CustomerCard(id: $id, name: $name, phoneNumber: $phoneNumber, email: $email, totalPoints: $totalPoints)';
+    return 'CustomerCard(id: $id, name: $name, phoneNumber: $phoneNumber, email: $email, totalPoints: $totalPoints, cardNumber: $cardNumber, merchantName: $merchantName, lastTransaction: $lastTransaction)';
   }
 
   @override
@@ -208,13 +256,28 @@ class _$CustomerCardImpl implements _CustomerCard {
                 other.phoneNumber == phoneNumber) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.totalPoints, totalPoints) ||
-                other.totalPoints == totalPoints));
+                other.totalPoints == totalPoints) &&
+            (identical(other.cardNumber, cardNumber) ||
+                other.cardNumber == cardNumber) &&
+            (identical(other.merchantName, merchantName) ||
+                other.merchantName == merchantName) &&
+            (identical(other.lastTransaction, lastTransaction) ||
+                other.lastTransaction == lastTransaction));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, name, phoneNumber, email, totalPoints);
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    name,
+    phoneNumber,
+    email,
+    totalPoints,
+    cardNumber,
+    merchantName,
+    lastTransaction,
+  );
 
   /// Create a copy of CustomerCard
   /// with the given fields replaced by the non-null parameter values.
@@ -237,6 +300,9 @@ abstract class _CustomerCard implements CustomerCard {
     required final String phoneNumber,
     required final String email,
     required final int totalPoints,
+    required final String cardNumber,
+    required final String merchantName,
+    required final DateTime? lastTransaction,
   }) = _$CustomerCardImpl;
 
   factory _CustomerCard.fromJson(Map<String, dynamic> json) =
@@ -252,6 +318,12 @@ abstract class _CustomerCard implements CustomerCard {
   String get email;
   @override
   int get totalPoints;
+  @override
+  String get cardNumber;
+  @override
+  String get merchantName;
+  @override
+  DateTime? get lastTransaction;
 
   /// Create a copy of CustomerCard
   /// with the given fields replaced by the non-null parameter values.

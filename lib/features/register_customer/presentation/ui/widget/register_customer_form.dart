@@ -24,15 +24,17 @@ class _RegisterCustomerFormState extends ConsumerState<RegisterCustomerForm> {
   late TextEditingController _phoneNumberController;
   late TextEditingController _birthdateController;
 
+  DateTime? _selectedBirthdate;
+
   bool? _gender; // null = غير محدد, true = ذكر, false = أنثى
 
   @override
   void initState() {
     super.initState();
-    _fullnameController = TextEditingController();
-    _emailController = TextEditingController();
-    _phoneNumberController = TextEditingController();
-    _birthdateController = TextEditingController();
+    _fullnameController = TextEditingController(text: 'Mohammed Ali');
+    _emailController = TextEditingController(text: 'mohammed.ali@gmail.com');
+    _phoneNumberController = TextEditingController(text: '0914913166');
+    _birthdateController = TextEditingController(text: '2000/05/15');
   }
 
   @override
@@ -40,16 +42,48 @@ class _RegisterCustomerFormState extends ConsumerState<RegisterCustomerForm> {
     _fullnameController.dispose();
     _emailController.dispose();
     _phoneNumberController.dispose();
-    _birthdateController.dispose(); // was missing
+    _birthdateController.dispose();
 
     super.dispose();
+  }
+
+  String _formatDate(DateTime d) {
+    final y = d.year.toString().padLeft(4, '0');
+    final m = d.month.toString().padLeft(2, '0');
+    final day = d.day.toString().padLeft(2, '0');
+    return '$y/$m/$day';
+  }
+
+  Future<void> _pickBirthdate() async {
+    final now = DateTime.now();
+    final tenYearsAgo = DateTime(now.year - 10, now.month, now.day);
+    final firstDate = DateTime(now.year - 100); // max age ~100
+    final initialDate = _selectedBirthdate ?? tenYearsAgo;
+
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: tenYearsAgo,
+      locale: const Locale('en'), // Arabic picker
+      helpText: 'اختر تاريخ الميلاد',
+      cancelText: 'إلغاء',
+      confirmText: 'تم',
+    );
+
+    if (picked != null) {
+      setState(() {
+        _selectedBirthdate = picked;
+        _birthdateController.text = _formatDate(picked);
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     _listener();
 
-    return Center(
+    return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -112,8 +146,11 @@ class _RegisterCustomerFormState extends ConsumerState<RegisterCustomerForm> {
                 controller: _phoneNumberController,
                 keyboardType: TextInputType.phone,
                 maxLength: 10,
+
                 decoration: InputDecoration(
                   labelText: 'رقم الهاتف'.hardcoded,
+                  hintText: '0911234567',
+                  hintStyle: const TextStyle(color: Colors.grey),
                   border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(kSmall)),
                   ),
@@ -134,15 +171,11 @@ class _RegisterCustomerFormState extends ConsumerState<RegisterCustomerForm> {
               ),
               const SizedBox(height: kLarge),
               TextFormField(
-                maxLength: 10,
-                inputFormatters: [
-                  MultiMaskedTextInputFormatter(
-                    masks: ['xxxx/xx/xx'],
-                    separator: '/',
-                  ),
-                ],
                 controller: _birthdateController,
-                keyboardType: TextInputType.number,
+                readOnly: true,
+                showCursor: false,
+                // user taps field to open picker
+                onTap: _pickBirthdate,
                 decoration: InputDecoration(
                   labelText: 'تاريخ الميلاد'.hardcoded,
                   hintText: '2010/01/01',
@@ -150,7 +183,10 @@ class _RegisterCustomerFormState extends ConsumerState<RegisterCustomerForm> {
                     borderRadius: BorderRadius.all(Radius.circular(kSmall)),
                   ),
                   prefixIcon: const Icon(Icons.calendar_month),
-                  counterText: "",
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.edit_calendar),
+                    onPressed: _pickBirthdate,
+                  ),
                 ),
                 validator: _dateofbirthValidator,
               ),
@@ -176,8 +212,8 @@ class _RegisterCustomerFormState extends ConsumerState<RegisterCustomerForm> {
                   ),
                 ],
                 onChanged: (val) => setState(() => _gender = val),
-                // If you want to force selection, add a validator:
-                // validator: (v) => v == null ? 'الرجاء اختيار الجنس'.hardcoded : null,
+                validator: (val) =>
+                    val == null ? 'الرجاء اختيار الجنس'.hardcoded : null,
               ),
 
               const SizedBox(height: kLarge),
@@ -252,11 +288,17 @@ class _RegisterCustomerFormState extends ConsumerState<RegisterCustomerForm> {
     final isValid = _formKey.currentState?.validate() ?? false;
 
     if (isValid) {
+      // (e.g. "0912345678" -> "218912345678")
+      final reformattedNumber = _phoneNumberController.text.length > 1
+          ? '218${_phoneNumberController.text.substring(1)}'
+          : '';
+
       // collect form data from controllers
+
       final formData = {
         'name': _fullnameController.text,
         'email': _emailController.text,
-        'phoneNumber': _phoneNumberController.text,
+        'phoneNumber': reformattedNumber,
         'birthdate': _birthdateController.text,
         'gender': _gender,
       };

@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:walaa_pos/core/data/customer/dto/request/register_customer_request.dart';
 import 'package:walaa_pos/core/data/customer/dto/response/register_customer_response.dart';
-import 'package:walaa_pos/core/data/remote/endpoint.dart';
-import 'package:walaa_pos/core/data/remote/network_service.dart';
+import 'package:walaa_pos/core/services/network/endpoint.dart';
+import 'package:walaa_pos/core/services/network/network_service.dart';
 import 'package:walaa_pos/core/data/customer/dto/response/customer_response.dart';
 
 part 'customer_api.g.dart';

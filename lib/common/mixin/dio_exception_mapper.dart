@@ -36,8 +36,16 @@ mixin DioExceptionMapper {
           stackTrace: stackTrace,
         );
       case DioExceptionType.badResponse:
-        final backendMessage = e.response?.data?['message'];
-        print(backendMessage);
+        String? backendMessage;
+        final data = e.response?.data;
+
+        if (data is Map && data['message'] is String) {
+          backendMessage = data['message'];
+        }
+        if (data is String && data.contains('<html>')) {
+          backendMessage = 'Server temporarily unavailable (Bad Gateway)';
+        }
+
         return Failure(
           // ✅ Prefer backend message if it exists, fallback otherwise
           message:
@@ -82,6 +90,8 @@ String _getErrorMessageForStatusCode(int? statusCode) {
     case 498:
       return "Refresh token expired. Please try again later".hardcoded;
     case 500:
+      return "Internal server error. Please try again later".hardcoded;
+    case 502:
       return "Internal server error. Please try again later".hardcoded;
     case 503:
       return "Service unavailable. Please try again later".hardcoded;

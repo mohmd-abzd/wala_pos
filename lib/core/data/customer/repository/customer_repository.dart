@@ -35,7 +35,7 @@ class CustomerRepository
       throw mapDioExceptionToFailure(e, st);
     } catch (e, st) {
       throw Failure(
-        message: "An unexpected error occurred. Please try again later.",
+        message: "An unexpected error occurred. Please try again later.xxxx",
         exception: e is Exception ? e : Exception(e.toString()),
         stackTrace: st,
       );

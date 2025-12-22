@@ -7,7 +7,9 @@ const String changePasswordRoute = 'change-password';
 const String registerCustomerRoute = 'register-customer';
 const String customerRoute = 'customer';
 const String purchaseRoute = 'purchase';
-const String refundRoute = 'refund';
+const String purchaseSessionRoute = 'purchase-session';
+
+const String transactionsRoute = 'transactions';
 
 const String rewardsRoute = 'rewards';
 const String scanRoute = 'scan';

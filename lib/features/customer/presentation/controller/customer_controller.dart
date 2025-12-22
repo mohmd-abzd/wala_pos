@@ -1,46 +1,74 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/features/customer/domain/get_customer_usecase.dart';
+import 'package:walaa_pos/common/util/run_guarded.dart';
 import 'package:walaa_pos/features/customer/domain/redemption_usecase.dart';
+import 'package:walaa_pos/features/customer/shared/customer_card.dart';
+import 'package:walaa_pos/features/customer/domain/get_customer_usecase.dart';
 import 'package:walaa_pos/features/customer/presentation/state/customer_state.dart';
-import 'package:walaa_pos/features/customer/shared/create_redemption_result.dart';
 
 final customerControllerProvider =
-    AutoDisposeAsyncNotifierProviderFamily<
+    AutoDisposeNotifierProviderFamily<
       CustomerController,
       CustomerState,
       String
     >(CustomerController.new);
 
 class CustomerController
-    extends AutoDisposeFamilyAsyncNotifier<CustomerState, String> {
-  late String _vcid;
-
+    extends AutoDisposeFamilyNotifier<CustomerState, String> {
   @override
-  Future<CustomerState> build(String vcid) async {
-    _vcid = vcid;
+  CustomerState build(String vcid) {
+    // Load customer after provider initializes
+    Future.microtask(() => _loadCustomer(vcid));
 
-    final customerReport = await ref
-        .read(getCustomerUseCaseProvider)
-        .execute(vcid);
-
+    // initial state (no UI yet)
     return CustomerState(
-      customer: customerReport.customer,
-      rewards: customerReport.rewards,
+      isLoading: true,
+      customer: CustomerCard(
+        id: 0,
+        name: '',
+        email: '',
+        phoneNumber: '',
+        totalPoints: 0,
+        cardNumber: '',
+        merchantName: '',
+        lastTransaction: DateTime.now(),
+      ),
+      rewards: const [],
     );
   }
 
-  Future<CreateRedemptionResult> redeemReward({required int rewardId}) async {
-    final customerId = state.value!.customer.id;
-    final result = await ref
-        .read(createRedemptionUseCaseProvider)
-        .execute(customerId: customerId, rewardId: rewardId);
+  Future<void> _loadCustomer(String vcid) async {
+    final report = await runGuarded(
+      () => ref.read(getCustomerUseCaseProvider).execute(vcid),
+      (msg) => state = state.copyWith(isLoading: false, error: msg),
+    );
 
-    // After successful redemption, refresh the customer data
-    await refresh();
-    return result;
+    if (report != null) {
+      state = state.copyWith(
+        isLoading: false,
+        customer: report.customer,
+        rewards: report.rewards,
+        error: null,
+      );
+    }
   }
 
-  /// If you need a manual refresh:
-  // Future<void> refresh() => ref.invalidate(customerControllerProvider);
-  Future<void> refresh() async => ref.invalidateSelf();
+  Future<void> redeemReward({required int rewardId}) async {
+    final prev = state;
+    state = prev.copyWith(isLoading: true, error: null, successMessage: null);
+
+    final result = await runGuarded(
+      () => ref
+          .read(createRedemptionUseCaseProvider)
+          .execute(customerId: prev.customer.id, rewardId: rewardId),
+      (msg) => state = prev.copyWith(isLoading: false, error: msg),
+    );
+
+    if (result != null) {
+      state = state.copyWith(isLoading: false, successMessage: result.message);
+      // Refresh customer points and rewards
+      await _loadCustomer(arg);
+    }
+  }
+
+  Future<void> refresh() async => _loadCustomer(arg);
 }

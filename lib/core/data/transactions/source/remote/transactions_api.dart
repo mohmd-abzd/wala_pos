@@ -4,8 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:walaa_pos/core/data/transactions/dtos/purchase_request.dart';
 import 'package:walaa_pos/core/data/transactions/dtos/purchase_response.dart';
+import 'package:walaa_pos/core/data/transactions/dtos/refund_request.dart';
+import 'package:walaa_pos/core/data/transactions/dtos/refund_response.dart';
 import 'package:walaa_pos/core/data/transactions/dtos/transactions_list_response.dart';
-import '/core/data/remote/network_service.dart';
+import '../../../../services/network/network_service.dart';
 
 part 'transactions_api.g.dart';
 
@@ -29,6 +31,7 @@ abstract class TransactionsApi {
     @Query('take') int take,
   );
 
-  @POST('/transactions/{transactionId}/refund')
-  Future<void> refundTransaction(@Path('transactionId') int transactionId);
+  @POST('/transactions/refund')
+  @Headers({'Content-Type': 'application/json'})
+  Future<RefundResponse> createRefund(@Body() RefundRequest body);
 }

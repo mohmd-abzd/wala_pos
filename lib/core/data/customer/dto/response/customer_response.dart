@@ -24,6 +24,9 @@ class CustomerData with _$CustomerData {
     required String phoneNumber,
     required String email,
     required int totalPoints,
+    required String cardNumber,
+    required String merchantName,
+    required DateTime? lastTransaction,
     required List<RewardData> rewards,
   }) = _CustomerData;
 
@@ -63,6 +66,9 @@ extension CustomerDataMapper on CustomerData {
     phoneNumber: phoneNumber,
     email: email,
     totalPoints: totalPoints,
+    cardNumber: cardNumber,
+    merchantName: merchantName,
+    lastTransaction: lastTransaction,
   );
 }
 

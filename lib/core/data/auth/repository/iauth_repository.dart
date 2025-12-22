@@ -1,12 +1,11 @@
 import 'package:walaa_pos/common/dtos/message_response.dart';
-
-import '/features/login/domain/session_token.dart';
+import 'package:walaa_pos/core/data/auth/dto/response/login_response.dart';
 
 abstract interface class IAuthRepository {
-  Future<SessionTokens> login(
+  Future<LoginResponse> login(
     String username,
     String password,
-    String deviceId,
+    String serialNumber,
   );
   Future<MessageResponse> changePassword(
     String oldPassword,

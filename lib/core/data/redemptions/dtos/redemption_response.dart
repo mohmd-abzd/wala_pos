@@ -17,8 +17,8 @@ class RedemptionResponse with _$RedemptionResponse {
 @freezed
 class RedemptionData with _$RedemptionData {
   const factory RedemptionData({
-    required String redemptionCode,
-    required int remainingPoints,
+    required int redemptionId,
+    required int newTotalPoints,
   }) = _RedemptionData;
 
   factory RedemptionData.fromJson(Map<String, dynamic> json) =>

@@ -11,6 +11,7 @@ _$PurchaseRequestImpl _$$PurchaseRequestImplFromJson(
 ) => _$PurchaseRequestImpl(
   customerId: (json['customerId'] as num).toInt(),
   amount: (json['amount'] as num).toDouble(),
+  invoiceId: json['invoiceId'] as String?,
 );
 
 Map<String, dynamic> _$$PurchaseRequestImplToJson(
@@ -18,4 +19,5 @@ Map<String, dynamic> _$$PurchaseRequestImplToJson(
 ) => <String, dynamic>{
   'customerId': instance.customerId,
   'amount': instance.amount,
+  'invoiceId': instance.invoiceId,
 };

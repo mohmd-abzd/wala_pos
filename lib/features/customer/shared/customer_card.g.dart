@@ -13,6 +13,11 @@ _$CustomerCardImpl _$$CustomerCardImplFromJson(Map<String, dynamic> json) =>
       phoneNumber: json['phoneNumber'] as String,
       email: json['email'] as String,
       totalPoints: (json['totalPoints'] as num).toInt(),
+      cardNumber: json['cardNumber'] as String,
+      merchantName: json['merchantName'] as String,
+      lastTransaction: json['lastTransaction'] == null
+          ? null
+          : DateTime.parse(json['lastTransaction'] as String),
     );
 
 Map<String, dynamic> _$$CustomerCardImplToJson(_$CustomerCardImpl instance) =>
@@ -22,4 +27,7 @@ Map<String, dynamic> _$$CustomerCardImplToJson(_$CustomerCardImpl instance) =>
       'phoneNumber': instance.phoneNumber,
       'email': instance.email,
       'totalPoints': instance.totalPoints,
+      'cardNumber': instance.cardNumber,
+      'merchantName': instance.merchantName,
+      'lastTransaction': instance.lastTransaction?.toIso8601String(),
     };

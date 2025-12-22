@@ -196,6 +196,8 @@ mixin _$LoginData {
   String get accessToken => throw _privateConstructorUsedError;
   @JsonKey(name: "refreshToken")
   String get refreshToken => throw _privateConstructorUsedError;
+  @JsonKey(name: "profile")
+  Profile get profile => throw _privateConstructorUsedError;
 
   /// Serializes this LoginData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -215,7 +217,10 @@ abstract class $LoginDataCopyWith<$Res> {
   $Res call({
     @JsonKey(name: "accessToken") String accessToken,
     @JsonKey(name: "refreshToken") String refreshToken,
+    @JsonKey(name: "profile") Profile profile,
   });
+
+  $ProfileCopyWith<$Res> get profile;
 }
 
 /// @nodoc
@@ -232,7 +237,11 @@ class _$LoginDataCopyWithImpl<$Res, $Val extends LoginData>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? accessToken = null, Object? refreshToken = null}) {
+  $Res call({
+    Object? accessToken = null,
+    Object? refreshToken = null,
+    Object? profile = null,
+  }) {
     return _then(
       _value.copyWith(
             accessToken: null == accessToken
@@ -243,9 +252,23 @@ class _$LoginDataCopyWithImpl<$Res, $Val extends LoginData>
                 ? _value.refreshToken
                 : refreshToken // ignore: cast_nullable_to_non_nullable
                       as String,
+            profile: null == profile
+                ? _value.profile
+                : profile // ignore: cast_nullable_to_non_nullable
+                      as Profile,
           )
           as $Val,
     );
+  }
+
+  /// Create a copy of LoginData
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ProfileCopyWith<$Res> get profile {
+    return $ProfileCopyWith<$Res>(_value.profile, (value) {
+      return _then(_value.copyWith(profile: value) as $Val);
+    });
   }
 }
 
@@ -261,7 +284,11 @@ abstract class _$$LoginDataImplCopyWith<$Res>
   $Res call({
     @JsonKey(name: "accessToken") String accessToken,
     @JsonKey(name: "refreshToken") String refreshToken,
+    @JsonKey(name: "profile") Profile profile,
   });
+
+  @override
+  $ProfileCopyWith<$Res> get profile;
 }
 
 /// @nodoc
@@ -277,7 +304,11 @@ class __$$LoginDataImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? accessToken = null, Object? refreshToken = null}) {
+  $Res call({
+    Object? accessToken = null,
+    Object? refreshToken = null,
+    Object? profile = null,
+  }) {
     return _then(
       _$LoginDataImpl(
         accessToken: null == accessToken
@@ -288,6 +319,10 @@ class __$$LoginDataImplCopyWithImpl<$Res>
             ? _value.refreshToken
             : refreshToken // ignore: cast_nullable_to_non_nullable
                   as String,
+        profile: null == profile
+            ? _value.profile
+            : profile // ignore: cast_nullable_to_non_nullable
+                  as Profile,
       ),
     );
   }
@@ -299,6 +334,7 @@ class _$LoginDataImpl implements _LoginData {
   const _$LoginDataImpl({
     @JsonKey(name: "accessToken") required this.accessToken,
     @JsonKey(name: "refreshToken") required this.refreshToken,
+    @JsonKey(name: "profile") required this.profile,
   });
 
   factory _$LoginDataImpl.fromJson(Map<String, dynamic> json) =>
@@ -310,10 +346,13 @@ class _$LoginDataImpl implements _LoginData {
   @override
   @JsonKey(name: "refreshToken")
   final String refreshToken;
+  @override
+  @JsonKey(name: "profile")
+  final Profile profile;
 
   @override
   String toString() {
-    return 'LoginData(accessToken: $accessToken, refreshToken: $refreshToken)';
+    return 'LoginData(accessToken: $accessToken, refreshToken: $refreshToken, profile: $profile)';
   }
 
   @override
@@ -324,12 +363,14 @@ class _$LoginDataImpl implements _LoginData {
             (identical(other.accessToken, accessToken) ||
                 other.accessToken == accessToken) &&
             (identical(other.refreshToken, refreshToken) ||
-                other.refreshToken == refreshToken));
+                other.refreshToken == refreshToken) &&
+            (identical(other.profile, profile) || other.profile == profile));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, accessToken, refreshToken);
+  int get hashCode =>
+      Object.hash(runtimeType, accessToken, refreshToken, profile);
 
   /// Create a copy of LoginData
   /// with the given fields replaced by the non-null parameter values.
@@ -349,6 +390,7 @@ abstract class _LoginData implements LoginData {
   const factory _LoginData({
     @JsonKey(name: "accessToken") required final String accessToken,
     @JsonKey(name: "refreshToken") required final String refreshToken,
+    @JsonKey(name: "profile") required final Profile profile,
   }) = _$LoginDataImpl;
 
   factory _LoginData.fromJson(Map<String, dynamic> json) =
@@ -360,11 +402,416 @@ abstract class _LoginData implements LoginData {
   @override
   @JsonKey(name: "refreshToken")
   String get refreshToken;
+  @override
+  @JsonKey(name: "profile")
+  Profile get profile;
 
   /// Create a copy of LoginData
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoginDataImplCopyWith<_$LoginDataImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+Profile _$ProfileFromJson(Map<String, dynamic> json) {
+  return _Profile.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Profile {
+  int get id => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+  String get username => throw _privateConstructorUsedError;
+  String get phoneNumber => throw _privateConstructorUsedError;
+  int get merchantId => throw _privateConstructorUsedError;
+  String get merchantName => throw _privateConstructorUsedError;
+  String? get merchantLogo => throw _privateConstructorUsedError;
+  int get branchId => throw _privateConstructorUsedError;
+  String get branchName => throw _privateConstructorUsedError;
+  String? get merchantType => throw _privateConstructorUsedError;
+  double? get pointsRate => throw _privateConstructorUsedError;
+  int? get maxPoints => throw _privateConstructorUsedError;
+
+  /// Serializes this Profile to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of Profile
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $ProfileCopyWith<Profile> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ProfileCopyWith<$Res> {
+  factory $ProfileCopyWith(Profile value, $Res Function(Profile) then) =
+      _$ProfileCopyWithImpl<$Res, Profile>;
+  @useResult
+  $Res call({
+    int id,
+    String name,
+    String username,
+    String phoneNumber,
+    int merchantId,
+    String merchantName,
+    String? merchantLogo,
+    int branchId,
+    String branchName,
+    String? merchantType,
+    double? pointsRate,
+    int? maxPoints,
+  });
+}
+
+/// @nodoc
+class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
+    implements $ProfileCopyWith<$Res> {
+  _$ProfileCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of Profile
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? name = null,
+    Object? username = null,
+    Object? phoneNumber = null,
+    Object? merchantId = null,
+    Object? merchantName = null,
+    Object? merchantLogo = freezed,
+    Object? branchId = null,
+    Object? branchName = null,
+    Object? merchantType = freezed,
+    Object? pointsRate = freezed,
+    Object? maxPoints = freezed,
+  }) {
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as int,
+            name: null == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                      as String,
+            username: null == username
+                ? _value.username
+                : username // ignore: cast_nullable_to_non_nullable
+                      as String,
+            phoneNumber: null == phoneNumber
+                ? _value.phoneNumber
+                : phoneNumber // ignore: cast_nullable_to_non_nullable
+                      as String,
+            merchantId: null == merchantId
+                ? _value.merchantId
+                : merchantId // ignore: cast_nullable_to_non_nullable
+                      as int,
+            merchantName: null == merchantName
+                ? _value.merchantName
+                : merchantName // ignore: cast_nullable_to_non_nullable
+                      as String,
+            merchantLogo: freezed == merchantLogo
+                ? _value.merchantLogo
+                : merchantLogo // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            branchId: null == branchId
+                ? _value.branchId
+                : branchId // ignore: cast_nullable_to_non_nullable
+                      as int,
+            branchName: null == branchName
+                ? _value.branchName
+                : branchName // ignore: cast_nullable_to_non_nullable
+                      as String,
+            merchantType: freezed == merchantType
+                ? _value.merchantType
+                : merchantType // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            pointsRate: freezed == pointsRate
+                ? _value.pointsRate
+                : pointsRate // ignore: cast_nullable_to_non_nullable
+                      as double?,
+            maxPoints: freezed == maxPoints
+                ? _value.maxPoints
+                : maxPoints // ignore: cast_nullable_to_non_nullable
+                      as int?,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$ProfileImplCopyWith<$Res> implements $ProfileCopyWith<$Res> {
+  factory _$$ProfileImplCopyWith(
+    _$ProfileImpl value,
+    $Res Function(_$ProfileImpl) then,
+  ) = __$$ProfileImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({
+    int id,
+    String name,
+    String username,
+    String phoneNumber,
+    int merchantId,
+    String merchantName,
+    String? merchantLogo,
+    int branchId,
+    String branchName,
+    String? merchantType,
+    double? pointsRate,
+    int? maxPoints,
+  });
+}
+
+/// @nodoc
+class __$$ProfileImplCopyWithImpl<$Res>
+    extends _$ProfileCopyWithImpl<$Res, _$ProfileImpl>
+    implements _$$ProfileImplCopyWith<$Res> {
+  __$$ProfileImplCopyWithImpl(
+    _$ProfileImpl _value,
+    $Res Function(_$ProfileImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of Profile
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? name = null,
+    Object? username = null,
+    Object? phoneNumber = null,
+    Object? merchantId = null,
+    Object? merchantName = null,
+    Object? merchantLogo = freezed,
+    Object? branchId = null,
+    Object? branchName = null,
+    Object? merchantType = freezed,
+    Object? pointsRate = freezed,
+    Object? maxPoints = freezed,
+  }) {
+    return _then(
+      _$ProfileImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as int,
+        name: null == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                  as String,
+        username: null == username
+            ? _value.username
+            : username // ignore: cast_nullable_to_non_nullable
+                  as String,
+        phoneNumber: null == phoneNumber
+            ? _value.phoneNumber
+            : phoneNumber // ignore: cast_nullable_to_non_nullable
+                  as String,
+        merchantId: null == merchantId
+            ? _value.merchantId
+            : merchantId // ignore: cast_nullable_to_non_nullable
+                  as int,
+        merchantName: null == merchantName
+            ? _value.merchantName
+            : merchantName // ignore: cast_nullable_to_non_nullable
+                  as String,
+        merchantLogo: freezed == merchantLogo
+            ? _value.merchantLogo
+            : merchantLogo // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        branchId: null == branchId
+            ? _value.branchId
+            : branchId // ignore: cast_nullable_to_non_nullable
+                  as int,
+        branchName: null == branchName
+            ? _value.branchName
+            : branchName // ignore: cast_nullable_to_non_nullable
+                  as String,
+        merchantType: freezed == merchantType
+            ? _value.merchantType
+            : merchantType // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        pointsRate: freezed == pointsRate
+            ? _value.pointsRate
+            : pointsRate // ignore: cast_nullable_to_non_nullable
+                  as double?,
+        maxPoints: freezed == maxPoints
+            ? _value.maxPoints
+            : maxPoints // ignore: cast_nullable_to_non_nullable
+                  as int?,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ProfileImpl implements _Profile {
+  const _$ProfileImpl({
+    required this.id,
+    required this.name,
+    required this.username,
+    required this.phoneNumber,
+    required this.merchantId,
+    required this.merchantName,
+    this.merchantLogo,
+    required this.branchId,
+    required this.branchName,
+    this.merchantType,
+    this.pointsRate,
+    this.maxPoints,
+  });
+
+  factory _$ProfileImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ProfileImplFromJson(json);
+
+  @override
+  final int id;
+  @override
+  final String name;
+  @override
+  final String username;
+  @override
+  final String phoneNumber;
+  @override
+  final int merchantId;
+  @override
+  final String merchantName;
+  @override
+  final String? merchantLogo;
+  @override
+  final int branchId;
+  @override
+  final String branchName;
+  @override
+  final String? merchantType;
+  @override
+  final double? pointsRate;
+  @override
+  final int? maxPoints;
+
+  @override
+  String toString() {
+    return 'Profile(id: $id, name: $name, username: $username, phoneNumber: $phoneNumber, merchantId: $merchantId, merchantName: $merchantName, merchantLogo: $merchantLogo, branchId: $branchId, branchName: $branchName, merchantType: $merchantType, pointsRate: $pointsRate, maxPoints: $maxPoints)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ProfileImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.username, username) ||
+                other.username == username) &&
+            (identical(other.phoneNumber, phoneNumber) ||
+                other.phoneNumber == phoneNumber) &&
+            (identical(other.merchantId, merchantId) ||
+                other.merchantId == merchantId) &&
+            (identical(other.merchantName, merchantName) ||
+                other.merchantName == merchantName) &&
+            (identical(other.merchantLogo, merchantLogo) ||
+                other.merchantLogo == merchantLogo) &&
+            (identical(other.branchId, branchId) ||
+                other.branchId == branchId) &&
+            (identical(other.branchName, branchName) ||
+                other.branchName == branchName) &&
+            (identical(other.merchantType, merchantType) ||
+                other.merchantType == merchantType) &&
+            (identical(other.pointsRate, pointsRate) ||
+                other.pointsRate == pointsRate) &&
+            (identical(other.maxPoints, maxPoints) ||
+                other.maxPoints == maxPoints));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    name,
+    username,
+    phoneNumber,
+    merchantId,
+    merchantName,
+    merchantLogo,
+    branchId,
+    branchName,
+    merchantType,
+    pointsRate,
+    maxPoints,
+  );
+
+  /// Create a copy of Profile
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ProfileImplCopyWith<_$ProfileImpl> get copyWith =>
+      __$$ProfileImplCopyWithImpl<_$ProfileImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ProfileImplToJson(this);
+  }
+}
+
+abstract class _Profile implements Profile {
+  const factory _Profile({
+    required final int id,
+    required final String name,
+    required final String username,
+    required final String phoneNumber,
+    required final int merchantId,
+    required final String merchantName,
+    final String? merchantLogo,
+    required final int branchId,
+    required final String branchName,
+    final String? merchantType,
+    final double? pointsRate,
+    final int? maxPoints,
+  }) = _$ProfileImpl;
+
+  factory _Profile.fromJson(Map<String, dynamic> json) = _$ProfileImpl.fromJson;
+
+  @override
+  int get id;
+  @override
+  String get name;
+  @override
+  String get username;
+  @override
+  String get phoneNumber;
+  @override
+  int get merchantId;
+  @override
+  String get merchantName;
+  @override
+  String? get merchantLogo;
+  @override
+  int get branchId;
+  @override
+  String get branchName;
+  @override
+  String? get merchantType;
+  @override
+  double? get pointsRate;
+  @override
+  int? get maxPoints;
+
+  /// Create a copy of Profile
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ProfileImplCopyWith<_$ProfileImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

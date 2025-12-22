@@ -40,6 +40,10 @@ _$TransactionDtoImpl _$$TransactionDtoImplFromJson(Map<String, dynamic> json) =>
       amount: (json['amount'] as num).toDouble(),
       points: (json['points'] as num).toInt(),
       transactionTime: json['transactionTime'] as String,
+      isRefund: json['isRefund'] as bool,
+      isRefunded: json['isRefunded'] as bool,
+      branch: BranchDto.fromJson(json['branch'] as Map<String, dynamic>),
+      staff: StaffDto.fromJson(json['staff'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$TransactionDtoImplToJson(
@@ -50,4 +54,26 @@ Map<String, dynamic> _$$TransactionDtoImplToJson(
   'amount': instance.amount,
   'points': instance.points,
   'transactionTime': instance.transactionTime,
+  'isRefund': instance.isRefund,
+  'isRefunded': instance.isRefunded,
+  'branch': instance.branch,
+  'staff': instance.staff,
 };
+
+_$BranchDtoImpl _$$BranchDtoImplFromJson(Map<String, dynamic> json) =>
+    _$BranchDtoImpl(
+      id: (json['id'] as num).toInt(),
+      name: json['name'] as String,
+    );
+
+Map<String, dynamic> _$$BranchDtoImplToJson(_$BranchDtoImpl instance) =>
+    <String, dynamic>{'id': instance.id, 'name': instance.name};
+
+_$StaffDtoImpl _$$StaffDtoImplFromJson(Map<String, dynamic> json) =>
+    _$StaffDtoImpl(
+      id: (json['id'] as num).toInt(),
+      name: json['name'] as String,
+    );
+
+Map<String, dynamic> _$$StaffDtoImplToJson(_$StaffDtoImpl instance) =>
+    <String, dynamic>{'id': instance.id, 'name': instance.name};

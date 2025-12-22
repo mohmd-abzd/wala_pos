@@ -35,9 +35,28 @@ class TransactionDto with _$TransactionDto {
     required double amount,
     required int points,
     required String transactionTime,
-    // add staff/branch fields if you expose them
+    required bool isRefund,
+    required bool isRefunded,
+    required BranchDto branch,
+    required StaffDto staff,
   }) = _TransactionDto;
 
   factory TransactionDto.fromJson(Map<String, dynamic> json) =>
       _$TransactionDtoFromJson(json);
+}
+
+@freezed
+class BranchDto with _$BranchDto {
+  const factory BranchDto({required int id, required String name}) = _BranchDto;
+
+  factory BranchDto.fromJson(Map<String, dynamic> json) =>
+      _$BranchDtoFromJson(json);
+}
+
+@freezed
+class StaffDto with _$StaffDto {
+  const factory StaffDto({required int id, required String name}) = _StaffDto;
+
+  factory StaffDto.fromJson(Map<String, dynamic> json) =>
+      _$StaffDtoFromJson(json);
 }

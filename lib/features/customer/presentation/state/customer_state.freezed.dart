@@ -17,6 +17,9 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$CustomerState {
+  bool get isLoading => throw _privateConstructorUsedError;
+  String? get error => throw _privateConstructorUsedError;
+  String? get successMessage => throw _privateConstructorUsedError;
   CustomerCard get customer => throw _privateConstructorUsedError;
   List<RewardItem> get rewards => throw _privateConstructorUsedError;
 
@@ -34,7 +37,13 @@ abstract class $CustomerStateCopyWith<$Res> {
     $Res Function(CustomerState) then,
   ) = _$CustomerStateCopyWithImpl<$Res, CustomerState>;
   @useResult
-  $Res call({CustomerCard customer, List<RewardItem> rewards});
+  $Res call({
+    bool isLoading,
+    String? error,
+    String? successMessage,
+    CustomerCard customer,
+    List<RewardItem> rewards,
+  });
 
   $CustomerCardCopyWith<$Res> get customer;
 }
@@ -53,9 +62,27 @@ class _$CustomerStateCopyWithImpl<$Res, $Val extends CustomerState>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? customer = null, Object? rewards = null}) {
+  $Res call({
+    Object? isLoading = null,
+    Object? error = freezed,
+    Object? successMessage = freezed,
+    Object? customer = null,
+    Object? rewards = null,
+  }) {
     return _then(
       _value.copyWith(
+            isLoading: null == isLoading
+                ? _value.isLoading
+                : isLoading // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            error: freezed == error
+                ? _value.error
+                : error // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            successMessage: freezed == successMessage
+                ? _value.successMessage
+                : successMessage // ignore: cast_nullable_to_non_nullable
+                      as String?,
             customer: null == customer
                 ? _value.customer
                 : customer // ignore: cast_nullable_to_non_nullable
@@ -89,7 +116,13 @@ abstract class _$$CustomerStateImplCopyWith<$Res>
   ) = __$$CustomerStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({CustomerCard customer, List<RewardItem> rewards});
+  $Res call({
+    bool isLoading,
+    String? error,
+    String? successMessage,
+    CustomerCard customer,
+    List<RewardItem> rewards,
+  });
 
   @override
   $CustomerCardCopyWith<$Res> get customer;
@@ -108,9 +141,27 @@ class __$$CustomerStateImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? customer = null, Object? rewards = null}) {
+  $Res call({
+    Object? isLoading = null,
+    Object? error = freezed,
+    Object? successMessage = freezed,
+    Object? customer = null,
+    Object? rewards = null,
+  }) {
     return _then(
       _$CustomerStateImpl(
+        isLoading: null == isLoading
+            ? _value.isLoading
+            : isLoading // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        error: freezed == error
+            ? _value.error
+            : error // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        successMessage: freezed == successMessage
+            ? _value.successMessage
+            : successMessage // ignore: cast_nullable_to_non_nullable
+                  as String?,
         customer: null == customer
             ? _value.customer
             : customer // ignore: cast_nullable_to_non_nullable
@@ -128,10 +179,20 @@ class __$$CustomerStateImplCopyWithImpl<$Res>
 
 class _$CustomerStateImpl implements _CustomerState {
   _$CustomerStateImpl({
+    this.isLoading = false,
+    this.error,
+    this.successMessage,
     required this.customer,
     required final List<RewardItem> rewards,
   }) : _rewards = rewards;
 
+  @override
+  @JsonKey()
+  final bool isLoading;
+  @override
+  final String? error;
+  @override
+  final String? successMessage;
   @override
   final CustomerCard customer;
   final List<RewardItem> _rewards;
@@ -144,7 +205,7 @@ class _$CustomerStateImpl implements _CustomerState {
 
   @override
   String toString() {
-    return 'CustomerState(customer: $customer, rewards: $rewards)';
+    return 'CustomerState(isLoading: $isLoading, error: $error, successMessage: $successMessage, customer: $customer, rewards: $rewards)';
   }
 
   @override
@@ -152,6 +213,11 @@ class _$CustomerStateImpl implements _CustomerState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CustomerStateImpl &&
+            (identical(other.isLoading, isLoading) ||
+                other.isLoading == isLoading) &&
+            (identical(other.error, error) || other.error == error) &&
+            (identical(other.successMessage, successMessage) ||
+                other.successMessage == successMessage) &&
             (identical(other.customer, customer) ||
                 other.customer == customer) &&
             const DeepCollectionEquality().equals(other._rewards, _rewards));
@@ -160,6 +226,9 @@ class _$CustomerStateImpl implements _CustomerState {
   @override
   int get hashCode => Object.hash(
     runtimeType,
+    isLoading,
+    error,
+    successMessage,
     customer,
     const DeepCollectionEquality().hash(_rewards),
   );
@@ -175,10 +244,19 @@ class _$CustomerStateImpl implements _CustomerState {
 
 abstract class _CustomerState implements CustomerState {
   factory _CustomerState({
+    final bool isLoading,
+    final String? error,
+    final String? successMessage,
     required final CustomerCard customer,
     required final List<RewardItem> rewards,
   }) = _$CustomerStateImpl;
 
+  @override
+  bool get isLoading;
+  @override
+  String? get error;
+  @override
+  String? get successMessage;
   @override
   CustomerCard get customer;
   @override

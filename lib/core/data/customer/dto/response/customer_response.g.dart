@@ -23,6 +23,11 @@ _$CustomerDataImpl _$$CustomerDataImplFromJson(Map<String, dynamic> json) =>
       phoneNumber: json['phoneNumber'] as String,
       email: json['email'] as String,
       totalPoints: (json['totalPoints'] as num).toInt(),
+      cardNumber: json['cardNumber'] as String,
+      merchantName: json['merchantName'] as String,
+      lastTransaction: json['lastTransaction'] == null
+          ? null
+          : DateTime.parse(json['lastTransaction'] as String),
       rewards: (json['rewards'] as List<dynamic>)
           .map((e) => RewardData.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -35,6 +40,9 @@ Map<String, dynamic> _$$CustomerDataImplToJson(_$CustomerDataImpl instance) =>
       'phoneNumber': instance.phoneNumber,
       'email': instance.email,
       'totalPoints': instance.totalPoints,
+      'cardNumber': instance.cardNumber,
+      'merchantName': instance.merchantName,
+      'lastTransaction': instance.lastTransaction?.toIso8601String(),
       'rewards': instance.rewards,
     };
 

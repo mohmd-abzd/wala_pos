@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '/core/data/local/secure_storage/secure_storage.dart';
-import '/core/data/local/secure_storage/secure_storage_const.dart';
+import '../services/secure_storage/secure_storage.dart';
+import '../services/secure_storage/secure_storage_const.dart';
 import '/core/provider/auth_state_provider.dart';
 
 part 'start_up_provider.g.dart';

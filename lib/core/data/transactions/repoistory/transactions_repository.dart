@@ -2,10 +2,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:walaa_pos/core/data/transactions/dtos/purchase_request.dart';
+import 'package:walaa_pos/core/data/transactions/dtos/refund_request.dart';
+import 'package:walaa_pos/core/data/transactions/dtos/refund_response.dart';
 import 'package:walaa_pos/core/data/transactions/dtos/transactions_list_response.dart';
 import 'package:walaa_pos/core/data/transactions/repoistory/itransactions_repository.dart';
 import 'package:walaa_pos/core/data/transactions/source/remote/transactions_api.dart';
 import 'package:walaa_pos/features/purchase/domain/purchase_usecase.dart';
+import 'package:walaa_pos/features/transactions/domain/refund_usecase.dart';
 import '/common/exception/failure.dart';
 import '/common/mixin/dio_exception_mapper.dart';
 
@@ -25,11 +28,17 @@ class TransactionsRepository
   Future<CreatePurchaseResult> createPurchase({
     required int customerId,
     required double amount,
+    String? invoiceId,
   }) async {
     try {
       final resp = await _api.createPurchase(
-        PurchaseRequest(customerId: customerId, amount: amount),
+        PurchaseRequest(
+          customerId: customerId,
+          amount: amount,
+          invoiceId: invoiceId,
+        ),
       );
+
       return CreatePurchaseResult(
         transactionCode: resp.data.transactionCode,
         newTotalPoints: resp.data.newTotalPoints,
@@ -60,11 +69,23 @@ class TransactionsRepository
   }
 
   @override
-  Future<void> refundTransaction(int transactionId) async {
+  Future<CreateRefundResult> createRefund(String transactionCode) async {
     try {
-      await _api.refundTransaction(transactionId);
+      final respo = await _api.createRefund(
+        RefundRequest(transactionCode: transactionCode),
+      );
+      return CreateRefundResult(
+        transactionCode: respo.data.refundCode,
+        message: respo.message,
+      );
     } on DioException catch (e, st) {
       throw mapDioExceptionToFailure(e, st);
+    } catch (e, st) {
+      throw Failure(
+        message: 'تعذر تنفيذ عملية الشراء',
+        exception: e is Exception ? e : Exception(e.toString()),
+        stackTrace: st,
+      );
     }
   }
 }

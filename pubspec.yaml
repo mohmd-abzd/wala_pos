@@ -59,6 +59,14 @@ dependencies:
   toastification: ^3.0.3
   firebase_core: ^4.0.0
   device_info_plus: ^12.1.0
+  flutter_keyboard_visibility: ^6.0.0
+  shared_preferences: ^2.5.3
+  modal_progress_hud_nsn: ^0.5.1
+  flutter_cache_manager: ^3.4.1
+  cached_network_image: ^3.4.1
+  mssql_connection: ^3.0.0
+
+
 
   flutter_localizations:
     sdk: flutter
@@ -73,6 +81,8 @@ dev_dependencies:
   riverpod_generator: ^2.6.2
   flutter_gen_runner: ^5.8.0
 
+
+
 # analysis_options.yaml
 analyzer:
   exclude:
@@ -83,6 +93,9 @@ analyzer:
 
 flutter:
   uses-material-design: true
+  assets:
+  - assets/images/
+
   fonts:
   - family: Alexandria
     fonts:

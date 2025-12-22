@@ -1,39 +1,61 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:walaa_pos/core/data/auth/repository/auth_repository.dart';
-import 'package:walaa_pos/core/data/auth/source/local/token_storage.dart';
+import 'package:walaa_pos/core/data/auth/source/local/iprofile_storage.dart';
+import 'package:walaa_pos/core/data/auth/source/local/profile_storage.dart';
 import 'package:walaa_pos/core/provider/device_info_provider.dart';
+import 'package:walaa_pos/core/services/network/network_service.dart';
+import 'package:walaa_pos/core/services/token/itoken_service.dart';
+import 'package:walaa_pos/core/services/token/token_service.dart';
+import 'package:walaa_pos/features/login/domain/session_token.dart';
 import '/core/provider/auth_state_provider.dart';
 import '../../../core/data/auth/repository/iauth_repository.dart';
-import '../../../core/data/auth/source/local/itoken_storage.dart';
 
 final loginUseCaseProvider = Provider.autoDispose<LoginUseCase>((ref) {
   final repo = ref.watch(authRepositoryProvider);
-  final storage = ref.watch(tokenStorageProvider);
+  final dio = ref.watch(networkServiceProvider); // 👈 existing global Dio
+  final tokenService = ref.watch(tokenServiceProvider(dio)); // 👈 pass Dio
+
   final auth = ref.read(authStateProvider.notifier);
   final deviceInfo = ref.read(deviceInfoServiceProvider);
+  final profileStorage = ref.watch(profileStorageProvider);
 
-  return LoginUseCase(repo, storage, auth, deviceInfo);
+  return LoginUseCase(repo, tokenService, profileStorage, auth, deviceInfo);
 });
 
 class LoginUseCase {
   final IAuthRepository _repo;
-  final ITokenStorage _storage;
+  final ITokenService _tokenService;
+  final IProfileStorage _profileStorage;
+
   final AuthState _auth;
   final DeviceInfoService _deviceInfo;
 
-  LoginUseCase(this._repo, this._storage, this._auth, this._deviceInfo);
+  LoginUseCase(
+    this._repo,
+    this._tokenService,
+    this._profileStorage,
+    this._auth,
+    this._deviceInfo,
+  );
 
   /// Executes the login flow. Throws `Failure` on error.
   Future<void> execute(String username, String password) async {
-    final deviceIdNotUsedYet = await _deviceInfo.getDeviceId();
+    final serialNumberNotUsedYet = await _deviceInfo.getSerialNumber();
 
-    print(deviceIdNotUsedYet);
-    final deviceId = "POS-1-921";
+    print(serialNumberNotUsedYet);
+    final serialNumber = "SN-11-126";
     // 1. remote call – may throw Failure.network etc.
-    final tokens = await _repo.login(username, password, deviceId);
+    final response = await _repo.login(username, password, serialNumber);
+
+    final tokens = SessionTokens(
+      response.data.accessToken,
+      response.data.refreshToken,
+    );
 
     // 2. persist
-    await _storage.storeToken(tokens.access, tokens.refresh);
+    await _tokenService.storeToken(tokens.access, tokens.refresh);
+
+    await _profileStorage.saveProfile(response.data.profile);
 
     // 3. flip global flag (single writer)
     _auth.setAuthState(true);

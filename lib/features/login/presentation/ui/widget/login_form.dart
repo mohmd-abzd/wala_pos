@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '/common/extension/string_hardcoded.dart';
 import '/common/style/dimens.dart';
 import '/features/login/presentation/controller/login_controller.dart';
@@ -38,60 +39,65 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   Widget build(BuildContext context) {
     _listener();
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextFormField(
-                controller: _usernameController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: 'username'.hardcoded,
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(kSmall)),
+    return ModalProgressHUD(
+      inAsyncCall: ref.watch(
+        loginControllerProvider.select((value) => value.isLoading),
+      ),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextFormField(
+                  controller: _usernameController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    labelText: 'اسم المستخدم'.hardcoded,
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(kSmall)),
+                    ),
+                    prefix: const Icon(Icons.person),
                   ),
-                  prefix: const Icon(Icons.person),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'الرجاء ادخال اسم المستخدم'.hardcoded;
+                    }
+                    // else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                    //   return 'Please enter a valid username'.hardcoded;
+                    // }
+                    return null;
+                  },
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your username'.hardcoded;
-                  }
-                  // else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                  //   return 'Please enter a valid username'.hardcoded;
-                  // }
-                  return null;
-                },
-              ),
-              const SizedBox(height: kMedium),
-              TextFormField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password'.hardcoded,
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(kSmall)),
+                const SizedBox(height: kMedium),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'كلمة المرور'.hardcoded,
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(kSmall)),
+                    ),
+                    prefix: const Icon(Icons.lock),
                   ),
-                  prefix: const Icon(Icons.lock),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'الرجاء ادخال كلمة المرور'.hardcoded;
+                    } else if (value.length < 6) {
+                      return 'Password must be at least 6 characters long'
+                          .hardcoded;
+                    }
+                    return null;
+                  },
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your password'.hardcoded;
-                  } else if (value.length < 6) {
-                    return 'Password must be at least 6 characters long'
-                        .hardcoded;
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: kSmall),
-              LoginButton(onPressed: _login),
-              const SizedBox(height: kLarge),
-              const SizedBox(height: kLarge),
-            ],
+                const SizedBox(height: kSmall),
+                LoginButton(onPressed: _login),
+                const SizedBox(height: kLarge),
+                const SizedBox(height: kLarge),
+              ],
+            ),
           ),
         ),
       ),
@@ -126,7 +132,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   }
 
   void _login() {
-    _getDeviceId();
+    _getSerialNumber();
     final isValid = _formKey.currentState?.validate() ?? false;
 
     if (isValid) {
@@ -143,7 +149,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
     }
   }
 
-  _getDeviceId() async {
+  _getSerialNumber() async {
     final deviceInfoPlugin = DeviceInfoPlugin();
     final androidInfo = await deviceInfoPlugin.androidInfo;
     final allInfo = androidInfo.id;

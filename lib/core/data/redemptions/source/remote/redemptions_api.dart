@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:walaa_pos/core/data/redemptions/dtos/redemption_request.dart';
 import 'package:walaa_pos/core/data/redemptions/dtos/redemption_response.dart';
-import '/core/data/remote/network_service.dart';
+import '../../../../services/network/network_service.dart';
 
 part 'redemptions_api.g.dart';
 

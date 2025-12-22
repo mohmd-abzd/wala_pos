@@ -17,8 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$CreateRedemptionResult {
-  String get redemptionCode => throw _privateConstructorUsedError;
-  int get remainingPoints => throw _privateConstructorUsedError;
+  int get redemptionId => throw _privateConstructorUsedError;
+  int get newTotalPoints => throw _privateConstructorUsedError;
   String? get message => throw _privateConstructorUsedError;
 
   /// Create a copy of CreateRedemptionResult
@@ -35,7 +35,7 @@ abstract class $CreateRedemptionResultCopyWith<$Res> {
     $Res Function(CreateRedemptionResult) then,
   ) = _$CreateRedemptionResultCopyWithImpl<$Res, CreateRedemptionResult>;
   @useResult
-  $Res call({String redemptionCode, int remainingPoints, String? message});
+  $Res call({int redemptionId, int newTotalPoints, String? message});
 }
 
 /// @nodoc
@@ -56,19 +56,19 @@ class _$CreateRedemptionResultCopyWithImpl<
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? redemptionCode = null,
-    Object? remainingPoints = null,
+    Object? redemptionId = null,
+    Object? newTotalPoints = null,
     Object? message = freezed,
   }) {
     return _then(
       _value.copyWith(
-            redemptionCode: null == redemptionCode
-                ? _value.redemptionCode
-                : redemptionCode // ignore: cast_nullable_to_non_nullable
-                      as String,
-            remainingPoints: null == remainingPoints
-                ? _value.remainingPoints
-                : remainingPoints // ignore: cast_nullable_to_non_nullable
+            redemptionId: null == redemptionId
+                ? _value.redemptionId
+                : redemptionId // ignore: cast_nullable_to_non_nullable
+                      as int,
+            newTotalPoints: null == newTotalPoints
+                ? _value.newTotalPoints
+                : newTotalPoints // ignore: cast_nullable_to_non_nullable
                       as int,
             message: freezed == message
                 ? _value.message
@@ -89,7 +89,7 @@ abstract class _$$CreateRedemptionResultImplCopyWith<$Res>
   ) = __$$CreateRedemptionResultImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String redemptionCode, int remainingPoints, String? message});
+  $Res call({int redemptionId, int newTotalPoints, String? message});
 }
 
 /// @nodoc
@@ -107,19 +107,19 @@ class __$$CreateRedemptionResultImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? redemptionCode = null,
-    Object? remainingPoints = null,
+    Object? redemptionId = null,
+    Object? newTotalPoints = null,
     Object? message = freezed,
   }) {
     return _then(
       _$CreateRedemptionResultImpl(
-        redemptionCode: null == redemptionCode
-            ? _value.redemptionCode
-            : redemptionCode // ignore: cast_nullable_to_non_nullable
-                  as String,
-        remainingPoints: null == remainingPoints
-            ? _value.remainingPoints
-            : remainingPoints // ignore: cast_nullable_to_non_nullable
+        redemptionId: null == redemptionId
+            ? _value.redemptionId
+            : redemptionId // ignore: cast_nullable_to_non_nullable
+                  as int,
+        newTotalPoints: null == newTotalPoints
+            ? _value.newTotalPoints
+            : newTotalPoints // ignore: cast_nullable_to_non_nullable
                   as int,
         message: freezed == message
             ? _value.message
@@ -134,21 +134,21 @@ class __$$CreateRedemptionResultImplCopyWithImpl<$Res>
 
 class _$CreateRedemptionResultImpl implements _CreateRedemptionResult {
   const _$CreateRedemptionResultImpl({
-    required this.redemptionCode,
-    required this.remainingPoints,
+    required this.redemptionId,
+    required this.newTotalPoints,
     this.message,
   });
 
   @override
-  final String redemptionCode;
+  final int redemptionId;
   @override
-  final int remainingPoints;
+  final int newTotalPoints;
   @override
   final String? message;
 
   @override
   String toString() {
-    return 'CreateRedemptionResult(redemptionCode: $redemptionCode, remainingPoints: $remainingPoints, message: $message)';
+    return 'CreateRedemptionResult(redemptionId: $redemptionId, newTotalPoints: $newTotalPoints, message: $message)';
   }
 
   @override
@@ -156,16 +156,16 @@ class _$CreateRedemptionResultImpl implements _CreateRedemptionResult {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CreateRedemptionResultImpl &&
-            (identical(other.redemptionCode, redemptionCode) ||
-                other.redemptionCode == redemptionCode) &&
-            (identical(other.remainingPoints, remainingPoints) ||
-                other.remainingPoints == remainingPoints) &&
+            (identical(other.redemptionId, redemptionId) ||
+                other.redemptionId == redemptionId) &&
+            (identical(other.newTotalPoints, newTotalPoints) ||
+                other.newTotalPoints == newTotalPoints) &&
             (identical(other.message, message) || other.message == message));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, redemptionCode, remainingPoints, message);
+      Object.hash(runtimeType, redemptionId, newTotalPoints, message);
 
   /// Create a copy of CreateRedemptionResult
   /// with the given fields replaced by the non-null parameter values.
@@ -182,15 +182,15 @@ class _$CreateRedemptionResultImpl implements _CreateRedemptionResult {
 
 abstract class _CreateRedemptionResult implements CreateRedemptionResult {
   const factory _CreateRedemptionResult({
-    required final String redemptionCode,
-    required final int remainingPoints,
+    required final int redemptionId,
+    required final int newTotalPoints,
     final String? message,
   }) = _$CreateRedemptionResultImpl;
 
   @override
-  String get redemptionCode;
+  int get redemptionId;
   @override
-  int get remainingPoints;
+  int get newTotalPoints;
   @override
   String? get message;
 

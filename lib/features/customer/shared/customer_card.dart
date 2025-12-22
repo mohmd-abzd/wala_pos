@@ -11,6 +11,9 @@ class CustomerCard with _$CustomerCard {
     required String phoneNumber,
     required String email,
     required int totalPoints,
+    required String cardNumber,
+    required String merchantName,
+    required DateTime? lastTransaction,
   }) = _CustomerCard;
 
   factory CustomerCard.fromJson(Map<String, dynamic> json) =>

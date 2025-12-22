@@ -8,7 +8,7 @@ class LoginRequest with _$LoginRequest {
   factory LoginRequest({
     @JsonKey(name: 'username') required String username,
     @JsonKey(name: 'password') required String password,
-    @JsonKey(name: 'deviceId') required String deviceId,
+    @JsonKey(name: 'serialNumber') required String serialNumber,
   }) = _LoginRequest;
 
   factory LoginRequest.fromJson(Map<String, dynamic> json) =>
@@ -16,6 +16,10 @@ class LoginRequest with _$LoginRequest {
 
   // factory Map<String, dynamic> toJson() => _$LoginRequestToJson(this);
   Map<String, dynamic> toJson() {
-    return {'username': username, 'password': password, 'deviceId': deviceId};
+    return {
+      'username': username,
+      'password': password,
+      'serialNumber': serialNumber,
+    };
   }
 }

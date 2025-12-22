@@ -8,6 +8,7 @@ class PurchaseRequest with _$PurchaseRequest {
   const factory PurchaseRequest({
     required int customerId,
     required double amount,
+    String? invoiceId,
   }) = _PurchaseRequest;
 
   factory PurchaseRequest.fromJson(Map<String, dynamic> json) =>

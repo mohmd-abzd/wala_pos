@@ -8,7 +8,7 @@ final deviceInfoServiceProvider = Provider<DeviceInfoService>((ref) {
 class DeviceInfoService {
   final _deviceInfo = DeviceInfoPlugin();
 
-  Future<String> getDeviceId() async {
+  Future<String> getSerialNumber() async {
     final androidInfo = await _deviceInfo.androidInfo;
     return androidInfo.id;
   }

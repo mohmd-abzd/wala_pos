@@ -200,6 +200,9 @@ mixin _$CustomerData {
   String get phoneNumber => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   int get totalPoints => throw _privateConstructorUsedError;
+  String get cardNumber => throw _privateConstructorUsedError;
+  String get merchantName => throw _privateConstructorUsedError;
+  DateTime? get lastTransaction => throw _privateConstructorUsedError;
   List<RewardData> get rewards => throw _privateConstructorUsedError;
 
   /// Serializes this CustomerData to a JSON map.
@@ -225,6 +228,9 @@ abstract class $CustomerDataCopyWith<$Res> {
     String phoneNumber,
     String email,
     int totalPoints,
+    String cardNumber,
+    String merchantName,
+    DateTime? lastTransaction,
     List<RewardData> rewards,
   });
 }
@@ -249,6 +255,9 @@ class _$CustomerDataCopyWithImpl<$Res, $Val extends CustomerData>
     Object? phoneNumber = null,
     Object? email = null,
     Object? totalPoints = null,
+    Object? cardNumber = null,
+    Object? merchantName = null,
+    Object? lastTransaction = freezed,
     Object? rewards = null,
   }) {
     return _then(
@@ -273,6 +282,18 @@ class _$CustomerDataCopyWithImpl<$Res, $Val extends CustomerData>
                 ? _value.totalPoints
                 : totalPoints // ignore: cast_nullable_to_non_nullable
                       as int,
+            cardNumber: null == cardNumber
+                ? _value.cardNumber
+                : cardNumber // ignore: cast_nullable_to_non_nullable
+                      as String,
+            merchantName: null == merchantName
+                ? _value.merchantName
+                : merchantName // ignore: cast_nullable_to_non_nullable
+                      as String,
+            lastTransaction: freezed == lastTransaction
+                ? _value.lastTransaction
+                : lastTransaction // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
             rewards: null == rewards
                 ? _value.rewards
                 : rewards // ignore: cast_nullable_to_non_nullable
@@ -298,6 +319,9 @@ abstract class _$$CustomerDataImplCopyWith<$Res>
     String phoneNumber,
     String email,
     int totalPoints,
+    String cardNumber,
+    String merchantName,
+    DateTime? lastTransaction,
     List<RewardData> rewards,
   });
 }
@@ -321,6 +345,9 @@ class __$$CustomerDataImplCopyWithImpl<$Res>
     Object? phoneNumber = null,
     Object? email = null,
     Object? totalPoints = null,
+    Object? cardNumber = null,
+    Object? merchantName = null,
+    Object? lastTransaction = freezed,
     Object? rewards = null,
   }) {
     return _then(
@@ -345,6 +372,18 @@ class __$$CustomerDataImplCopyWithImpl<$Res>
             ? _value.totalPoints
             : totalPoints // ignore: cast_nullable_to_non_nullable
                   as int,
+        cardNumber: null == cardNumber
+            ? _value.cardNumber
+            : cardNumber // ignore: cast_nullable_to_non_nullable
+                  as String,
+        merchantName: null == merchantName
+            ? _value.merchantName
+            : merchantName // ignore: cast_nullable_to_non_nullable
+                  as String,
+        lastTransaction: freezed == lastTransaction
+            ? _value.lastTransaction
+            : lastTransaction // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
         rewards: null == rewards
             ? _value._rewards
             : rewards // ignore: cast_nullable_to_non_nullable
@@ -363,6 +402,9 @@ class _$CustomerDataImpl implements _CustomerData {
     required this.phoneNumber,
     required this.email,
     required this.totalPoints,
+    required this.cardNumber,
+    required this.merchantName,
+    required this.lastTransaction,
     required final List<RewardData> rewards,
   }) : _rewards = rewards;
 
@@ -379,6 +421,12 @@ class _$CustomerDataImpl implements _CustomerData {
   final String email;
   @override
   final int totalPoints;
+  @override
+  final String cardNumber;
+  @override
+  final String merchantName;
+  @override
+  final DateTime? lastTransaction;
   final List<RewardData> _rewards;
   @override
   List<RewardData> get rewards {
@@ -389,7 +437,7 @@ class _$CustomerDataImpl implements _CustomerData {
 
   @override
   String toString() {
-    return 'CustomerData(id: $id, name: $name, phoneNumber: $phoneNumber, email: $email, totalPoints: $totalPoints, rewards: $rewards)';
+    return 'CustomerData(id: $id, name: $name, phoneNumber: $phoneNumber, email: $email, totalPoints: $totalPoints, cardNumber: $cardNumber, merchantName: $merchantName, lastTransaction: $lastTransaction, rewards: $rewards)';
   }
 
   @override
@@ -404,6 +452,12 @@ class _$CustomerDataImpl implements _CustomerData {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.totalPoints, totalPoints) ||
                 other.totalPoints == totalPoints) &&
+            (identical(other.cardNumber, cardNumber) ||
+                other.cardNumber == cardNumber) &&
+            (identical(other.merchantName, merchantName) ||
+                other.merchantName == merchantName) &&
+            (identical(other.lastTransaction, lastTransaction) ||
+                other.lastTransaction == lastTransaction) &&
             const DeepCollectionEquality().equals(other._rewards, _rewards));
   }
 
@@ -416,6 +470,9 @@ class _$CustomerDataImpl implements _CustomerData {
     phoneNumber,
     email,
     totalPoints,
+    cardNumber,
+    merchantName,
+    lastTransaction,
     const DeepCollectionEquality().hash(_rewards),
   );
 
@@ -440,6 +497,9 @@ abstract class _CustomerData implements CustomerData {
     required final String phoneNumber,
     required final String email,
     required final int totalPoints,
+    required final String cardNumber,
+    required final String merchantName,
+    required final DateTime? lastTransaction,
     required final List<RewardData> rewards,
   }) = _$CustomerDataImpl;
 
@@ -456,6 +516,12 @@ abstract class _CustomerData implements CustomerData {
   String get email;
   @override
   int get totalPoints;
+  @override
+  String get cardNumber;
+  @override
+  String get merchantName;
+  @override
+  DateTime? get lastTransaction;
   @override
   List<RewardData> get rewards;
 

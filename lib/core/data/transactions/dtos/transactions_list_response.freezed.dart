@@ -410,6 +410,10 @@ mixin _$TransactionDto {
   double get amount => throw _privateConstructorUsedError;
   int get points => throw _privateConstructorUsedError;
   String get transactionTime => throw _privateConstructorUsedError;
+  bool get isRefund => throw _privateConstructorUsedError;
+  bool get isRefunded => throw _privateConstructorUsedError;
+  BranchDto get branch => throw _privateConstructorUsedError;
+  StaffDto get staff => throw _privateConstructorUsedError;
 
   /// Serializes this TransactionDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -434,7 +438,14 @@ abstract class $TransactionDtoCopyWith<$Res> {
     double amount,
     int points,
     String transactionTime,
+    bool isRefund,
+    bool isRefunded,
+    BranchDto branch,
+    StaffDto staff,
   });
+
+  $BranchDtoCopyWith<$Res> get branch;
+  $StaffDtoCopyWith<$Res> get staff;
 }
 
 /// @nodoc
@@ -457,6 +468,10 @@ class _$TransactionDtoCopyWithImpl<$Res, $Val extends TransactionDto>
     Object? amount = null,
     Object? points = null,
     Object? transactionTime = null,
+    Object? isRefund = null,
+    Object? isRefunded = null,
+    Object? branch = null,
+    Object? staff = null,
   }) {
     return _then(
       _value.copyWith(
@@ -480,9 +495,45 @@ class _$TransactionDtoCopyWithImpl<$Res, $Val extends TransactionDto>
                 ? _value.transactionTime
                 : transactionTime // ignore: cast_nullable_to_non_nullable
                       as String,
+            isRefund: null == isRefund
+                ? _value.isRefund
+                : isRefund // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            isRefunded: null == isRefunded
+                ? _value.isRefunded
+                : isRefunded // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            branch: null == branch
+                ? _value.branch
+                : branch // ignore: cast_nullable_to_non_nullable
+                      as BranchDto,
+            staff: null == staff
+                ? _value.staff
+                : staff // ignore: cast_nullable_to_non_nullable
+                      as StaffDto,
           )
           as $Val,
     );
+  }
+
+  /// Create a copy of TransactionDto
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $BranchDtoCopyWith<$Res> get branch {
+    return $BranchDtoCopyWith<$Res>(_value.branch, (value) {
+      return _then(_value.copyWith(branch: value) as $Val);
+    });
+  }
+
+  /// Create a copy of TransactionDto
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $StaffDtoCopyWith<$Res> get staff {
+    return $StaffDtoCopyWith<$Res>(_value.staff, (value) {
+      return _then(_value.copyWith(staff: value) as $Val);
+    });
   }
 }
 
@@ -501,7 +552,16 @@ abstract class _$$TransactionDtoImplCopyWith<$Res>
     double amount,
     int points,
     String transactionTime,
+    bool isRefund,
+    bool isRefunded,
+    BranchDto branch,
+    StaffDto staff,
   });
+
+  @override
+  $BranchDtoCopyWith<$Res> get branch;
+  @override
+  $StaffDtoCopyWith<$Res> get staff;
 }
 
 /// @nodoc
@@ -523,6 +583,10 @@ class __$$TransactionDtoImplCopyWithImpl<$Res>
     Object? amount = null,
     Object? points = null,
     Object? transactionTime = null,
+    Object? isRefund = null,
+    Object? isRefunded = null,
+    Object? branch = null,
+    Object? staff = null,
   }) {
     return _then(
       _$TransactionDtoImpl(
@@ -546,6 +610,22 @@ class __$$TransactionDtoImplCopyWithImpl<$Res>
             ? _value.transactionTime
             : transactionTime // ignore: cast_nullable_to_non_nullable
                   as String,
+        isRefund: null == isRefund
+            ? _value.isRefund
+            : isRefund // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        isRefunded: null == isRefunded
+            ? _value.isRefunded
+            : isRefunded // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        branch: null == branch
+            ? _value.branch
+            : branch // ignore: cast_nullable_to_non_nullable
+                  as BranchDto,
+        staff: null == staff
+            ? _value.staff
+            : staff // ignore: cast_nullable_to_non_nullable
+                  as StaffDto,
       ),
     );
   }
@@ -560,6 +640,10 @@ class _$TransactionDtoImpl implements _TransactionDto {
     required this.amount,
     required this.points,
     required this.transactionTime,
+    required this.isRefund,
+    required this.isRefunded,
+    required this.branch,
+    required this.staff,
   });
 
   factory _$TransactionDtoImpl.fromJson(Map<String, dynamic> json) =>
@@ -575,10 +659,18 @@ class _$TransactionDtoImpl implements _TransactionDto {
   final int points;
   @override
   final String transactionTime;
+  @override
+  final bool isRefund;
+  @override
+  final bool isRefunded;
+  @override
+  final BranchDto branch;
+  @override
+  final StaffDto staff;
 
   @override
   String toString() {
-    return 'TransactionDto(id: $id, transactionCode: $transactionCode, amount: $amount, points: $points, transactionTime: $transactionTime)';
+    return 'TransactionDto(id: $id, transactionCode: $transactionCode, amount: $amount, points: $points, transactionTime: $transactionTime, isRefund: $isRefund, isRefunded: $isRefunded, branch: $branch, staff: $staff)';
   }
 
   @override
@@ -592,7 +684,13 @@ class _$TransactionDtoImpl implements _TransactionDto {
             (identical(other.amount, amount) || other.amount == amount) &&
             (identical(other.points, points) || other.points == points) &&
             (identical(other.transactionTime, transactionTime) ||
-                other.transactionTime == transactionTime));
+                other.transactionTime == transactionTime) &&
+            (identical(other.isRefund, isRefund) ||
+                other.isRefund == isRefund) &&
+            (identical(other.isRefunded, isRefunded) ||
+                other.isRefunded == isRefunded) &&
+            (identical(other.branch, branch) || other.branch == branch) &&
+            (identical(other.staff, staff) || other.staff == staff));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -604,6 +702,10 @@ class _$TransactionDtoImpl implements _TransactionDto {
     amount,
     points,
     transactionTime,
+    isRefund,
+    isRefunded,
+    branch,
+    staff,
   );
 
   /// Create a copy of TransactionDto
@@ -630,6 +732,10 @@ abstract class _TransactionDto implements TransactionDto {
     required final double amount,
     required final int points,
     required final String transactionTime,
+    required final bool isRefund,
+    required final bool isRefunded,
+    required final BranchDto branch,
+    required final StaffDto staff,
   }) = _$TransactionDtoImpl;
 
   factory _TransactionDto.fromJson(Map<String, dynamic> json) =
@@ -645,11 +751,349 @@ abstract class _TransactionDto implements TransactionDto {
   int get points;
   @override
   String get transactionTime;
+  @override
+  bool get isRefund;
+  @override
+  bool get isRefunded;
+  @override
+  BranchDto get branch;
+  @override
+  StaffDto get staff;
 
   /// Create a copy of TransactionDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TransactionDtoImplCopyWith<_$TransactionDtoImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+BranchDto _$BranchDtoFromJson(Map<String, dynamic> json) {
+  return _BranchDto.fromJson(json);
+}
+
+/// @nodoc
+mixin _$BranchDto {
+  int get id => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+
+  /// Serializes this BranchDto to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of BranchDto
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $BranchDtoCopyWith<BranchDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $BranchDtoCopyWith<$Res> {
+  factory $BranchDtoCopyWith(BranchDto value, $Res Function(BranchDto) then) =
+      _$BranchDtoCopyWithImpl<$Res, BranchDto>;
+  @useResult
+  $Res call({int id, String name});
+}
+
+/// @nodoc
+class _$BranchDtoCopyWithImpl<$Res, $Val extends BranchDto>
+    implements $BranchDtoCopyWith<$Res> {
+  _$BranchDtoCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of BranchDto
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? id = null, Object? name = null}) {
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as int,
+            name: null == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$BranchDtoImplCopyWith<$Res>
+    implements $BranchDtoCopyWith<$Res> {
+  factory _$$BranchDtoImplCopyWith(
+    _$BranchDtoImpl value,
+    $Res Function(_$BranchDtoImpl) then,
+  ) = __$$BranchDtoImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({int id, String name});
+}
+
+/// @nodoc
+class __$$BranchDtoImplCopyWithImpl<$Res>
+    extends _$BranchDtoCopyWithImpl<$Res, _$BranchDtoImpl>
+    implements _$$BranchDtoImplCopyWith<$Res> {
+  __$$BranchDtoImplCopyWithImpl(
+    _$BranchDtoImpl _value,
+    $Res Function(_$BranchDtoImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of BranchDto
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? id = null, Object? name = null}) {
+    return _then(
+      _$BranchDtoImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as int,
+        name: null == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$BranchDtoImpl implements _BranchDto {
+  const _$BranchDtoImpl({required this.id, required this.name});
+
+  factory _$BranchDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$BranchDtoImplFromJson(json);
+
+  @override
+  final int id;
+  @override
+  final String name;
+
+  @override
+  String toString() {
+    return 'BranchDto(id: $id, name: $name)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$BranchDtoImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, name);
+
+  /// Create a copy of BranchDto
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$BranchDtoImplCopyWith<_$BranchDtoImpl> get copyWith =>
+      __$$BranchDtoImplCopyWithImpl<_$BranchDtoImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$BranchDtoImplToJson(this);
+  }
+}
+
+abstract class _BranchDto implements BranchDto {
+  const factory _BranchDto({
+    required final int id,
+    required final String name,
+  }) = _$BranchDtoImpl;
+
+  factory _BranchDto.fromJson(Map<String, dynamic> json) =
+      _$BranchDtoImpl.fromJson;
+
+  @override
+  int get id;
+  @override
+  String get name;
+
+  /// Create a copy of BranchDto
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$BranchDtoImplCopyWith<_$BranchDtoImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+StaffDto _$StaffDtoFromJson(Map<String, dynamic> json) {
+  return _StaffDto.fromJson(json);
+}
+
+/// @nodoc
+mixin _$StaffDto {
+  int get id => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+
+  /// Serializes this StaffDto to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of StaffDto
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $StaffDtoCopyWith<StaffDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $StaffDtoCopyWith<$Res> {
+  factory $StaffDtoCopyWith(StaffDto value, $Res Function(StaffDto) then) =
+      _$StaffDtoCopyWithImpl<$Res, StaffDto>;
+  @useResult
+  $Res call({int id, String name});
+}
+
+/// @nodoc
+class _$StaffDtoCopyWithImpl<$Res, $Val extends StaffDto>
+    implements $StaffDtoCopyWith<$Res> {
+  _$StaffDtoCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of StaffDto
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? id = null, Object? name = null}) {
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as int,
+            name: null == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$StaffDtoImplCopyWith<$Res>
+    implements $StaffDtoCopyWith<$Res> {
+  factory _$$StaffDtoImplCopyWith(
+    _$StaffDtoImpl value,
+    $Res Function(_$StaffDtoImpl) then,
+  ) = __$$StaffDtoImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({int id, String name});
+}
+
+/// @nodoc
+class __$$StaffDtoImplCopyWithImpl<$Res>
+    extends _$StaffDtoCopyWithImpl<$Res, _$StaffDtoImpl>
+    implements _$$StaffDtoImplCopyWith<$Res> {
+  __$$StaffDtoImplCopyWithImpl(
+    _$StaffDtoImpl _value,
+    $Res Function(_$StaffDtoImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of StaffDto
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? id = null, Object? name = null}) {
+    return _then(
+      _$StaffDtoImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as int,
+        name: null == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$StaffDtoImpl implements _StaffDto {
+  const _$StaffDtoImpl({required this.id, required this.name});
+
+  factory _$StaffDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$StaffDtoImplFromJson(json);
+
+  @override
+  final int id;
+  @override
+  final String name;
+
+  @override
+  String toString() {
+    return 'StaffDto(id: $id, name: $name)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$StaffDtoImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, name);
+
+  /// Create a copy of StaffDto
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$StaffDtoImplCopyWith<_$StaffDtoImpl> get copyWith =>
+      __$$StaffDtoImplCopyWithImpl<_$StaffDtoImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$StaffDtoImplToJson(this);
+  }
+}
+
+abstract class _StaffDto implements StaffDto {
+  const factory _StaffDto({required final int id, required final String name}) =
+      _$StaffDtoImpl;
+
+  factory _StaffDto.fromJson(Map<String, dynamic> json) =
+      _$StaffDtoImpl.fromJson;
+
+  @override
+  int get id;
+  @override
+  String get name;
+
+  /// Create a copy of StaffDto
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$StaffDtoImplCopyWith<_$StaffDtoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

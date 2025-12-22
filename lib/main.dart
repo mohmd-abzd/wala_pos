@@ -8,7 +8,6 @@ void main() {
   runApp(
     ProviderScope(
       observers: [RiverpodLogger()], // <-- only addition
-
       child: StartUpScreen(builder: (context) => const MainWidget()),
     ),
   );

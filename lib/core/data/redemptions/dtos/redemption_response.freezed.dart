@@ -207,8 +207,8 @@ RedemptionData _$RedemptionDataFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$RedemptionData {
-  String get redemptionCode => throw _privateConstructorUsedError;
-  int get remainingPoints => throw _privateConstructorUsedError;
+  int get redemptionId => throw _privateConstructorUsedError;
+  int get newTotalPoints => throw _privateConstructorUsedError;
 
   /// Serializes this RedemptionData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -227,7 +227,7 @@ abstract class $RedemptionDataCopyWith<$Res> {
     $Res Function(RedemptionData) then,
   ) = _$RedemptionDataCopyWithImpl<$Res, RedemptionData>;
   @useResult
-  $Res call({String redemptionCode, int remainingPoints});
+  $Res call({int redemptionId, int newTotalPoints});
 }
 
 /// @nodoc
@@ -244,16 +244,16 @@ class _$RedemptionDataCopyWithImpl<$Res, $Val extends RedemptionData>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? redemptionCode = null, Object? remainingPoints = null}) {
+  $Res call({Object? redemptionId = null, Object? newTotalPoints = null}) {
     return _then(
       _value.copyWith(
-            redemptionCode: null == redemptionCode
-                ? _value.redemptionCode
-                : redemptionCode // ignore: cast_nullable_to_non_nullable
-                      as String,
-            remainingPoints: null == remainingPoints
-                ? _value.remainingPoints
-                : remainingPoints // ignore: cast_nullable_to_non_nullable
+            redemptionId: null == redemptionId
+                ? _value.redemptionId
+                : redemptionId // ignore: cast_nullable_to_non_nullable
+                      as int,
+            newTotalPoints: null == newTotalPoints
+                ? _value.newTotalPoints
+                : newTotalPoints // ignore: cast_nullable_to_non_nullable
                       as int,
           )
           as $Val,
@@ -270,7 +270,7 @@ abstract class _$$RedemptionDataImplCopyWith<$Res>
   ) = __$$RedemptionDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String redemptionCode, int remainingPoints});
+  $Res call({int redemptionId, int newTotalPoints});
 }
 
 /// @nodoc
@@ -286,16 +286,16 @@ class __$$RedemptionDataImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? redemptionCode = null, Object? remainingPoints = null}) {
+  $Res call({Object? redemptionId = null, Object? newTotalPoints = null}) {
     return _then(
       _$RedemptionDataImpl(
-        redemptionCode: null == redemptionCode
-            ? _value.redemptionCode
-            : redemptionCode // ignore: cast_nullable_to_non_nullable
-                  as String,
-        remainingPoints: null == remainingPoints
-            ? _value.remainingPoints
-            : remainingPoints // ignore: cast_nullable_to_non_nullable
+        redemptionId: null == redemptionId
+            ? _value.redemptionId
+            : redemptionId // ignore: cast_nullable_to_non_nullable
+                  as int,
+        newTotalPoints: null == newTotalPoints
+            ? _value.newTotalPoints
+            : newTotalPoints // ignore: cast_nullable_to_non_nullable
                   as int,
       ),
     );
@@ -306,21 +306,21 @@ class __$$RedemptionDataImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$RedemptionDataImpl implements _RedemptionData {
   const _$RedemptionDataImpl({
-    required this.redemptionCode,
-    required this.remainingPoints,
+    required this.redemptionId,
+    required this.newTotalPoints,
   });
 
   factory _$RedemptionDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$RedemptionDataImplFromJson(json);
 
   @override
-  final String redemptionCode;
+  final int redemptionId;
   @override
-  final int remainingPoints;
+  final int newTotalPoints;
 
   @override
   String toString() {
-    return 'RedemptionData(redemptionCode: $redemptionCode, remainingPoints: $remainingPoints)';
+    return 'RedemptionData(redemptionId: $redemptionId, newTotalPoints: $newTotalPoints)';
   }
 
   @override
@@ -328,15 +328,15 @@ class _$RedemptionDataImpl implements _RedemptionData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RedemptionDataImpl &&
-            (identical(other.redemptionCode, redemptionCode) ||
-                other.redemptionCode == redemptionCode) &&
-            (identical(other.remainingPoints, remainingPoints) ||
-                other.remainingPoints == remainingPoints));
+            (identical(other.redemptionId, redemptionId) ||
+                other.redemptionId == redemptionId) &&
+            (identical(other.newTotalPoints, newTotalPoints) ||
+                other.newTotalPoints == newTotalPoints));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, redemptionCode, remainingPoints);
+  int get hashCode => Object.hash(runtimeType, redemptionId, newTotalPoints);
 
   /// Create a copy of RedemptionData
   /// with the given fields replaced by the non-null parameter values.
@@ -357,17 +357,17 @@ class _$RedemptionDataImpl implements _RedemptionData {
 
 abstract class _RedemptionData implements RedemptionData {
   const factory _RedemptionData({
-    required final String redemptionCode,
-    required final int remainingPoints,
+    required final int redemptionId,
+    required final int newTotalPoints,
   }) = _$RedemptionDataImpl;
 
   factory _RedemptionData.fromJson(Map<String, dynamic> json) =
       _$RedemptionDataImpl.fromJson;
 
   @override
-  String get redemptionCode;
+  int get redemptionId;
   @override
-  int get remainingPoints;
+  int get newTotalPoints;
 
   /// Create a copy of RedemptionData
   /// with the given fields replaced by the non-null parameter values.

@@ -4,10 +4,10 @@ import 'package:walaa_pos/features/bind_card/presentation/ui/bind_card_screen.da
 import 'package:walaa_pos/features/change_password/presentation/ui/change_password_screen.dart';
 import 'package:walaa_pos/features/customer/presentation/ui/customer_screen.dart';
 import 'package:walaa_pos/features/purchase/presentation/ui/purchase_screen.dart';
-import 'package:walaa_pos/features/refund/presentation/ui/refund_screen.dart';
+import 'package:walaa_pos/features/purchase/presentation/ui/purchase_screen_session.dart';
+import 'package:walaa_pos/features/transactions/presentation/ui/transactions_screen.dart';
 import 'package:walaa_pos/features/register_customer/presentation/ui/register_customer_screen.dart';
 import 'package:walaa_pos/features/scan/presentation/ui/scan_screen.dart';
-import 'package:walaa_pos/features/setting/presentation/ui/setting_screen.dart';
 import '/core/provider/auth_state_provider.dart';
 import '/core/route/route_name.dart';
 import '/features/home/presentation/ui/home_screen.dart';
@@ -41,16 +41,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const HomeScreen(),
         routes: [
           GoRoute(
-            path: 'setting',
-            name: settingRoute,
-            builder: (context, state) => const SettingScreen(),
-            routes: [
-              GoRoute(
-                path: 'change-password',
-                name: changePasswordRoute,
-                builder: (context, state) => const ChangePasswordScreen(),
-              ),
-            ],
+            path: 'change-password',
+            name: changePasswordRoute,
+            builder: (context, state) => const ChangePasswordScreen(),
           ),
           GoRoute(
             path: 'register-customer',
@@ -73,10 +66,19 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                 ),
               ),
               GoRoute(
-                path: 'refund/:customerId',
-                name: refundRoute,
-                builder: (context, state) => RefundScreen(
+                path: 'purchaseSession/:customerId', // <-- include id
+                name: purchaseSessionRoute,
+                builder: (context, state) => PurchaseSessionScreen(
+                  // <-- new screen
                   vcid: state.pathParameters['vcid']!,
+                  customerId: int.parse(state.pathParameters['customerId']!),
+                ),
+              ),
+
+              GoRoute(
+                path: 'refund/:customerId',
+                name: transactionsRoute,
+                builder: (context, state) => TransactionsScreen(
                   customerId: int.parse(state.pathParameters['customerId']!),
                 ),
               ),

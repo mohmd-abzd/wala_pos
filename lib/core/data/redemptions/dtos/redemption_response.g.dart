@@ -19,13 +19,13 @@ Map<String, dynamic> _$$RedemptionResponseImplToJson(
 
 _$RedemptionDataImpl _$$RedemptionDataImplFromJson(Map<String, dynamic> json) =>
     _$RedemptionDataImpl(
-      redemptionCode: json['redemptionCode'] as String,
-      remainingPoints: (json['remainingPoints'] as num).toInt(),
+      redemptionId: (json['redemptionId'] as num).toInt(),
+      newTotalPoints: (json['newTotalPoints'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$RedemptionDataImplToJson(
   _$RedemptionDataImpl instance,
 ) => <String, dynamic>{
-  'redemptionCode': instance.redemptionCode,
-  'remainingPoints': instance.remainingPoints,
+  'redemptionId': instance.redemptionId,
+  'newTotalPoints': instance.newTotalPoints,
 };

@@ -8,5 +8,7 @@ class PurchaseState with _$PurchaseState {
     @Default(false) bool isLoading,
     String? error,
     String? successMessage,
+    @Default(false) bool changed,
+    int? newTotalPoints,
   }) = _PurchaseState;
 }

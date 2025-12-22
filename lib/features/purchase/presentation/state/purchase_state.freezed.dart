@@ -20,6 +20,8 @@ mixin _$PurchaseState {
   bool get isLoading => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
   String? get successMessage => throw _privateConstructorUsedError;
+  bool get changed => throw _privateConstructorUsedError;
+  int? get newTotalPoints => throw _privateConstructorUsedError;
 
   /// Create a copy of PurchaseState
   /// with the given fields replaced by the non-null parameter values.
@@ -35,7 +37,13 @@ abstract class $PurchaseStateCopyWith<$Res> {
     $Res Function(PurchaseState) then,
   ) = _$PurchaseStateCopyWithImpl<$Res, PurchaseState>;
   @useResult
-  $Res call({bool isLoading, String? error, String? successMessage});
+  $Res call({
+    bool isLoading,
+    String? error,
+    String? successMessage,
+    bool changed,
+    int? newTotalPoints,
+  });
 }
 
 /// @nodoc
@@ -56,6 +64,8 @@ class _$PurchaseStateCopyWithImpl<$Res, $Val extends PurchaseState>
     Object? isLoading = null,
     Object? error = freezed,
     Object? successMessage = freezed,
+    Object? changed = null,
+    Object? newTotalPoints = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -71,6 +81,14 @@ class _$PurchaseStateCopyWithImpl<$Res, $Val extends PurchaseState>
                 ? _value.successMessage
                 : successMessage // ignore: cast_nullable_to_non_nullable
                       as String?,
+            changed: null == changed
+                ? _value.changed
+                : changed // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            newTotalPoints: freezed == newTotalPoints
+                ? _value.newTotalPoints
+                : newTotalPoints // ignore: cast_nullable_to_non_nullable
+                      as int?,
           )
           as $Val,
     );
@@ -86,7 +104,13 @@ abstract class _$$PurchaseStateImplCopyWith<$Res>
   ) = __$$PurchaseStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isLoading, String? error, String? successMessage});
+  $Res call({
+    bool isLoading,
+    String? error,
+    String? successMessage,
+    bool changed,
+    int? newTotalPoints,
+  });
 }
 
 /// @nodoc
@@ -106,6 +130,8 @@ class __$$PurchaseStateImplCopyWithImpl<$Res>
     Object? isLoading = null,
     Object? error = freezed,
     Object? successMessage = freezed,
+    Object? changed = null,
+    Object? newTotalPoints = freezed,
   }) {
     return _then(
       _$PurchaseStateImpl(
@@ -121,6 +147,14 @@ class __$$PurchaseStateImplCopyWithImpl<$Res>
             ? _value.successMessage
             : successMessage // ignore: cast_nullable_to_non_nullable
                   as String?,
+        changed: null == changed
+            ? _value.changed
+            : changed // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        newTotalPoints: freezed == newTotalPoints
+            ? _value.newTotalPoints
+            : newTotalPoints // ignore: cast_nullable_to_non_nullable
+                  as int?,
       ),
     );
   }
@@ -133,6 +167,8 @@ class _$PurchaseStateImpl implements _PurchaseState {
     this.isLoading = false,
     this.error,
     this.successMessage,
+    this.changed = false,
+    this.newTotalPoints,
   });
 
   @override
@@ -142,10 +178,15 @@ class _$PurchaseStateImpl implements _PurchaseState {
   final String? error;
   @override
   final String? successMessage;
+  @override
+  @JsonKey()
+  final bool changed;
+  @override
+  final int? newTotalPoints;
 
   @override
   String toString() {
-    return 'PurchaseState(isLoading: $isLoading, error: $error, successMessage: $successMessage)';
+    return 'PurchaseState(isLoading: $isLoading, error: $error, successMessage: $successMessage, changed: $changed, newTotalPoints: $newTotalPoints)';
   }
 
   @override
@@ -157,12 +198,21 @@ class _$PurchaseStateImpl implements _PurchaseState {
                 other.isLoading == isLoading) &&
             (identical(other.error, error) || other.error == error) &&
             (identical(other.successMessage, successMessage) ||
-                other.successMessage == successMessage));
+                other.successMessage == successMessage) &&
+            (identical(other.changed, changed) || other.changed == changed) &&
+            (identical(other.newTotalPoints, newTotalPoints) ||
+                other.newTotalPoints == newTotalPoints));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, isLoading, error, successMessage);
+  int get hashCode => Object.hash(
+    runtimeType,
+    isLoading,
+    error,
+    successMessage,
+    changed,
+    newTotalPoints,
+  );
 
   /// Create a copy of PurchaseState
   /// with the given fields replaced by the non-null parameter values.
@@ -178,6 +228,8 @@ abstract class _PurchaseState implements PurchaseState {
     final bool isLoading,
     final String? error,
     final String? successMessage,
+    final bool changed,
+    final int? newTotalPoints,
   }) = _$PurchaseStateImpl;
 
   @override
@@ -186,6 +238,10 @@ abstract class _PurchaseState implements PurchaseState {
   String? get error;
   @override
   String? get successMessage;
+  @override
+  bool get changed;
+  @override
+  int? get newTotalPoints;
 
   /// Create a copy of PurchaseState
   /// with the given fields replaced by the non-null parameter values.

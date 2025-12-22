@@ -28,9 +28,10 @@ class RedemptionsRepository
       final resp = await _api.createRedemption(
         RedemptionRequest(customerId: customerId, rewardId: rewardId),
       );
+
       return CreateRedemptionResult(
-        redemptionCode: resp.data.redemptionCode,
-        remainingPoints: resp.data.remainingPoints,
+        redemptionId: resp.data.redemptionId,
+        newTotalPoints: resp.data.newTotalPoints,
         message: resp.message,
       );
     } on DioException catch (e, st) {

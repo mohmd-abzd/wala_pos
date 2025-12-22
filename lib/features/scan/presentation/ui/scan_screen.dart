@@ -1,13 +1,12 @@
-import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
 import 'package:walaa_pos/core/route/route_name.dart';
 import 'package:walaa_pos/features/scan/presentation/controller/scan_controller.dart';
-import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
-import 'package:ndef/ndef.dart' as ndef;
 
 class ScanScreen extends ConsumerStatefulWidget {
   const ScanScreen({super.key});
@@ -18,9 +17,11 @@ class ScanScreen extends ConsumerStatefulWidget {
 
 class _ScanScreenState extends ConsumerState<ScanScreen> {
   static const _platform = MethodChannel('samples.flutter.dev/printer');
+  late final KeyboardVisibilityController _keyboardController;
+  late final StreamSubscription<bool> _keyboardSubscription;
 
   String _qrdetails = "None";
-  String _nfcdetails = "None";
+  // String _nfcdetails = "None";
 
   // Infrared QR listener
   final _scanStream = const EventChannel(
@@ -62,6 +63,24 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
   void initState() {
     super.initState();
     _startQRListening(); // ✅ Only listen for QR (default mode)
+    _keyboardController = KeyboardVisibilityController();
+
+    // Check once when screen opens
+    final isKeyboardVisible = _keyboardController.isVisible;
+    debugPrint(
+      "🔍 Keyboard visible when entering ScanScreen: $isKeyboardVisible",
+    );
+
+    // (optional) listen for changes while screen active
+    _keyboardSubscription = _keyboardController.onChange.listen((visible) {
+      debugPrint("⌨️ Keyboard visibility changed: $visible");
+    });
+  }
+
+  @override
+  void dispose() {
+    _keyboardSubscription.cancel();
+    super.dispose();
   }
 
   @override
@@ -106,85 +125,96 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
           const SizedBox(height: 12),
 
           // 3. NFC scan button (shows popup)
+          // ElevatedButton.icon(
+          //   onPressed: () => _showNfcDialog(context),
+          //   icon: const Icon(Icons.nfc),
+          //   label: const Text("مسح بطاقة NFC"),
+          // ),
+          const SizedBox(height: 24),
           ElevatedButton.icon(
-            onPressed: () => _showNfcDialog(context),
+            onPressed: () {
+              setState(() => _qrdetails = "الرجاء التأكد من بيانات المستخدم");
+              context.pushNamed(
+                customerRoute,
+                pathParameters: {'vcid': "8S7WymqI0p6gHz-Sph59CQ"},
+              );
+            },
             icon: const Icon(Icons.nfc),
-            label: const Text("مسح بطاقة NFC"),
+            label: const Text("Emulator's Scan"),
           ),
 
-          const SizedBox(height: 24),
           if (state.isScanning) const CircularProgressIndicator(),
         ],
       ),
     );
   }
 
-  Future<void> _showNfcDialog(BuildContext context) async {
-    showDialog(
-      context: context,
-      barrierDismissible: false, // force user to finish/cancel
-      builder: (ctx) {
-        _startNfcScan(ctx);
-        return AlertDialog(
-          title: const Text("NFC Scan"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              Icon(Icons.nfc, size: 80, color: Colors.blue),
-              SizedBox(height: 12),
-              Text("ضع البطاقة بالقرب من الجهاز"),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                FlutterNfcKit.finish(); // stop polling
-                Navigator.of(ctx).pop();
-              },
-              child: const Text("إلغاء"),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // Future<void> _showNfcDialog(BuildContext context) async {
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false, // force user to finish/cancel
+  //     builder: (ctx) {
+  //       _startNfcScan(ctx);
+  //       return AlertDialog(
+  //         title: const Text("NFC Scan"),
+  //         content: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: const [
+  //             Icon(Icons.nfc, size: 80, color: Colors.blue),
+  //             SizedBox(height: 12),
+  //             Text("ضع البطاقة بالقرب من الجهاز"),
+  //           ],
+  //         ),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () {
+  //               FlutterNfcKit.finish(); // stop polling
+  //               Navigator.of(ctx).pop();
+  //             },
+  //             child: const Text("إلغاء"),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
-  Future<void> _startNfcScan(BuildContext dialogContext) async {
-    try {
-      var tag = await FlutterNfcKit.poll(timeout: const Duration(seconds: 5));
-      setState(() {
-        _nfcdetails = tag.applicationData ?? "???";
-      });
+  // Future<void> _startNfcScan(BuildContext dialogContext) async {
+  //   try {
+  //     var tag = await FlutterNfcKit.poll(timeout: const Duration(seconds: 5));
+  //     setState(() {
+  //       _nfcdetails = tag.applicationData ?? "???";
+  //     });
 
-      final records = await FlutterNfcKit.readNDEFRecords();
-      for (var r in records) {
-        if (r is ndef.MimeRecord) {
-          final vcid = utf8.decode(r.payload!);
-          print('VCID from card: $vcid');
-          Navigator.of(dialogContext).pop(); // close popup on success
-          context.pushNamed(customerRoute, pathParameters: {'vcid': vcid});
-        }
-      }
-    } on PlatformException catch (e) {
-      if (e.code == '408') {
-        // Timeout
-        toastification.show(
-          context: context,
-          type: ToastificationType.error,
-          title: const Text("مهلة انتهت"),
-          description: const Text("لم يتم اكتشاف بطاقة، حاول مرة أخرى"),
-        );
-      } else {
-        toastification.show(
-          context: context,
-          type: ToastificationType.error,
-          title: const Text("خطأ NFC"),
-          description: Text(e.message ?? "غير معروف"),
-        );
-      }
-      Navigator.of(dialogContext).pop(); // close popup on error
-    } finally {
-      await FlutterNfcKit.finish();
-    }
-  }
+  //     final records = await FlutterNfcKit.readNDEFRecords();
+  //     for (var r in records) {
+  //       if (r is ndef.MimeRecord) {
+  //         final vcid = utf8.decode(r.payload!);
+  //         print('VCID from card: $vcid');
+  //         Navigator.of(dialogContext).pop(); // close popup on success
+  //         context.pushNamed(customerRoute, pathParameters: {'vcid': vcid});
+  //       }
+  //     }
+  //   } on PlatformException catch (e) {
+  //     if (e.code == '408') {
+  //       // Timeout
+  //       toastification.show(
+  //         context: context,
+  //         type: ToastificationType.error,
+  //         title: const Text("مهلة انتهت"),
+  //         description: const Text("لم يتم اكتشاف بطاقة، حاول مرة أخرى"),
+  //       );
+  //     } else {
+  //       toastification.show(
+  //         context: context,
+  //         type: ToastificationType.error,
+  //         title: const Text("خطأ NFC"),
+  //         description: Text(e.message ?? "غير معروف"),
+  //       );
+  //     }
+  //     Navigator.of(dialogContext).pop(); // close popup on error
+  //   } finally {
+  //     await FlutterNfcKit.finish();
+  //   }
+  // }
 }

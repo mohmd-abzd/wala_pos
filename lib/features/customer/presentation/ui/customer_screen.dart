@@ -1,21 +1,18 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:toastification/toastification.dart';
-import 'package:walaa_pos/common/exception/failure.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
+import 'package:walaa_pos/core/provider/cache_manager_provider.dart';
 import 'package:walaa_pos/core/route/route_name.dart';
 import 'package:walaa_pos/features/customer/presentation/controller/customer_controller.dart';
-import 'package:go_router/go_router.dart';
+import 'package:walaa_pos/features/customer/presentation/ui/customer_card.dart';
+import 'package:walaa_pos/features/customer/presentation/ui/rewards_list.dart';
 import 'package:walaa_pos/features/customer/shared/reward_item.dart';
 
-final _rewardImages = [
-  'https://picsum.photos/300/300', // coffee
-  'https://picsum.photos/300/300', // croissant
-  'https://picsum.photos/300/300', // sandwich
-  'https://images.unsplash.com/photo-1578985545062-69928b1d9587', // cake
-];
-final _random = Random();
+enum _PurchaseFlow { normal, session }
 
 class CustomerScreen extends ConsumerWidget {
   const CustomerScreen({super.key, required this.vcid});
@@ -23,343 +20,219 @@ class CustomerScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final stateAsync = ref.watch(customerControllerProvider(vcid));
+    final state = ref.watch(customerControllerProvider(vcid));
 
-    ref.listen(customerControllerProvider(vcid), (previous, next) {
-      next.whenOrNull(
-        error: (err, stack) {
-          toastification.show(
-            context: context,
-            type: ToastificationType.error,
-            title: const Text("خطأ"),
-            description: Text(err is Failure ? err.message : err.toString()),
-            alignment: Alignment.center,
-            autoCloseDuration: const Duration(seconds: 4),
-          );
-        },
-      );
+    // Listen for errors
+    ref.listen(customerControllerProvider(vcid), (prev, next) {
+      if (next.error != null && next.error != prev?.error) {
+        toastification.show(
+          context: context,
+          type: ToastificationType.error,
+          title: const Text("خطأ"),
+          description: Text(next.error ?? "حدث خطأ غير متوقع."),
+          alignment: Alignment.center,
+          autoCloseDuration: const Duration(seconds: 4),
+        );
+      }
     });
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('حساب الزبون')),
-      body: stateAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, s) => const SizedBox.shrink(),
-        data: (state) {
-          final c = state.customer;
-
-          Widget customerSidebar = Card(
-            margin: const EdgeInsets.all(16),
-            elevation: 2,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
+    // Listen for success messages (existing dialog)
+    ref.listen(
+      customerControllerProvider(vcid).select((s) => s.successMessage),
+      (_, msg) async {
+        if (msg != null) {
+          await showDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (_) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              title: const Text(
+                '🎉 تمت عملية الاستبدال بنجاح!',
+                textAlign: TextAlign.center,
+              ),
+              content: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 36,
-                        backgroundColor: Colors.blueGrey.shade100,
-                        child: Text(
-                          ((c.name.isNotEmpty ? c.name[0] : '?')).toUpperCase(),
-                          style: const TextStyle(
-                            fontSize: 28,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              c.name,
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              c.email,
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                            Text(
-                              c.phoneNumber,
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                  Icon(Icons.card_giftcard, color: Colors.deepPurple, size: 64),
                   const SizedBox(height: 12),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Chip(
-                      label: Text('${c.totalPoints} نقطة'),
-                      avatar: const Icon(Icons.stars, size: 18),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                  ),
-                  const Divider(height: 24),
-                  // Actions
-                  FilledButton.icon(
-                    onPressed: () {
-                      context.pushNamed(
-                        purchaseRoute,
-                        pathParameters: {
-                          'vcid': vcid,
-                          'customerId': c.id.toString(),
-                        },
-                      );
-                    },
-                    icon: const Icon(Icons.shopping_bag),
-                    label: const Text('عملية شراء'),
-                  ),
-                  const SizedBox(height: 12),
-                  OutlinedButton.icon(
-                    onPressed: () {
-                      context.pushNamed(
-                        refundRoute,
-                        pathParameters: {
-                          'vcid': vcid,
-                          'customerId': c.id.toString(),
-                        },
-                      );
-                    },
-                    icon: const Icon(Icons.undo),
-                    label: const Text('عملية استرجاع'),
+                  Text(
+                    msg,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 16),
                   ),
                 ],
               ),
+              actions: [
+                Center(
+                  child: FilledButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('تم'),
+                  ),
+                ),
+              ],
             ),
           );
 
-          Widget rewardsList = ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: state.rewards.length,
-            itemBuilder: (ctx, i) {
-              final r = state.rewards[i];
-              final hasEnoughPoints = c.totalPoints >= r.pointsRequired;
-              final progress = (c.totalPoints / r.pointsRequired).clamp(
-                0.0,
-                1.0,
-              );
-              final imageUrl =
-                  _rewardImages[_random.nextInt(_rewardImages.length)];
-
-              return Card(
-                margin: const EdgeInsets.only(bottom: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                elevation: 3,
-                clipBehavior: Clip.antiAlias,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Image
-                    r.imageUrl != null
-                        ? Image.network(
-                            // r.imageUrl!,
-                            imageUrl,
-                            width: double.infinity,
-                            height: 160,
-                            fit: BoxFit.cover,
-                          )
-                        : Container(
-                            width: double.infinity,
-                            height: 160,
-                            color: Colors.grey.shade200,
-                            child: const Icon(Icons.card_giftcard, size: 60),
-                          ),
-
-                    Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Reward title
-                          Text(
-                            r.name,
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          const SizedBox(height: 8),
-
-                          // Progress bar
-                          LinearProgressIndicator(
-                            value: progress,
-                            minHeight: 6,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              RichText(
-                                text: TextSpan(
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.bodyMedium, // base style
-                                  children: [
-                                    TextSpan(
-                                      text:
-                                          '${c.totalPoints}', // customer total points
-                                      style: TextStyle(
-                                        color: hasEnoughPoints
-                                            ? Colors.deepPurple
-                                            : Colors.grey,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-
-                                    const TextSpan(text: ' / '), // separator
-                                    TextSpan(
-                                      text:
-                                          '${r.pointsRequired}', // required points
-                                      style: const TextStyle(
-                                        color: Colors.black, // always black
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 8,
-                                ),
-                                child: hasEnoughPoints
-                                    ? InkWell(
-                                        onTap: () {
-                                          _redeem(context, ref, r);
-                                        },
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: const [
-                                            Text(
-                                              'بدل نقاطك بالمكافأة',
-                                              style: TextStyle(
-                                                color: Colors.deepPurple,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            SizedBox(width: 8),
-                                            Icon(
-                                              Icons.card_giftcard,
-                                              size: 18,
-                                              color: Colors.deepPurple,
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    : const Text(
-                                        'لم تصل لعدد النقاط المطلوب',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
-
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final isWide = constraints.maxWidth >= 900;
-              if (isWide) {
-                // Sidebar on the side
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(width: 340, child: customerSidebar),
-                    Expanded(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Container(),
-                      ),
-                    ),
-                  ],
-                );
-              } else {
-                // Stack vertically on small screens
-                return Column(
-                  children: [
-                    customerSidebar,
-                    Expanded(child: rewardsList),
-                  ],
-                );
-              }
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  _redeem(BuildContext context, WidgetRef ref, RewardItem r) async {
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('تأكيد الاستبدال'),
-        content: Text(
-          'هل تريد استبدال ${r.pointsRequired} نقطة بمكافأة "${r.name}"؟',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('إلغاء'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('تأكيد'),
-          ),
-        ],
-      ),
+          ref.read(customerControllerProvider(vcid).notifier).refresh();
+        }
+      },
     );
 
-    if (confirm != true) return;
+    // Use the custom cache manager (only for loading / caching)
+    final cacheManager = ref.watch(imageCacheManagerProvider);
 
-    try {
-      final result = await ref
-          .read(customerControllerProvider(vcid).notifier)
-          .redeemReward(rewardId: r.id);
+    final isBusy = state.isLoading;
+    final hasError = state.error != null;
 
-      toastification.show(
-        context: context,
-        type: ToastificationType.success,
-        title: const Text('تم الاستبدال بنجاح'),
-        description: Text(
-          'رمز الاستبدال: ${result.redemptionCode}\n'
-          'النقاط المتبقية: ${result.remainingPoints}',
+    return Scaffold(
+      appBar: AppBar(title: const Text('حساب الزبون')),
+      body: ModalProgressHUD(
+        inAsyncCall: isBusy,
+        child: Builder(
+          builder: (context) {
+            if (hasError) {
+              return Center(
+                child: Text(
+                  state.error!,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              );
+            }
+
+            final c = state.customer;
+            final rewards = state.rewards;
+
+            // Rewards list
+            final rewardsList = RewardsList(c: c, rewards: rewards, vcid: vcid);
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                final isWide = constraints.maxWidth >= 900;
+                if (isWide) {
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SizedBox(width: 340, child: const Text("Nothing here")),
+                      Expanded(child: rewardsList),
+                    ],
+                  );
+                } else {
+                  return Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        child: CustomerCard(
+                          merchantName: c.merchantName,
+                          cardNumber: c.cardNumber,
+                          points: c.totalPoints,
+                          name: c.name,
+                          lastTransaction: c.lastTransaction,
+                        ),
+                      ),
+                      FilledButton.icon(
+                        icon: const Icon(Icons.shopping_cart_checkout),
+                        label: const Text('شراء'),
+                        onPressed: () async {
+                          final flow = await showModalBottomSheet<_PurchaseFlow>(
+                            context: context,
+                            showDragHandle: true,
+                            builder: (ctx) {
+                              return SafeArea(
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                    16,
+                                    8,
+                                    16,
+                                    16,
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        'اختر طريقة الشراء',
+                                        style: Theme.of(
+                                          ctx,
+                                        ).textTheme.titleMedium,
+                                      ),
+                                      const SizedBox(height: 12),
+
+                                      ListTile(
+                                        leading: const Icon(Icons.edit_note),
+                                        title: const Text('شراء عادي'),
+                                        subtitle: const Text(
+                                          'إدخال يدوي / شاشة الشراء المعتادة',
+                                        ),
+                                        onTap: () => Navigator.pop(
+                                          ctx,
+                                          _PurchaseFlow.normal,
+                                        ),
+                                      ),
+
+                                      ListTile(
+                                        leading: const Icon(Icons.timer),
+                                        title: const Text('جلسة شراء'),
+                                        subtitle: const Text(
+                                          'تدفق فواتير — اختر فاتورة لتأكيد الولاء',
+                                        ),
+                                        onTap: () => Navigator.pop(
+                                          ctx,
+                                          _PurchaseFlow.session,
+                                        ),
+                                      ),
+
+                                      const SizedBox(height: 8),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+
+                          if (flow == null) return;
+
+                          // Navigate and optionally refresh when returning
+                          bool? changed;
+
+                          if (flow == _PurchaseFlow.normal) {
+                            changed = await context.pushNamed<bool>(
+                              purchaseRoute,
+                              pathParameters: {
+                                'vcid': vcid,
+                                'customerId': c.id.toString(),
+                              },
+                            );
+                          } else {
+                            changed = await context.pushNamed<bool>(
+                              purchaseSessionRoute,
+                              pathParameters: {
+                                'vcid': vcid,
+                                'customerId': c.id.toString(),
+                              },
+                            );
+                          }
+
+                          if (changed == true) {
+                            // Refresh customer/rewards after purchase/session confirmation
+                            ref
+                                .read(customerControllerProvider(vcid).notifier)
+                                .refresh();
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 12),
+                      Expanded(child: rewardsList),
+                    ],
+                  );
+                }
+              },
+            );
+          },
         ),
-        alignment: Alignment.center,
-        autoCloseDuration: const Duration(seconds: 5),
-      );
-    } catch (e) {
-      toastification.show(
-        context: context,
-        type: ToastificationType.error,
-        title: const Text('فشل الاستبدال'),
-        description: Text(
-          e is Failure ? e.message : 'حدث خطأ أثناء تنفيذ العملية',
-        ),
-        alignment: Alignment.center,
-        autoCloseDuration: const Duration(seconds: 5),
-      );
-    }
+      ),
+    );
   }
 }

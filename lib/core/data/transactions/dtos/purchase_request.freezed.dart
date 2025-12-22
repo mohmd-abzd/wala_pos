@@ -23,6 +23,7 @@ PurchaseRequest _$PurchaseRequestFromJson(Map<String, dynamic> json) {
 mixin _$PurchaseRequest {
   int get customerId => throw _privateConstructorUsedError;
   double get amount => throw _privateConstructorUsedError;
+  String? get invoiceId => throw _privateConstructorUsedError;
 
   /// Serializes this PurchaseRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,7 +42,7 @@ abstract class $PurchaseRequestCopyWith<$Res> {
     $Res Function(PurchaseRequest) then,
   ) = _$PurchaseRequestCopyWithImpl<$Res, PurchaseRequest>;
   @useResult
-  $Res call({int customerId, double amount});
+  $Res call({int customerId, double amount, String? invoiceId});
 }
 
 /// @nodoc
@@ -58,7 +59,11 @@ class _$PurchaseRequestCopyWithImpl<$Res, $Val extends PurchaseRequest>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? customerId = null, Object? amount = null}) {
+  $Res call({
+    Object? customerId = null,
+    Object? amount = null,
+    Object? invoiceId = freezed,
+  }) {
     return _then(
       _value.copyWith(
             customerId: null == customerId
@@ -69,6 +74,10 @@ class _$PurchaseRequestCopyWithImpl<$Res, $Val extends PurchaseRequest>
                 ? _value.amount
                 : amount // ignore: cast_nullable_to_non_nullable
                       as double,
+            invoiceId: freezed == invoiceId
+                ? _value.invoiceId
+                : invoiceId // ignore: cast_nullable_to_non_nullable
+                      as String?,
           )
           as $Val,
     );
@@ -84,7 +93,7 @@ abstract class _$$PurchaseRequestImplCopyWith<$Res>
   ) = __$$PurchaseRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int customerId, double amount});
+  $Res call({int customerId, double amount, String? invoiceId});
 }
 
 /// @nodoc
@@ -100,7 +109,11 @@ class __$$PurchaseRequestImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? customerId = null, Object? amount = null}) {
+  $Res call({
+    Object? customerId = null,
+    Object? amount = null,
+    Object? invoiceId = freezed,
+  }) {
     return _then(
       _$PurchaseRequestImpl(
         customerId: null == customerId
@@ -111,6 +124,10 @@ class __$$PurchaseRequestImplCopyWithImpl<$Res>
             ? _value.amount
             : amount // ignore: cast_nullable_to_non_nullable
                   as double,
+        invoiceId: freezed == invoiceId
+            ? _value.invoiceId
+            : invoiceId // ignore: cast_nullable_to_non_nullable
+                  as String?,
       ),
     );
   }
@@ -119,7 +136,11 @@ class __$$PurchaseRequestImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$PurchaseRequestImpl implements _PurchaseRequest {
-  const _$PurchaseRequestImpl({required this.customerId, required this.amount});
+  const _$PurchaseRequestImpl({
+    required this.customerId,
+    required this.amount,
+    this.invoiceId,
+  });
 
   factory _$PurchaseRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$PurchaseRequestImplFromJson(json);
@@ -128,10 +149,12 @@ class _$PurchaseRequestImpl implements _PurchaseRequest {
   final int customerId;
   @override
   final double amount;
+  @override
+  final String? invoiceId;
 
   @override
   String toString() {
-    return 'PurchaseRequest(customerId: $customerId, amount: $amount)';
+    return 'PurchaseRequest(customerId: $customerId, amount: $amount, invoiceId: $invoiceId)';
   }
 
   @override
@@ -141,12 +164,14 @@ class _$PurchaseRequestImpl implements _PurchaseRequest {
             other is _$PurchaseRequestImpl &&
             (identical(other.customerId, customerId) ||
                 other.customerId == customerId) &&
-            (identical(other.amount, amount) || other.amount == amount));
+            (identical(other.amount, amount) || other.amount == amount) &&
+            (identical(other.invoiceId, invoiceId) ||
+                other.invoiceId == invoiceId));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, customerId, amount);
+  int get hashCode => Object.hash(runtimeType, customerId, amount, invoiceId);
 
   /// Create a copy of PurchaseRequest
   /// with the given fields replaced by the non-null parameter values.
@@ -169,6 +194,7 @@ abstract class _PurchaseRequest implements PurchaseRequest {
   const factory _PurchaseRequest({
     required final int customerId,
     required final double amount,
+    final String? invoiceId,
   }) = _$PurchaseRequestImpl;
 
   factory _PurchaseRequest.fromJson(Map<String, dynamic> json) =
@@ -178,6 +204,8 @@ abstract class _PurchaseRequest implements PurchaseRequest {
   int get customerId;
   @override
   double get amount;
+  @override
+  String? get invoiceId;
 
   /// Create a copy of PurchaseRequest
   /// with the given fields replaced by the non-null parameter values.
