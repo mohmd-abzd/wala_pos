@@ -5,6 +5,7 @@ import 'package:walaa_pos/features/change_password/presentation/ui/change_passwo
 import 'package:walaa_pos/features/customer/presentation/ui/customer_screen.dart';
 import 'package:walaa_pos/features/purchase/presentation/ui/purchase_screen.dart';
 import 'package:walaa_pos/features/purchase/presentation/ui/purchase_screen_session.dart';
+import 'package:walaa_pos/features/settings/presentation/ui/settings_screen.dart';
 import 'package:walaa_pos/features/transactions/presentation/ui/transactions_screen.dart';
 import 'package:walaa_pos/features/register_customer/presentation/ui/register_customer_screen.dart';
 import 'package:walaa_pos/features/scan/presentation/ui/scan_screen.dart';
@@ -45,6 +46,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             name: changePasswordRoute,
             builder: (context, state) => const ChangePasswordScreen(),
           ),
+          GoRoute(
+            path: 'settings',
+            name: settingsRoute,
+            builder: (context, state) => const SettingsScreen(),
+          ),
+
           GoRoute(
             path: 'register-customer',
             name: registerCustomerRoute,

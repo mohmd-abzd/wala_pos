@@ -9,4 +9,7 @@ const String baseURL = serverURL;
 const String loginEndPoint = '/auth/login';
 const String changePasswordEndPoint = '/auth/change-password';
 const String customerEndPoint = '/customers/{vcid}';
+
 const String signUpEndPoint = '/auth/signup';
+
+const String endpoint = '/settings/system-ip';

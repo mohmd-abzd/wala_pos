@@ -89,6 +89,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
               Spacer(),
               ListTile(
+                leading: const Icon(Icons.settings),
+                title: Text('الاعدادات'.hardcoded),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => context.pushNamed(settingsRoute),
+              ),
+
+              ListTile(
                 leading: const Icon(Icons.lock),
                 title: Text('تغيير كلمة المرور'.hardcoded),
                 trailing: const Icon(Icons.chevron_right),

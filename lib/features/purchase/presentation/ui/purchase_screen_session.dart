@@ -1,10 +1,11 @@
 // purchase_session_screen.dart
-import 'dart:async';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PurchaseSessionScreen extends StatefulWidget {
+import 'package:walaa_pos/core/data/invoice/dto/invoice.dart';
+import 'package:walaa_pos/features/purchase/presentation/controller/purchase_session_controller.dart'; // adjust path
+
+class PurchaseSessionScreen extends ConsumerStatefulWidget {
   const PurchaseSessionScreen({
     super.key,
     required this.vcid,
@@ -15,61 +16,23 @@ class PurchaseSessionScreen extends StatefulWidget {
   final int customerId;
 
   @override
-  State<PurchaseSessionScreen> createState() => _PurchaseSessionScreenState();
+  ConsumerState<PurchaseSessionScreen> createState() =>
+      _PurchaseSessionScreenState();
 }
 
-class _PurchaseSessionScreenState extends State<PurchaseSessionScreen> {
-  final List<_Invoice> _invoices = <_Invoice>[];
-  final Random _rng = Random();
-  Timer? _timer;
+class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
   bool _active = true;
 
-  @override
-  void initState() {
-    super.initState();
-    _scheduleNext();
-  }
+  PurchaseSessionKey get _key =>
+      PurchaseSessionKey(vcid: widget.vcid, customerId: widget.customerId);
 
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
+  Future<void> _onInvoiceTap(Invoice inv) async {
+    // --- adjust if DTO differs ---
+    final id = inv.invoiceId;
+    final amount = inv.amount;
+    final closedAt = inv.createdAt;
+    // ----------------------------
 
-  // Random delay 3–7 seconds
-  Duration _nextDelay() => Duration(seconds: 3 + _rng.nextInt(5));
-
-  String _rndInvoiceId() => 'فاتورة-${10000 + _rng.nextInt(90000)}';
-
-  double _rndAmount() => double.parse(
-    (5 + _rng.nextInt(200) + _rng.nextDouble()).toStringAsFixed(2),
-  );
-
-  void _scheduleNext() {
-    _timer?.cancel();
-    if (!_active) return;
-
-    _timer = Timer(_nextDelay(), () {
-      if (!mounted || !_active) return;
-
-      final inv = _Invoice(
-        id: _rndInvoiceId(),
-        amount: _rndAmount(),
-        closedAt: DateTime.now(),
-      );
-
-      setState(() {
-        // Newest invoices on top
-        _invoices.insert(0, inv);
-      });
-
-      // Keep session running
-      _scheduleNext();
-    });
-  }
-
-  Future<void> _onInvoiceTap(_Invoice inv) async {
-    // Show confirmation modal when the cashier taps an invoice
     final confirmed = await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: false,
@@ -96,10 +59,10 @@ class _PurchaseSessionScreenState extends State<PurchaseSessionScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('رقم الفاتورة: ${inv.id}'),
+                      Text('رقم الفاتورة: $id'),
                       const SizedBox(height: 6),
                       Text(
-                        'المبلغ: ${inv.amount.toStringAsFixed(2)} د.ل',
+                        'المبلغ: ${amount.toStringAsFixed(2)} د.ل',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
@@ -108,7 +71,7 @@ class _PurchaseSessionScreenState extends State<PurchaseSessionScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'الوقت: ${TimeOfDay.fromDateTime(inv.closedAt).format(ctx)}',
+                        'الوقت: ${TimeOfDay.fromDateTime(closedAt).format(ctx)}',
                         style: Theme.of(ctx).textTheme.bodySmall,
                       ),
                     ],
@@ -140,32 +103,34 @@ class _PurchaseSessionScreenState extends State<PurchaseSessionScreen> {
     }
   }
 
-  void _completeWith(_Invoice inv) {
+  void _completeWith(Invoice inv) {
     // Close the session (no more new invoices)
     _active = false;
-    _timer?.cancel();
+    ref.read(purchaseSessionControllerProvider(_key).notifier).pause();
 
-    // Result to pass back if you want to use it
+    // --- adjust if DTO differs ---
+    final id = inv.invoiceId;
+    final amount = inv.amount;
+    // ----------------------------
+
     final result = {
       'changed': true,
-      'invoiceId': inv.id,
-      'amount': inv.amount,
+      'invoiceId': id,
+      'amount': amount,
       'vcid': widget.vcid,
       'customerId': widget.customerId,
     };
 
     if (!mounted) return;
 
-    // Success toast/snackbar
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          'تم تأكيد عملية ولاء للفاتورة ${inv.id} بمبلغ ${inv.amount.toStringAsFixed(2)} د.ل',
+          'تم تأكيد عملية ولاء للفاتورة $id بمبلغ ${amount.toStringAsFixed(2)} د.ل',
         ),
       ),
     );
 
-    // Pop screen after short delay
     Future.delayed(const Duration(milliseconds: 350), () {
       if (mounted) Navigator.of(context).pop(true);
     });
@@ -173,6 +138,9 @@ class _PurchaseSessionScreenState extends State<PurchaseSessionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final session = ref.watch(purchaseSessionControllerProvider(_key));
+    final invoices = session.invoices;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('جلسة ولاء – تدفق فواتير'),
@@ -181,10 +149,15 @@ class _PurchaseSessionScreenState extends State<PurchaseSessionScreen> {
             tooltip: _active ? 'إيقاف الجلسة' : 'استئناف الجلسة',
             onPressed: () {
               setState(() => _active = !_active);
+
+              final ctrl = ref.read(
+                purchaseSessionControllerProvider(_key).notifier,
+              );
+
               if (_active) {
-                _scheduleNext();
+                ctrl.resume();
               } else {
-                _timer?.cancel();
+                ctrl.pause();
               }
             },
             icon: Icon(
@@ -193,14 +166,21 @@ class _PurchaseSessionScreenState extends State<PurchaseSessionScreen> {
           ),
         ],
       ),
-      body: _invoices.isEmpty
+      body: invoices.isEmpty
           ? const _EmptyState()
           : ListView.separated(
               padding: const EdgeInsets.all(12),
-              itemCount: _invoices.length,
+              itemCount: invoices.length,
               separatorBuilder: (_, __) => const SizedBox(height: 8),
               itemBuilder: (_, i) {
-                final inv = _invoices[i];
+                final inv = invoices[i];
+
+                // --- adjust if DTO differs ---
+                final id = inv.invoiceId;
+                final amount = inv.amount;
+                final closedAt = inv.createdAt;
+                // ----------------------------
+
                 return InkWell(
                   onTap: () => _onInvoiceTap(inv),
                   child: Card(
@@ -217,7 +197,7 @@ class _PurchaseSessionScreenState extends State<PurchaseSessionScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'رقم الفاتورة: ${inv.id}',
+                                  'رقم الفاتورة: $id',
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
@@ -225,7 +205,7 @@ class _PurchaseSessionScreenState extends State<PurchaseSessionScreen> {
                                 ),
                                 const SizedBox(height: 6),
                                 Text(
-                                  'المبلغ: ${inv.amount.toStringAsFixed(2)} د.ل',
+                                  'المبلغ: ${amount.toStringAsFixed(2)} د.ل',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18,
@@ -236,7 +216,7 @@ class _PurchaseSessionScreenState extends State<PurchaseSessionScreen> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'الوقت: ${TimeOfDay.fromDateTime(inv.closedAt).format(context)}',
+                                  'الوقت: ${TimeOfDay.fromDateTime(closedAt).format(context)}',
                                   style: Theme.of(context).textTheme.bodySmall,
                                 ),
                               ],
@@ -277,12 +257,4 @@ class _EmptyState extends StatelessWidget {
       ),
     );
   }
-}
-
-class _Invoice {
-  final String id;
-  final double amount;
-  final DateTime closedAt;
-
-  _Invoice({required this.id, required this.amount, required this.closedAt});
 }
