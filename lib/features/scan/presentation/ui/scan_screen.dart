@@ -52,7 +52,9 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
       final result = await _platform.invokeMethod<String>('startCameraScan');
       if (result != null) {
         setState(() => _qrdetails = result);
+        context.pushNamed(customerRoute, pathParameters: {'vcid': _qrdetails});
       }
+
       return result;
     } catch (e) {
       return null;
@@ -133,7 +135,6 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
           const SizedBox(height: 24),
           ElevatedButton.icon(
             onPressed: () {
-              setState(() => _qrdetails = "الرجاء التأكد من بيانات المستخدم");
               context.pushNamed(
                 customerRoute,
                 pathParameters: {'vcid': "8S7WymqI0p6gHz-Sph59CQ"},

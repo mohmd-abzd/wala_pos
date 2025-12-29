@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:toastification/toastification.dart';
-import 'package:walaa_pos/features/customer/presentation/controller/customer_controller.dart';
 import '../../presentation/controller/purchase_controller.dart';
 
 class PurchaseScreen extends ConsumerStatefulWidget {

@@ -27,7 +27,7 @@ class _InvoiceApi implements InvoiceApi {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/invoices/latest',
+            '/invoices/fakest',
             queryParameters: queryParameters,
             data: _data,
           )

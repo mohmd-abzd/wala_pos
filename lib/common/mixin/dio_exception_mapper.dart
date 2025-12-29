@@ -4,6 +4,8 @@ import '/common/extension/string_hardcoded.dart';
 
 mixin DioExceptionMapper {
   Failure mapDioExceptionToFailure(DioException e, StackTrace stackTrace) {
+    print(e.type);
+    print(e);
     switch (e.type) {
       case DioExceptionType.connectionTimeout:
         return Failure(

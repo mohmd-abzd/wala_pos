@@ -4,9 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:walaa_pos/common/util/run_guarded.dart';
 import 'package:walaa_pos/core/data/invoice/dto/invoice.dart';
-import 'package:walaa_pos/features/purchase/domain/get_latest_invoice_usecase.dart';
 import 'package:walaa_pos/features/purchase/domain/purchase_usecase.dart';
-import 'package:walaa_pos/features/purchase/presentation/state/purchase_session_state.dart';
+import 'package:walaa_pos/features/purchase_session/domain/get_latest_invoices.dart';
+import 'package:walaa_pos/features/purchase_session/presentation/state/purchase_session_state.dart';
 
 @immutable
 class PurchaseSessionKey {
@@ -53,6 +53,7 @@ class PurchaseSessionController
 
     _timer = Timer.periodic(const Duration(seconds: 1), (_) => _tick());
     _tick(); // fetch immediately once
+
     return state;
   }
 
@@ -80,7 +81,7 @@ class PurchaseSessionController
 
     final result = await runGuarded<List<Invoice>>(
       () => ref
-          .read(getLatestInvoiceUseCaseProvider)
+          .read(getLatestInvoicesUseCaseProvider)
           .execute(timeStamp: _allInvoicesSinceIso),
       (msg) => state = state.copyWith(isLoading: false, error: msg),
     );
@@ -113,7 +114,7 @@ class PurchaseSessionController
       () => ref
           .read(createPurchaseUseCaseProvider)
           .execute(
-            customerId: arg.customerId,
+            customerId: arg.customerId, // ✅ was arg.customerId
             amount: amount,
             invoiceId: invoiceId,
           ),

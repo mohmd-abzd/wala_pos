@@ -2,59 +2,89 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:walaa_pos/core/features/settings/settings_storage.dart';
 
-/// Reads the saved gateway IP/host from SharedPreferences via SettingsStorage.
-/// Expected formats:
-/// - "192.168.1.50"
-/// - "192.168.1.50:3000"
-/// - "http://192.168.1.50:3000"
-final gatewayBaseUrlProvider = FutureProvider.autoDispose<String?>((ref) async {
+/// Reads the saved gateway IP from SharedPreferences.
+/// Expected format: "192.168.91.249"
+final gatewayIpProvider = FutureProvider.autoDispose<String?>((ref) async {
   final storage = ref.watch(settingsStorageProvider);
   final raw = await storage.readSystemIp();
   if (raw == null) return null;
-  final v = raw.trim();
-  return v.isEmpty ? null : v;
+
+  final ip = raw.trim();
+  return ip.isEmpty ? null : ip;
 });
 
-/// A dedicated Dio instance for the local Gateway (separate baseUrl from backend).
-final gatewayNetworkServiceProvider = Provider.autoDispose<Dio>((ref) {
-  final baseUrlAsync = ref.watch(gatewayBaseUrlProvider);
-
-  final raw = baseUrlAsync.maybeWhen(data: (v) => v, orElse: () => null);
-
-  final options = BaseOptions(
-    baseUrl: "http://172.20.10.2:3000/",
-    connectTimeout: const Duration(seconds: 5),
-    receiveTimeout: const Duration(seconds: 8),
-    sendTimeout: const Duration(seconds: 8),
-    headers: const {'Content-Type': 'application/json'},
-  );
-
-  return Dio(options);
-});
-
-/// Call this after you save/clear system_ip so Dio rebuilds with the new baseUrl.
-void invalidateGatewayNetwork(WidgetRef ref) {
-  ref.invalidate(gatewayBaseUrlProvider);
-  ref.invalidate(gatewayNetworkServiceProvider);
+bool _isValidIpv4(String v) {
+  final parts = v.split('.');
+  if (parts.length != 4) return false;
+  for (final p in parts) {
+    final n = int.tryParse(p);
+    if (n == null) return false;
+    if (n < 0 || n > 255) return false;
+  }
+  return true;
 }
 
-String _normalizeGatewayBaseUrl(String? raw) {
-  // If not configured yet, keep a dummy base URL so the app can still start.
-  if (raw == null || raw.isEmpty) return 'http://0.0.0.0';
+/// Builds baseUrl from IP (default port 3000).
+String _gatewayBaseUrlFromIp(String ip) {
+  final v = ip.trim();
+  if (!_isValidIpv4(v)) {
+    throw Exception("INVALID_GATEWAY_IP: $ip");
+  }
+  return 'http://$v:3000/'; // trailing slash matters for URL joining
+}
 
-  var v = raw.trim();
+/// ✅ Best: async Dio that waits for SharedPreferences IP to load.
+/// Use this provider when building Retrofit clients.
+final gatewayDioProvider = FutureProvider.autoDispose<Dio>((ref) async {
+  final ip = await ref.watch(gatewayIpProvider.future);
 
-  // If user stores only IP/host (or IP:port), add scheme.
-  if (!v.startsWith('http://') && !v.startsWith('https://')) {
-    v = 'http://$v';
+  if (ip == null || ip.trim().isEmpty) {
+    throw Exception("GATEWAY_NOT_CONFIGURED");
   }
 
-  final uri = Uri.parse(v);
+  final baseUrl = _gatewayBaseUrlFromIp(ip);
 
-  // Default port to 3000 if not provided.
-  if (!uri.hasPort) {
-    return uri.replace(port: 3000).toString();
+  final dio = Dio(
+    BaseOptions(
+      baseUrl: baseUrl,
+      connectTimeout: const Duration(seconds: 5),
+      receiveTimeout: const Duration(seconds: 8),
+      sendTimeout: const Duration(seconds: 8),
+      headers: const {'Content-Type': 'application/json'},
+    ),
+  );
+
+  return dio;
+});
+
+/// Optional: synchronous Dio provider.
+/// Only use this if you're 100% sure the IP is already loaded.
+/// If not loaded yet, it throws (so you don't accidentally call 0.0.0.0).
+final gatewayNetworkServiceProvider = Provider.autoDispose<Dio>((ref) {
+  final ipAsync = ref.watch(gatewayIpProvider);
+
+  final ip = ipAsync.maybeWhen(data: (v) => v, orElse: () => null);
+
+  if (ip == null || ip.trim().isEmpty) {
+    throw Exception("GATEWAY_NOT_CONFIGURED");
   }
 
-  return uri.toString();
+  final baseUrl = _gatewayBaseUrlFromIp(ip);
+
+  return Dio(
+    BaseOptions(
+      baseUrl: baseUrl,
+      connectTimeout: const Duration(seconds: 5),
+      receiveTimeout: const Duration(seconds: 8),
+      sendTimeout: const Duration(seconds: 8),
+      headers: const {'Content-Type': 'application/json'},
+    ),
+  );
+});
+
+/// Call this after save/clear system_ip so Dio rebuilds with the new baseUrl.
+void invalidateGatewayNetwork(WidgetRef ref) {
+  ref.invalidate(gatewayIpProvider);
+  ref.invalidate(gatewayDioProvider);
+  ref.invalidate(gatewayNetworkServiceProvider);
 }

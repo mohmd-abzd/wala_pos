@@ -1,11 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:walaa_pos/core/data/invoice/dto/invoice.dart';
 import 'package:walaa_pos/core/data/invoice/repoistory/iinvoice_repository.dart';
+import 'package:walaa_pos/core/data/invoice/repoistory/invoice_repository.dart';
 
-/// Use-case: Fetch latest invoice after a timestamp (ISO string).
-class GetLatestInvoiceUseCase {
+/// Use-case: Fetch latest invoices after a given timestamp (ISO string).
+class GetLatestInvoicesUseCase {
   final IInvoiceRepository _repo;
-  GetLatestInvoiceUseCase(this._repo);
+  GetLatestInvoicesUseCase(this._repo);
 
   Future<List<Invoice>> execute({required String timeStamp}) {
     return _repo.getLatestInvoice(timeStamp: timeStamp);
@@ -13,6 +14,6 @@ class GetLatestInvoiceUseCase {
 }
 
 /// Provider for DI
-final getLatestInvoiceUseCaseProvider = Provider<GetLatestInvoiceUseCase>(
-  (ref) => GetLatestInvoiceUseCase(ref.read(invoiceRepositoryProvider)),
+final getLatestInvoicesUseCaseProvider = Provider<GetLatestInvoicesUseCase>(
+  (ref) => GetLatestInvoicesUseCase(ref.read(invoiceRepositoryProvider)),
 );

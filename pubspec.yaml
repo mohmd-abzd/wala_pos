@@ -64,7 +64,6 @@ dependencies:
   modal_progress_hud_nsn: ^0.5.1
   flutter_cache_manager: ^3.4.1
   cached_network_image: ^3.4.1
-  mssql_connection: ^3.0.0
 
 
 

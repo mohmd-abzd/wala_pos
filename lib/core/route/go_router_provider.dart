@@ -4,7 +4,7 @@ import 'package:walaa_pos/features/bind_card/presentation/ui/bind_card_screen.da
 import 'package:walaa_pos/features/change_password/presentation/ui/change_password_screen.dart';
 import 'package:walaa_pos/features/customer/presentation/ui/customer_screen.dart';
 import 'package:walaa_pos/features/purchase/presentation/ui/purchase_screen.dart';
-import 'package:walaa_pos/features/purchase/presentation/ui/purchase_screen_session.dart';
+import 'package:walaa_pos/features/purchase_session/presentation/ui/purchase_screen_session.dart';
 import 'package:walaa_pos/features/settings/presentation/ui/settings_screen.dart';
 import 'package:walaa_pos/features/transactions/presentation/ui/transactions_screen.dart';
 import 'package:walaa_pos/features/register_customer/presentation/ui/register_customer_screen.dart';

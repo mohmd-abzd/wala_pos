@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:walaa_pos/core/data/invoice/dto/invoice.dart';
-import 'package:walaa_pos/features/purchase/presentation/controller/purchase_session_controller.dart'; // adjust path
+import 'package:walaa_pos/features/purchase_session/presentation/controller/purchase_session_controller.dart'; // adjust path
 
 class PurchaseSessionScreen extends ConsumerStatefulWidget {
   const PurchaseSessionScreen({
