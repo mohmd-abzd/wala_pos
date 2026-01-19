@@ -120,7 +120,9 @@ class TransactionsScreen extends ConsumerWidget {
                                     children: [
                                       Container(
                                         decoration: BoxDecoration(
-                                          color: iconColor.withOpacity(0.1),
+                                          color: iconColor.withValues(
+                                            alpha: 0.1,
+                                          ),
                                           borderRadius: BorderRadius.circular(
                                             8,
                                           ),
@@ -214,24 +216,23 @@ class TransactionsScreen extends ConsumerWidget {
                                 ],
                               ),
                               const SizedBox(height: 4),
-                              if (tx.branch != null)
-                                Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.store,
-                                      size: 18,
-                                      color: Colors.grey,
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.store,
+                                    size: 18,
+                                    color: Colors.grey,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    "الفرع: ${tx.branch.name}",
+                                    style: const TextStyle(
+                                      color: Colors.black54,
+                                      fontSize: 14,
                                     ),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      "الفرع: ${tx.branch.name}",
-                                      style: const TextStyle(
-                                        color: Colors.black54,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
+                              ),
 
                               // Refund button
                               if (!isRefund)

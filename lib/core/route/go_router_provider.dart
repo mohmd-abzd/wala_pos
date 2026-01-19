@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:walaa_pos/core/boot/onboarding_screen.dart';
+import 'package:walaa_pos/core/provider/device_config_provider.dart';
 import 'package:walaa_pos/features/bind_card/presentation/ui/bind_card_screen.dart';
 import 'package:walaa_pos/features/change_password/presentation/ui/change_password_screen.dart';
 import 'package:walaa_pos/features/customer/presentation/ui/customer_screen.dart';
@@ -16,12 +18,19 @@ import '/features/login/presentation/ui/login_screen.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
+  final deviceConfigured = ref.watch(deviceConfiguredProvider);
 
   return GoRouter(
     initialLocation: '/login',
     redirect: (context, state) {
       final isGoingToLogin = state.matchedLocation == '/login';
+      final isGoingOnboarding = state.matchedLocation == '/onboarding';
 
+      // 1) Device must be configured first
+      if (!deviceConfigured) {
+        return isGoingOnboarding ? null : '/onboarding';
+      }
+      // 2) Then check auth state
       if (authState) {
         if (isGoingToLogin) {
           return '/home';
@@ -30,6 +39,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
+      GoRoute(
+        path: '/onboarding',
+        name: onboardingRoute,
+        builder: (context, state) => const OnboardingScreen(),
+      ),
+
       GoRoute(
         path: '/login',
         name: loginRoute,

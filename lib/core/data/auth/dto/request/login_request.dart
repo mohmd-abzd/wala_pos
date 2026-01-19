@@ -15,6 +15,7 @@ class LoginRequest with _$LoginRequest {
       _$LoginRequestFromJson(json);
 
   // factory Map<String, dynamic> toJson() => _$LoginRequestToJson(this);
+  @override
   Map<String, dynamic> toJson() {
     return {
       'username': username,

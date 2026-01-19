@@ -4,8 +4,6 @@ import '/common/extension/string_hardcoded.dart';
 
 mixin DioExceptionMapper {
   Failure mapDioExceptionToFailure(DioException e, StackTrace stackTrace) {
-    print(e.type);
-    print(e);
     switch (e.type) {
       case DioExceptionType.connectionTimeout:
         return Failure(
@@ -47,7 +45,6 @@ mixin DioExceptionMapper {
         if (data is String && data.contains('<html>')) {
           backendMessage = 'Server temporarily unavailable (Bad Gateway)';
         }
-
         return Failure(
           // ✅ Prefer backend message if it exists, fallback otherwise
           message:

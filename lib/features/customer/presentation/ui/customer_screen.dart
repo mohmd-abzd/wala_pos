@@ -2,15 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:toastification/toastification.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-
-import 'package:walaa_pos/core/provider/cache_manager_provider.dart';
 import 'package:walaa_pos/core/route/route_name.dart';
 import 'package:walaa_pos/features/customer/presentation/controller/customer_controller.dart';
 import 'package:walaa_pos/features/customer/presentation/ui/customer_card.dart';
 import 'package:walaa_pos/features/customer/presentation/ui/rewards_list.dart';
-import 'package:walaa_pos/features/customer/shared/reward_item.dart';
 
 enum _PurchaseFlow { normal, session }
 
@@ -21,20 +16,6 @@ class CustomerScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(customerControllerProvider(vcid));
-
-    // Listen for errors
-    ref.listen(customerControllerProvider(vcid), (prev, next) {
-      if (next.error != null && next.error != prev?.error) {
-        toastification.show(
-          context: context,
-          type: ToastificationType.error,
-          title: const Text("خطأ"),
-          description: Text(next.error ?? "حدث خطأ غير متوقع."),
-          alignment: Alignment.center,
-          autoCloseDuration: const Duration(seconds: 4),
-        );
-      }
-    });
 
     // Listen for success messages (existing dialog)
     ref.listen(
@@ -80,9 +61,6 @@ class CustomerScreen extends ConsumerWidget {
       },
     );
 
-    // Use the custom cache manager (only for loading / caching)
-    final cacheManager = ref.watch(imageCacheManagerProvider);
-
     final isBusy = state.isLoading;
     final hasError = state.error != null;
 
@@ -96,7 +74,7 @@ class CustomerScreen extends ConsumerWidget {
               return Center(
                 child: Text(
                   state.error!,
-                  style: const TextStyle(color: Colors.red),
+                  style: const TextStyle(color: Colors.red, fontSize: 32),
                 ),
               );
             }
@@ -191,6 +169,7 @@ class CustomerScreen extends ConsumerWidget {
                               );
                             },
                           );
+                          if (!context.mounted) return;
 
                           if (flow == null) return;
 

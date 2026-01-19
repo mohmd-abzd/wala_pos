@@ -1,12 +1,11 @@
-import 'dart:convert';
-import 'dart:math';
-import 'dart:typed_data';
+// import 'dart:convert';
+// import 'dart:math';
+// import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:walaa_pos/features/scan/presentation/controller/scan_controller.dart';
-import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
-import 'package:ndef/ndef.dart' as ndef;
+// import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 
 class BindCard extends ConsumerStatefulWidget {
   const BindCard({super.key});
@@ -16,7 +15,7 @@ class BindCard extends ConsumerStatefulWidget {
 }
 
 class _BindCardState extends ConsumerState<BindCard> {
-  final _csprng = Random.secure();
+  // final _csprng = Random.secure();
 
   @override
   void initState() {
@@ -59,34 +58,35 @@ class _BindCardState extends ConsumerState<BindCard> {
   }
 
   Future<void> _startNfcScan() async {
-    var tag = await FlutterNfcKit.poll(timeout: Duration(seconds: 10));
-    if (tag.ndefWritable == true) {
-      final vcid = _generateVcid(); // From earlier helper
-      final payload = utf8.encode(vcid); // VCID as bytes
+    //   var tag = await FlutterNfcKit.poll(timeout: Duration(seconds: 10));
+    //   if (tag.ndefWritable == true) {
+    //     final vcid = _generateVcid(); // From earlier helper
+    //     final payload = utf8.encode(vcid); // VCID as bytes
 
-      final record = ndef.MimeRecord(
-        decodedType: 'application/vnd.walaa.vcid',
-        payload: Uint8List.fromList(payload),
-      );
+    //     final record = ndef.MimeRecord(
+    //       decodedType: 'application/vnd.walaa.vcid',
+    //       payload: Uint8List.fromList(payload),
+    //     );
 
-      await FlutterNfcKit.writeNDEFRecords([record]);
-      print('VCID written: $vcid');
-    } else {
-      print('NFC tag is not writable.');
-    }
+    //     await FlutterNfcKit.writeNDEFRecords([record]);
+    //     print('VCID written: $vcid');
+    //   } else {
+    //     print('NFC tag is not writable.');
+    //   }
 
-    await FlutterNfcKit.finish(); // End session
-  }
+    //   await FlutterNfcKit.finish(); // End session
+    // }
 
-  /// Returns a 128-bit (16-byte) random VCID encoded as Base64URL without padding.
-  /// Example: "3r9-s1Oiv1mQe0n4z1gKxQ" (22 chars, [A-Za-z0-9-_])
-  String _generateVcid({int bytes = 16}) {
-    final buf = Uint8List(bytes);
-    for (var i = 0; i < buf.length; i++) {
-      buf[i] = _csprng.nextInt(256);
-      int x = 10;
-    }
-    // Base64URL, strip '=' padding
-    return base64UrlEncode(buf).replaceAll('=', '');
+    /// Returns a 128-bit (16-byte) random VCID encoded as Base64URL without padding.
+    /// Example: "3r9-s1Oiv1mQe0n4z1gKxQ" (22 chars, [A-Za-z0-9-_])
+    // String _generateVcid({int bytes = 16}) {
+    //   final buf = Uint8List(bytes);
+    //   for (var i = 0; i < buf.length; i++) {
+    //     buf[i] = _csprng.nextInt(256);
+    //     int x = 10;
+    //   }
+    //   // Base64URL, strip '=' padding
+    //   return base64UrlEncode(buf).replaceAll('=', '');
+    // }
   }
 }

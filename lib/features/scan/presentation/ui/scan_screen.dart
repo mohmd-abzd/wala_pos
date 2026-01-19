@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -12,68 +13,52 @@ class ScanScreen extends ConsumerStatefulWidget {
   const ScanScreen({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _ScanScreenState();
+  ConsumerState<ScanScreen> createState() => _ScanScreenState();
 }
 
 class _ScanScreenState extends ConsumerState<ScanScreen> {
-  static const _platform = MethodChannel('samples.flutter.dev/printer');
+  // Platform channels
+  static const MethodChannel _platform = MethodChannel(
+    'samples.flutter.dev/printer',
+  );
+  static const EventChannel _infraredScanChannel = EventChannel(
+    'samples.flutter.dev/infrared_scan',
+  );
+
+  // Keyboard visibility (optional: kept, but only logs)
   late final KeyboardVisibilityController _keyboardController;
   late final StreamSubscription<bool> _keyboardSubscription;
 
-  String _qrdetails = "None";
-  // String _nfcdetails = "None";
+  // Subscriptions
+  StreamSubscription? _qrSub;
+  late final ProviderSubscription<String?> _errorSub;
 
-  // Infrared QR listener
-  final _scanStream = const EventChannel(
-    'samples.flutter.dev/infrared_scan',
-  ).receiveBroadcastStream();
-
-  void _startQRListening() {
-    _scanStream.listen(
-      (code) {
-        setState(() => _qrdetails = code);
-        context.pushNamed(customerRoute, pathParameters: {'vcid': _qrdetails});
-      },
-      onError: (err) {
-        toastification.show(
-          context: context,
-          type: ToastificationType.error,
-          title: const Text("خطأ"),
-          description: Text(err),
-          autoCloseDuration: const Duration(seconds: 4),
-        );
-        setState(() => _qrdetails = err);
-      },
-    );
-  }
-
-  Future<String?> _startCameraScan() async {
-    try {
-      final result = await _platform.invokeMethod<String>('startCameraScan');
-      if (result != null) {
-        setState(() => _qrdetails = result);
-        context.pushNamed(customerRoute, pathParameters: {'vcid': _qrdetails});
-      }
-
-      return result;
-    } catch (e) {
-      return null;
-    }
-  }
+  // Navigation guard
+  bool _navigating = false;
 
   @override
   void initState() {
     super.initState();
-    _startQRListening(); // ✅ Only listen for QR (default mode)
+
+    // Listen to controller errors ONCE (don't do this in build)
+    _errorSub = ref.listenManual(
+      scanControllerProvider.select((s) => s.error),
+      (_, error) {
+        if (error != null) _showError(error);
+      },
+    );
+
+    // Start infrared QR listening
+    _startInfraredQrListening();
+
+    // Keyboard visibility (optional)
     _keyboardController = KeyboardVisibilityController();
 
-    // Check once when screen opens
     final isKeyboardVisible = _keyboardController.isVisible;
     debugPrint(
       "🔍 Keyboard visible when entering ScanScreen: $isKeyboardVisible",
     );
 
-    // (optional) listen for changes while screen active
     _keyboardSubscription = _keyboardController.onChange.listen((visible) {
       debugPrint("⌨️ Keyboard visibility changed: $visible");
     });
@@ -81,32 +66,77 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
 
   @override
   void dispose() {
+    _qrSub?.cancel();
     _keyboardSubscription.cancel();
+    _errorSub.close();
     super.dispose();
+  }
+
+  void _showError(Object err) {
+    if (!mounted) return;
+    toastification.show(
+      context: context,
+      type: ToastificationType.error,
+      title: const Text("خطأ"),
+      description: Text(err.toString()),
+      autoCloseDuration: const Duration(seconds: 4),
+    );
+  }
+
+  void _startInfraredQrListening() {
+    _qrSub?.cancel();
+
+    _qrSub = _infraredScanChannel.receiveBroadcastStream().listen(
+      (code) {
+        final vcid = (code as String?)?.trim();
+        if (vcid == null || vcid.isEmpty) return;
+
+        if (!mounted) return;
+
+        _goToCustomer(vcid);
+      },
+      onError: (err) {
+        if (!mounted) return;
+        _showError(err);
+      },
+    );
+  }
+
+  Future<void> _goToCustomer(String vcid) async {
+    if (_navigating || !mounted) return;
+
+    _navigating = true;
+    try {
+      context.pushNamed(customerRoute, pathParameters: {'vcid': vcid});
+      // Optional: small debounce to avoid repeated pushes from rapid events
+      await Future<void>.delayed(const Duration(milliseconds: 400));
+    } finally {
+      _navigating = false;
+    }
+  }
+
+  Future<void> _startCameraScan() async {
+    try {
+      final result = await _platform.invokeMethod<String>('startCameraScan');
+      final vcid = result?.trim();
+      if (vcid == null || vcid.isEmpty) return;
+
+      if (!mounted) return;
+
+      await _goToCustomer(vcid);
+    } catch (e) {
+      _showError(e);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(scanControllerProvider);
 
-    // Listen for errors
-    ref.listen(scanControllerProvider.select((s) => s.error), (_, error) {
-      if (error != null) {
-        toastification.show(
-          context: context,
-          type: ToastificationType.error,
-          title: const Text("خطأ"),
-          description: Text(error),
-          autoCloseDuration: const Duration(seconds: 4),
-        );
-      }
-    });
-
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // 1. Big QR code placeholder
           const Icon(Icons.qr_code, size: 200),
           const SizedBox(height: 16),
           const Text(
@@ -117,105 +147,27 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
 
           const SizedBox(height: 32),
 
-          // 2. Camera scan button
+          // Camera scan
           ElevatedButton.icon(
-            onPressed: _startCameraScan,
+            onPressed: state.isScanning ? null : _startCameraScan,
             icon: const Icon(Icons.camera_alt),
             label: const Text("استخدام الكاميرا لمسح QR"),
           ),
 
           const SizedBox(height: 12),
 
-          // 3. NFC scan button (shows popup)
-          // ElevatedButton.icon(
-          //   onPressed: () => _showNfcDialog(context),
-          //   icon: const Icon(Icons.nfc),
-          //   label: const Text("مسح بطاقة NFC"),
-          // ),
-          const SizedBox(height: 24),
+          // Emulator shortcut (optional)
           ElevatedButton.icon(
-            onPressed: () {
-              context.pushNamed(
-                customerRoute,
-                pathParameters: {'vcid': "8S7WymqI0p6gHz-Sph59CQ"},
-              );
-            },
-            icon: const Icon(Icons.nfc),
+            onPressed: () => _goToCustomer("8S7WymqI0p6gHz-Sph59CQ"),
+            icon: const Icon(Icons.developer_mode),
             label: const Text("Emulator's Scan"),
           ),
+
+          const SizedBox(height: 24),
 
           if (state.isScanning) const CircularProgressIndicator(),
         ],
       ),
     );
   }
-
-  // Future<void> _showNfcDialog(BuildContext context) async {
-  //   showDialog(
-  //     context: context,
-  //     barrierDismissible: false, // force user to finish/cancel
-  //     builder: (ctx) {
-  //       _startNfcScan(ctx);
-  //       return AlertDialog(
-  //         title: const Text("NFC Scan"),
-  //         content: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: const [
-  //             Icon(Icons.nfc, size: 80, color: Colors.blue),
-  //             SizedBox(height: 12),
-  //             Text("ضع البطاقة بالقرب من الجهاز"),
-  //           ],
-  //         ),
-  //         actions: [
-  //           TextButton(
-  //             onPressed: () {
-  //               FlutterNfcKit.finish(); // stop polling
-  //               Navigator.of(ctx).pop();
-  //             },
-  //             child: const Text("إلغاء"),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
-
-  // Future<void> _startNfcScan(BuildContext dialogContext) async {
-  //   try {
-  //     var tag = await FlutterNfcKit.poll(timeout: const Duration(seconds: 5));
-  //     setState(() {
-  //       _nfcdetails = tag.applicationData ?? "???";
-  //     });
-
-  //     final records = await FlutterNfcKit.readNDEFRecords();
-  //     for (var r in records) {
-  //       if (r is ndef.MimeRecord) {
-  //         final vcid = utf8.decode(r.payload!);
-  //         print('VCID from card: $vcid');
-  //         Navigator.of(dialogContext).pop(); // close popup on success
-  //         context.pushNamed(customerRoute, pathParameters: {'vcid': vcid});
-  //       }
-  //     }
-  //   } on PlatformException catch (e) {
-  //     if (e.code == '408') {
-  //       // Timeout
-  //       toastification.show(
-  //         context: context,
-  //         type: ToastificationType.error,
-  //         title: const Text("مهلة انتهت"),
-  //         description: const Text("لم يتم اكتشاف بطاقة، حاول مرة أخرى"),
-  //       );
-  //     } else {
-  //       toastification.show(
-  //         context: context,
-  //         type: ToastificationType.error,
-  //         title: const Text("خطأ NFC"),
-  //         description: Text(e.message ?? "غير معروف"),
-  //       );
-  //     }
-  //     Navigator.of(dialogContext).pop(); // close popup on error
-  //   } finally {
-  //     await FlutterNfcKit.finish();
-  //   }
-  // }
 }

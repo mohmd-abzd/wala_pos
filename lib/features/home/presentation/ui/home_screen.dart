@@ -50,7 +50,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             backgroundImage:
                                 (profile?.merchantLogo != null &&
                                     profile!.merchantLogo!.isNotEmpty)
-                                ? NetworkImage(profile!.merchantLogo!)
+                                ? NetworkImage(profile.merchantLogo!)
                                 : null,
                             child:
                                 (profile?.merchantLogo == null ||

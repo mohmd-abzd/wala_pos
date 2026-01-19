@@ -6,7 +6,6 @@ import '/common/extension/string_hardcoded.dart';
 import '/common/style/dimens.dart';
 import '/features/login/presentation/controller/login_controller.dart';
 import '/features/login/presentation/ui/widget/login_button.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({super.key});
@@ -132,7 +131,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   }
 
   void _login() {
-    _getSerialNumber();
     final isValid = _formKey.currentState?.validate() ?? false;
 
     if (isValid) {
@@ -147,11 +145,5 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       // login - call api
       ref.read(loginControllerProvider.notifier).login();
     }
-  }
-
-  _getSerialNumber() async {
-    final deviceInfoPlugin = DeviceInfoPlugin();
-    final androidInfo = await deviceInfoPlugin.androidInfo;
-    final allInfo = androidInfo.id;
   }
 }

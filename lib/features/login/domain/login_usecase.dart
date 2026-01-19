@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:walaa_pos/core/data/auth/repository/auth_repository.dart';
 import 'package:walaa_pos/core/data/auth/source/local/iprofile_storage.dart';
 import 'package:walaa_pos/core/data/auth/source/local/profile_storage.dart';
-import 'package:walaa_pos/core/provider/device_info_provider.dart';
+import 'package:walaa_pos/core/storage/device_info_storage.dart';
 import 'package:walaa_pos/core/services/network/network_service.dart';
 import 'package:walaa_pos/core/services/token/itoken_service.dart';
 import 'package:walaa_pos/core/services/token/token_service.dart';
@@ -16,10 +16,16 @@ final loginUseCaseProvider = Provider.autoDispose<LoginUseCase>((ref) {
   final tokenService = ref.watch(tokenServiceProvider(dio)); // 👈 pass Dio
 
   final auth = ref.read(authStateProvider.notifier);
-  final deviceInfo = ref.read(deviceInfoServiceProvider);
+  final deviceInfoStorage = ref.read(deviceInfoStorageProvider);
   final profileStorage = ref.watch(profileStorageProvider);
 
-  return LoginUseCase(repo, tokenService, profileStorage, auth, deviceInfo);
+  return LoginUseCase(
+    repo,
+    tokenService,
+    profileStorage,
+    auth,
+    deviceInfoStorage,
+  );
 });
 
 class LoginUseCase {
@@ -28,7 +34,7 @@ class LoginUseCase {
   final IProfileStorage _profileStorage;
 
   final AuthState _auth;
-  final DeviceInfoService _deviceInfo;
+  final DeviceInfoStorage _deviceInfo;
 
   LoginUseCase(
     this._repo,
@@ -40,10 +46,12 @@ class LoginUseCase {
 
   /// Executes the login flow. Throws `Failure` on error.
   Future<void> execute(String username, String password) async {
-    final serialNumberNotUsedYet = await _deviceInfo.getSerialNumber();
+    // final serialNumber = "SN-11-126";
+    final serialNumber = await _deviceInfo.getSerialNumber();
+    if (serialNumber == null) {
+      throw Exception('SERIAL_NUMBER_MISSING'); // handle -> go onboarding
+    }
 
-    print(serialNumberNotUsedYet);
-    final serialNumber = "SN-11-126";
     // 1. remote call – may throw Failure.network etc.
     final response = await _repo.login(username, password, serialNumber);
 

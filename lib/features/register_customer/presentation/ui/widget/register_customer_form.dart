@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:multi_masked_formatter/multi_masked_formatter.dart';
 import 'package:walaa_pos/core/route/route_name.dart';
 import 'package:walaa_pos/features/register_customer/presentation/controller/register_customer_controller.dart';
 import 'package:walaa_pos/features/register_customer/presentation/ui/widget/register_button.dart';
@@ -193,7 +192,7 @@ class _RegisterCustomerFormState extends ConsumerState<RegisterCustomerForm> {
               const SizedBox(height: kLarge),
               // الجنس
               DropdownButtonFormField<bool?>(
-                value: _gender,
+                initialValue: _gender,
                 decoration: InputDecoration(
                   labelText: 'الجنس'.hardcoded,
                   border: const OutlineInputBorder(

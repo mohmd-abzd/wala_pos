@@ -113,14 +113,6 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
     final amount = inv.amount;
     // ----------------------------
 
-    final result = {
-      'changed': true,
-      'invoiceId': id,
-      'amount': amount,
-      'vcid': widget.vcid,
-      'customerId': widget.customerId,
-    };
-
     if (!mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(

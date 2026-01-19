@@ -105,12 +105,6 @@ class _PurchaseScreenState extends ConsumerState<PurchaseScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      'الزبون: ${widget.vcid}',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: 12),
-                    // New invoice id field
                     TextFormField(
                       controller: _invoiceIdController,
                       keyboardType: TextInputType.text,
@@ -131,6 +125,7 @@ class _PurchaseScreenState extends ConsumerState<PurchaseScreen> {
                       keyboardType: const TextInputType.numberWithOptions(
                         decimal: true,
                       ),
+                      maxLength: 3,
                       decoration: const InputDecoration(
                         labelText: 'المبلغ',
                         prefixIcon: Icon(Icons.payments),
