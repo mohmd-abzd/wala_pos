@@ -2,11 +2,11 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:walaa_pos/core/data/transactions/dtos/purchase_request.dart';
-import 'package:walaa_pos/core/data/transactions/dtos/purchase_response.dart';
-import 'package:walaa_pos/core/data/transactions/dtos/refund_request.dart';
-import 'package:walaa_pos/core/data/transactions/dtos/refund_response.dart';
-import 'package:walaa_pos/core/data/transactions/dtos/transactions_list_response.dart';
+import 'package:wala_pos/core/data/transactions/dtos/purchase_request.dart';
+import 'package:wala_pos/core/data/transactions/dtos/purchase_response.dart';
+import 'package:wala_pos/core/data/transactions/dtos/refund_request.dart';
+import 'package:wala_pos/core/data/transactions/dtos/refund_response.dart';
+import 'package:wala_pos/core/data/transactions/dtos/transactions_list_response.dart';
 import '../../../../services/network/network_service.dart';
 
 part 'transactions_api.g.dart';

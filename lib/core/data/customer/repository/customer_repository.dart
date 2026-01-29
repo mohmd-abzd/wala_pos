@@ -1,12 +1,12 @@
 // lib/features/customer/data/repository/customer_repository.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
-import 'package:walaa_pos/core/data/customer/dto/request/register_customer_request.dart';
-import 'package:walaa_pos/features/customer/shared/customer_report.dart';
-import 'package:walaa_pos/core/data/customer/dto/response/customer_response.dart';
-import 'package:walaa_pos/core/data/customer/repository/icustomer_repository.dart';
-import 'package:walaa_pos/core/data/customer/source/remote/customer_api.dart';
-import 'package:walaa_pos/features/register_customer/shared/registration_result.dart';
+import 'package:wala_pos/core/data/customer/dto/request/register_customer_request.dart';
+import 'package:wala_pos/features/customer/shared/customer_report.dart';
+import 'package:wala_pos/core/data/customer/dto/response/customer_response.dart';
+import 'package:wala_pos/core/data/customer/repository/icustomer_repository.dart';
+import 'package:wala_pos/core/data/customer/source/remote/customer_api.dart';
+import 'package:wala_pos/features/register_customer/shared/registration_result.dart';
 import '/common/exception/failure.dart';
 import '/common/mixin/dio_exception_mapper.dart';
 

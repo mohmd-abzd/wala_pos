@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/common/mixin/dio_exception_mapper.dart';
-import 'package:walaa_pos/core/data/invoice/dto/invoice.dart';
-import 'package:walaa_pos/core/data/invoice/repoistory/iinvoice_repository.dart';
-import 'package:walaa_pos/core/data/invoice/source/invoice_api.dart';
+import 'package:wala_pos/common/mixin/dio_exception_mapper.dart';
+import 'package:wala_pos/core/data/invoice/dto/invoice.dart';
+import 'package:wala_pos/core/data/invoice/repoistory/iinvoice_repository.dart';
+import 'package:wala_pos/core/data/invoice/source/invoice_api.dart';
 import '/common/exception/failure.dart';
 
 final invoiceRepositoryProvider = Provider.autoDispose<IInvoiceRepository>((

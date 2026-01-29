@@ -6,8 +6,8 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
-import 'package:walaa_pos/core/route/route_name.dart';
-import 'package:walaa_pos/features/scan/presentation/controller/scan_controller.dart';
+import 'package:wala_pos/core/route/route_name.dart';
+import 'package:wala_pos/features/scan/presentation/controller/scan_controller.dart';
 
 class ScanScreen extends ConsumerStatefulWidget {
   const ScanScreen({super.key});

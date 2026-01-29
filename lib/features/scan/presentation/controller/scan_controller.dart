@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/features/scan/presentation/state/scan_state.dart';
+import 'package:wala_pos/features/scan/presentation/state/scan_state.dart';
 
 final scanControllerProvider =
     AutoDisposeNotifierProvider<ScanController, ScanState>(ScanController.new);

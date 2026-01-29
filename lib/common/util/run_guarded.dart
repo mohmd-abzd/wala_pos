@@ -1,4 +1,4 @@
-import 'package:walaa_pos/common/exception/failure.dart';
+import 'package:wala_pos/common/exception/failure.dart';
 
 Future<T?> runGuarded<T>(
   Future<T> Function() action,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:toastification/toastification.dart';
-import 'package:walaa_pos/features/home/presentation/controller/home_controller.dart';
+import 'package:wala_pos/features/home/presentation/controller/home_controller.dart';
 
 import '/features/change_password/presentation/controller/change_password_controller.dart';
 

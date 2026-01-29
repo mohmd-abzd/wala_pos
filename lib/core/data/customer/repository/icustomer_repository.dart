@@ -1,7 +1,7 @@
 // lib/features/customer/data/repository/icustomer_repository.dart
 
-import 'package:walaa_pos/features/register_customer/shared/registration_result.dart';
-import 'package:walaa_pos/features/customer/shared/customer_report.dart';
+import 'package:wala_pos/features/register_customer/shared/registration_result.dart';
+import 'package:wala_pos/features/customer/shared/customer_report.dart';
 
 /// Abstract contract for fetching the combined customer + rewards data.
 abstract class ICustomerRepository {

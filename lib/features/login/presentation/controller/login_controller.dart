@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/common/util/run_guarded.dart';
+import 'package:wala_pos/common/util/run_guarded.dart';
 import '../../domain/login_usecase.dart';
 import '/features/login/presentation/state/login_state.dart';
 

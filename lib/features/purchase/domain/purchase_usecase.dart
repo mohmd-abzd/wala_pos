@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/core/data/transactions/repoistory/itransactions_repository.dart';
-import 'package:walaa_pos/core/data/transactions/repoistory/transactions_repository.dart';
+import 'package:wala_pos/core/data/transactions/repoistory/itransactions_repository.dart';
+import 'package:wala_pos/core/data/transactions/repoistory/transactions_repository.dart';
 
 final createPurchaseUseCaseProvider =
     Provider.autoDispose<CreatePurchaseUseCase>((ref) {

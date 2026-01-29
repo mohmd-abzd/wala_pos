@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:walaa_pos/core/data/invoice/dto/invoice.dart';
+import 'package:wala_pos/core/data/invoice/dto/invoice.dart';
 
 part 'purchase_session_state.freezed.dart';
 

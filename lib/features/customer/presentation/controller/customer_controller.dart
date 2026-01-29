@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/common/util/run_guarded.dart';
-import 'package:walaa_pos/features/customer/domain/redemption_usecase.dart';
-import 'package:walaa_pos/features/customer/shared/customer_card.dart';
-import 'package:walaa_pos/features/customer/domain/get_customer_usecase.dart';
-import 'package:walaa_pos/features/customer/presentation/state/customer_state.dart';
+import 'package:wala_pos/common/util/run_guarded.dart';
+import 'package:wala_pos/features/customer/domain/redemption_usecase.dart';
+import 'package:wala_pos/features/customer/shared/customer_card.dart';
+import 'package:wala_pos/features/customer/domain/get_customer_usecase.dart';
+import 'package:wala_pos/features/customer/presentation/state/customer_state.dart';
 
 final customerControllerProvider =
     AutoDisposeNotifierProviderFamily<

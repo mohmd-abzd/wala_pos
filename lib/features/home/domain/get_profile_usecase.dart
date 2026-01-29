@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/core/data/auth/dto/response/login_response.dart';
-import 'package:walaa_pos/core/data/auth/source/local/iprofile_storage.dart';
-import 'package:walaa_pos/core/data/auth/source/local/profile_storage.dart';
+import 'package:wala_pos/core/data/auth/dto/response/login_response.dart';
+import 'package:wala_pos/core/data/auth/source/local/iprofile_storage.dart';
+import 'package:wala_pos/core/data/auth/source/local/profile_storage.dart';
 
 class GetProfileUseCase {
   final IProfileStorage _storage;

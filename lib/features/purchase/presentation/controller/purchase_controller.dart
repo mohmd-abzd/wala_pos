@@ -1,7 +1,7 @@
 // features/purchase/presentation/controller/purchase_controller.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/common/util/run_guarded.dart';
-import 'package:walaa_pos/features/purchase/domain/purchase_usecase.dart';
+import 'package:wala_pos/common/util/run_guarded.dart';
+import 'package:wala_pos/features/purchase/domain/purchase_usecase.dart';
 import '../../presentation/state/purchase_state.dart';
 
 final purchaseControllerProvider =

@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/common/util/run_guarded.dart';
-import 'package:walaa_pos/features/home/domain/get_profile_usecase.dart';
-import 'package:walaa_pos/features/home/domain/logout_usecase.dart';
-import 'package:walaa_pos/features/home/presentation/state/home_state.dart';
+import 'package:wala_pos/common/util/run_guarded.dart';
+import 'package:wala_pos/features/home/domain/get_profile_usecase.dart';
+import 'package:wala_pos/features/home/domain/logout_usecase.dart';
+import 'package:wala_pos/features/home/presentation/state/home_state.dart';
 
 final homeControllerProvider = NotifierProvider<HomeController, HomeState>(
   HomeController.new,

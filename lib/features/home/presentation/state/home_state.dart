@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:walaa_pos/core/data/auth/dto/response/login_response.dart';
+import 'package:wala_pos/core/data/auth/dto/response/login_response.dart';
 
 part 'home_state.freezed.dart';
 

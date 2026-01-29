@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:walaa_pos/core/data/invoice/dto/invoice.dart';
-import 'package:walaa_pos/core/data/invoice/repoistory/iinvoice_repository.dart';
+import 'package:wala_pos/core/data/invoice/dto/invoice.dart';
+import 'package:wala_pos/core/data/invoice/repoistory/iinvoice_repository.dart';
 
 class FakeInvoiceRepository implements IInvoiceRepository {
   static final List<Invoice> _store = <Invoice>[];

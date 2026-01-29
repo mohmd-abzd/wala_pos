@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/features/change_password/domain/change_password_usecase.dart';
-import 'package:walaa_pos/features/change_password/presentation/state/change_password_state.dart';
+import 'package:wala_pos/features/change_password/domain/change_password_usecase.dart';
+import 'package:wala_pos/features/change_password/presentation/state/change_password_state.dart';
 import '/common/util/run_guarded.dart';
 
 final changePasswordControllerProvider =

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:walaa_pos/core/storage/device_info_storage.dart';
 
+import 'package:wala_pos/core/storage/device_info_storage.dart';
 import '/core/provider/device_config_provider.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -17,9 +17,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final _formKey = GlobalKey<FormState>();
   final _serialCtrl = TextEditingController();
 
-  bool _confirmMode = false; // when true: show confirm card + buttons
+  String? _deviceType;
+  bool _confirmMode = false;
   bool _saving = false;
   String? _errorText;
+
+  static const _deviceTypes = ['POS', 'KIOSK', 'DESKTOP', 'WEB'];
 
   @override
   void dispose() {
@@ -31,15 +34,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    // If router passes serial in `extra`, jump straight to confirm mode.
-    // Example: context.go('/onboarding', extra: 'WALA-POS-000123');
+    // Allow pre-filled serial from router
     final extra = GoRouterState.of(context).extra;
     if (extra is String && extra.trim().isNotEmpty) {
-      final serial = extra.trim();
-      if (_serialCtrl.text.trim() != serial) {
-        _serialCtrl.text = serial;
-      }
-      _confirmMode = true;
+      _serialCtrl.text = extra.trim();
     }
   }
 
@@ -58,29 +56,33 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   Future<void> _confirmAndSave() async {
-    setState(() => _errorText = null);
-
     final serial = _serialCtrl.text.trim();
-    if (serial.isEmpty) {
-      setState(() => _errorText = 'Serial number is missing.');
-      _toEdit();
+    final type = _deviceType;
+
+    if (serial.isEmpty || type == null) {
+      setState(() {
+        _errorText = 'Serial number and device type are required.';
+        _confirmMode = false;
+      });
       return;
     }
 
     setState(() => _saving = true);
+
     try {
       final storage = ref.read(deviceInfoStorageProvider);
       await storage.setSerialNumber(serial);
+      await storage.setDeviceType(type);
 
-      // Flip app state so router can stop forcing onboarding
+      // Mark device configured
       ref.read(deviceConfiguredProvider.notifier).setConfigured(true);
 
       if (!mounted) return;
       context.go('/login');
     } catch (e) {
-      setState(
-        () => _errorText = 'Failed to save device info. (${e.runtimeType})',
-      );
+      setState(() {
+        _errorText = 'Failed to save device configuration.';
+      });
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -88,17 +90,23 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   Future<void> _reset() async {
     setState(() {
-      _errorText = null;
       _saving = true;
+      _errorText = null;
     });
+
     try {
       final storage = ref.read(deviceInfoStorageProvider);
       await storage.clearAll();
+
       _serialCtrl.clear();
+      _deviceType = null;
+
       ref.read(deviceConfiguredProvider.notifier).setConfigured(false);
       _confirmMode = false;
     } catch (e) {
-      setState(() => _errorText = 'Failed to reset. (${e.runtimeType})');
+      setState(() {
+        _errorText = 'Failed to reset device.';
+      });
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -123,22 +131,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           child: ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              const SizedBox(height: 10),
-              const Icon(Icons.verified_user_outlined, size: 56),
-              const SizedBox(height: 12),
+              const Icon(Icons.devices_outlined, size: 56),
+              const SizedBox(height: 16),
 
               Text(
-                'Confirm device serial',
+                'Configure this device',
                 style: Theme.of(context).textTheme.headlineSmall,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
-              Text(
-                'Please confirm this is the correct serial number for this POS.',
-                style: Theme.of(context).textTheme.bodyMedium,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 12),
 
               if (_errorText != null) ...[
                 _ErrorBanner(message: _errorText!),
@@ -146,11 +147,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               ],
 
               if (_confirmMode) ...[
-                _ConfirmCard(serial: _serialCtrl.text.trim()),
+                _ConfirmCard(
+                  serial: _serialCtrl.text.trim(),
+                  deviceType: _deviceType!,
+                ),
                 const SizedBox(height: 16),
 
                 FilledButton.icon(
-                  onPressed: _saving ? null : _confirmAndSave,
+                  onPressed: _confirmAndSave,
                   icon: _saving
                       ? const SizedBox(
                           width: 18,
@@ -160,39 +164,50 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       : const Icon(Icons.check),
                   label: const Text('Confirm & Continue'),
                 ),
-
                 const SizedBox(height: 8),
 
                 OutlinedButton.icon(
-                  onPressed: _saving ? null : _toEdit,
-                  icon: const Icon(Icons.edit_outlined),
-                  label: const Text('Edit serial'),
+                  onPressed: _toEdit,
+                  icon: const Icon(Icons.edit),
+                  label: const Text('Edit'),
                 ),
               ] else ...[
                 Form(
                   key: _formKey,
-                  child: TextFormField(
-                    controller: _serialCtrl,
-                    autofocus: true,
-                    textInputAction: TextInputAction.done,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.deny(RegExp(r'\s')),
+                  child: Column(
+                    children: [
+                      DropdownButtonFormField<String>(
+                        value: _deviceType,
+                        decoration: const InputDecoration(
+                          labelText: 'Device Type',
+                          border: OutlineInputBorder(),
+                        ),
+                        items: _deviceTypes
+                            .map(
+                              (t) => DropdownMenuItem(value: t, child: Text(t)),
+                            )
+                            .toList(),
+                        onChanged: (v) => setState(() => _deviceType = v),
+                        validator: (v) =>
+                            v == null ? 'Select device type' : null,
+                      ),
+                      const SizedBox(height: 16),
+
+                      TextFormField(
+                        controller: _serialCtrl,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.deny(RegExp(r'\s')),
+                        ],
+                        decoration: const InputDecoration(
+                          labelText: 'Serial Number',
+                          hintText: 'e.g. WALA-000123',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (v) => (v == null || v.trim().isEmpty)
+                            ? 'Serial number required'
+                            : null,
+                      ),
                     ],
-                    decoration: const InputDecoration(
-                      labelText: 'Serial Number',
-                      hintText: 'e.g. WALA-POS-000123',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (v) {
-                      final s = (v ?? '').trim();
-                      if (s.isEmpty) return 'Serial number is required';
-                      if (s.length < 4) return 'Too short';
-                      return null;
-                    },
-                    onFieldSubmitted: (_) {
-                      final ok = _formKey.currentState?.validate() ?? false;
-                      if (ok) _toConfirm();
-                    },
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -215,7 +230,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
 class _ConfirmCard extends StatelessWidget {
   final String serial;
-  const _ConfirmCard({required this.serial});
+  final String deviceType;
+
+  const _ConfirmCard({required this.serial, required this.deviceType});
 
   @override
   Widget build(BuildContext context) {
@@ -228,18 +245,18 @@ class _ConfirmCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text('Device Type', style: Theme.of(context).textTheme.titleMedium),
+          const SizedBox(height: 4),
+          Text(deviceType, style: Theme.of(context).textTheme.headlineSmall),
+          const SizedBox(height: 12),
+
           Text('Serial Number', style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
           SelectableText(
-            serial.isEmpty ? '—' : serial,
+            serial,
             style: Theme.of(
               context,
             ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'If this is correct, confirm to continue.',
-            style: Theme.of(context).textTheme.bodyMedium,
           ),
         ],
       ),

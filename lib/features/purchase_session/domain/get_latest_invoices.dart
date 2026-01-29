@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/core/data/invoice/dto/invoice.dart';
-import 'package:walaa_pos/core/data/invoice/repoistory/iinvoice_repository.dart';
-import 'package:walaa_pos/core/data/invoice/repoistory/invoice_repository.dart';
+import 'package:wala_pos/core/data/invoice/dto/invoice.dart';
+import 'package:wala_pos/core/data/invoice/repoistory/iinvoice_repository.dart';
+import 'package:wala_pos/core/data/invoice/repoistory/invoice_repository.dart';
 
 /// Use-case: Fetch latest invoices after a given timestamp (ISO string).
 class GetLatestInvoicesUseCase {

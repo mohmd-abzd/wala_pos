@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/core/data/auth/repository/auth_repository.dart';
-import 'package:walaa_pos/core/data/auth/source/local/iprofile_storage.dart';
-import 'package:walaa_pos/core/data/auth/source/local/profile_storage.dart';
-import 'package:walaa_pos/core/storage/device_info_storage.dart';
-import 'package:walaa_pos/core/services/network/network_service.dart';
-import 'package:walaa_pos/core/services/token/itoken_service.dart';
-import 'package:walaa_pos/core/services/token/token_service.dart';
-import 'package:walaa_pos/features/login/domain/session_token.dart';
+import 'package:wala_pos/core/data/auth/repository/auth_repository.dart';
+import 'package:wala_pos/core/data/auth/source/local/iprofile_storage.dart';
+import 'package:wala_pos/core/data/auth/source/local/profile_storage.dart';
+import 'package:wala_pos/core/storage/device_info_storage.dart';
+import 'package:wala_pos/core/services/network/network_service.dart';
+import 'package:wala_pos/core/services/token/itoken_service.dart';
+import 'package:wala_pos/core/services/token/token_service.dart';
+import 'package:wala_pos/features/login/domain/session_token.dart';
 import '/core/provider/auth_state_provider.dart';
 import '../../../core/data/auth/repository/iauth_repository.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:walaa_pos/core/storage/device_info_storage.dart';
+import 'package:wala_pos/core/storage/device_info_storage.dart';
 
 import '/core/provider/auth_state_provider.dart';
 import '/core/provider/device_config_provider.dart';
@@ -14,7 +14,11 @@ Future<void> startUp(Ref ref) async {
   // 1) Device check (SharedPreferences)
   final deviceStorage = ref.read(deviceInfoStorageProvider);
   final serial = await deviceStorage.getSerialNumber();
-  ref.read(deviceConfiguredProvider.notifier).setConfigured(serial != null);
+  final deviceType = await deviceStorage.getDeviceType();
+  print('StartUp Check - Serial: $serial, Type: $deviceType');
+  ref
+      .read(deviceConfiguredProvider.notifier)
+      .setConfigured(serial != null && deviceType != null);
 
   // 2) Auth check (SecureStorage)
   final secureStorage = ref.read(secureStorageProvider);

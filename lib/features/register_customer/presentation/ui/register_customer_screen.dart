@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:walaa_pos/features/register_customer/presentation/controller/register_customer_controller.dart';
-import 'package:walaa_pos/features/register_customer/presentation/ui/widget/register_customer_form.dart';
+import 'package:wala_pos/features/register_customer/presentation/controller/register_customer_controller.dart';
+import 'package:wala_pos/features/register_customer/presentation/ui/widget/register_customer_form.dart';
 import '/common/extension/string_hardcoded.dart';
 
 class RegisterCustomerScreen extends ConsumerStatefulWidget {

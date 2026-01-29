@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
-import 'package:walaa_pos/core/data/redemptions/dtos/redemption_request.dart';
-import 'package:walaa_pos/core/data/redemptions/repoistory/iredemptions_repository.dart';
-import 'package:walaa_pos/core/data/redemptions/source/remote/redemptions_api.dart';
-import 'package:walaa_pos/features/customer/shared/create_redemption_result.dart';
+import 'package:wala_pos/core/data/redemptions/dtos/redemption_request.dart';
+import 'package:wala_pos/core/data/redemptions/repoistory/iredemptions_repository.dart';
+import 'package:wala_pos/core/data/redemptions/source/remote/redemptions_api.dart';
+import 'package:wala_pos/features/customer/shared/create_redemption_result.dart';
 import '/common/exception/failure.dart';
 import '/common/mixin/dio_exception_mapper.dart';
 

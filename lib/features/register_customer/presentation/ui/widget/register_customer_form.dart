@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/core/route/route_name.dart';
-import 'package:walaa_pos/features/register_customer/presentation/controller/register_customer_controller.dart';
-import 'package:walaa_pos/features/register_customer/presentation/ui/widget/register_button.dart';
+import 'package:wala_pos/core/route/route_name.dart';
+import 'package:wala_pos/features/register_customer/presentation/controller/register_customer_controller.dart';
+import 'package:wala_pos/features/register_customer/presentation/ui/widget/register_button.dart';
 import '/common/extension/string_hardcoded.dart';
 import '/common/style/dimens.dart';
 import 'package:go_router/go_router.dart';

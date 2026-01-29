@@ -4,7 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/features/scan/presentation/controller/scan_controller.dart';
+import 'package:wala_pos/features/scan/presentation/controller/scan_controller.dart';
 // import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 
 class BindCard extends ConsumerStatefulWidget {

@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:walaa_pos/common/dtos/message_response.dart';
-import 'package:walaa_pos/core/data/auth/dto/request/change_password_request.dart';
+import 'package:wala_pos/common/dtos/message_response.dart';
+import 'package:wala_pos/core/data/auth/dto/request/change_password_request.dart';
 import '../../../../services/network/endpoint.dart';
 import '../../../../services/network/network_service.dart';
 import '../../dto/request/login_request.dart';

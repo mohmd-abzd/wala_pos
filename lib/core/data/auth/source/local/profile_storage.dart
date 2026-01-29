@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:walaa_pos/core/data/auth/dto/response/login_response.dart';
+import 'package:wala_pos/core/data/auth/dto/response/login_response.dart';
 import 'iprofile_storage.dart';
 
 final profileStorageProvider = Provider.autoDispose<IProfileStorage>((ref) {

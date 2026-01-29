@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:walaa_pos/core/route/route_name.dart';
-import 'package:walaa_pos/features/customer/presentation/controller/customer_controller.dart';
-import 'package:walaa_pos/features/customer/presentation/ui/customer_card.dart';
-import 'package:walaa_pos/features/customer/presentation/ui/rewards_list.dart';
-
-enum _PurchaseFlow { normal, session }
+import 'package:wala_pos/core/route/route_name.dart';
+import 'package:wala_pos/features/customer/presentation/controller/customer_controller.dart';
+import 'package:wala_pos/features/customer/presentation/ui/customer_card.dart';
+import 'package:wala_pos/features/customer/presentation/ui/rewards_list.dart';
 
 class CustomerScreen extends ConsumerWidget {
   const CustomerScreen({super.key, required this.vcid});
@@ -17,7 +15,7 @@ class CustomerScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(customerControllerProvider(vcid));
 
-    // Listen for success messages (existing dialog)
+    // Listen for success messages
     ref.listen(
       customerControllerProvider(vcid).select((s) => s.successMessage),
       (_, msg) async {
@@ -81,12 +79,12 @@ class CustomerScreen extends ConsumerWidget {
 
             final c = state.customer;
             final rewards = state.rewards;
-
-            // Rewards list
             final rewardsList = RewardsList(c: c, rewards: rewards, vcid: vcid);
+
             return LayoutBuilder(
               builder: (context, constraints) {
                 final isWide = constraints.maxWidth >= 900;
+
                 if (isWide) {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -95,118 +93,49 @@ class CustomerScreen extends ConsumerWidget {
                       Expanded(child: rewardsList),
                     ],
                   );
-                } else {
-                  return Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        child: CustomerCard(
-                          merchantName: c.merchantName,
-                          cardNumber: c.cardNumber,
-                          points: c.totalPoints,
-                          name: c.name,
-                          lastTransaction: c.lastTransaction,
-                        ),
-                      ),
-                      FilledButton.icon(
-                        icon: const Icon(Icons.shopping_cart_checkout),
-                        label: const Text('شراء'),
-                        onPressed: () async {
-                          final flow = await showModalBottomSheet<_PurchaseFlow>(
-                            context: context,
-                            showDragHandle: true,
-                            builder: (ctx) {
-                              return SafeArea(
-                                child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(
-                                    16,
-                                    8,
-                                    16,
-                                    16,
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        'اختر طريقة الشراء',
-                                        style: Theme.of(
-                                          ctx,
-                                        ).textTheme.titleMedium,
-                                      ),
-                                      const SizedBox(height: 12),
-
-                                      ListTile(
-                                        leading: const Icon(Icons.edit_note),
-                                        title: const Text('شراء عادي'),
-                                        subtitle: const Text(
-                                          'إدخال يدوي / شاشة الشراء المعتادة',
-                                        ),
-                                        onTap: () => Navigator.pop(
-                                          ctx,
-                                          _PurchaseFlow.normal,
-                                        ),
-                                      ),
-
-                                      ListTile(
-                                        leading: const Icon(Icons.timer),
-                                        title: const Text('جلسة شراء'),
-                                        subtitle: const Text(
-                                          'تدفق فواتير — اختر فاتورة لتأكيد الولاء',
-                                        ),
-                                        onTap: () => Navigator.pop(
-                                          ctx,
-                                          _PurchaseFlow.session,
-                                        ),
-                                      ),
-
-                                      const SizedBox(height: 8),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                          if (!context.mounted) return;
-
-                          if (flow == null) return;
-
-                          // Navigate and optionally refresh when returning
-                          bool? changed;
-
-                          if (flow == _PurchaseFlow.normal) {
-                            changed = await context.pushNamed<bool>(
-                              purchaseRoute,
-                              pathParameters: {
-                                'vcid': vcid,
-                                'customerId': c.id.toString(),
-                              },
-                            );
-                          } else {
-                            changed = await context.pushNamed<bool>(
-                              purchaseSessionRoute,
-                              pathParameters: {
-                                'vcid': vcid,
-                                'customerId': c.id.toString(),
-                              },
-                            );
-                          }
-
-                          if (changed == true) {
-                            // Refresh customer/rewards after purchase/session confirmation
-                            ref
-                                .read(customerControllerProvider(vcid).notifier)
-                                .refresh();
-                          }
-                        },
-                      ),
-                      const SizedBox(height: 12),
-                      Expanded(child: rewardsList),
-                    ],
-                  );
                 }
+
+                return Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: CustomerCard(
+                        merchantName: c.merchantName,
+                        cardNumber: c.cardNumber,
+                        points: c.totalPoints,
+                        name: c.name,
+                        lastTransaction: c.lastTransaction,
+                      ),
+                    ),
+
+                    /// ✅ Direct navigation to Purchase Session
+                    FilledButton.icon(
+                      icon: const Icon(Icons.shopping_cart_checkout),
+                      label: const Text('شراء'),
+                      onPressed: () async {
+                        final changed = await context.pushNamed<bool>(
+                          purchaseSessionRoute,
+                          pathParameters: {
+                            'vcid': vcid,
+                            'customerId': c.id.toString(),
+                          },
+                        );
+
+                        if (changed == true) {
+                          ref
+                              .read(customerControllerProvider(vcid).notifier)
+                              .refresh();
+                        }
+                      },
+                    ),
+
+                    const SizedBox(height: 12),
+                    Expanded(child: rewardsList),
+                  ],
+                );
               },
             );
           },

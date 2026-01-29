@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/core/data/auth/source/local/iprofile_storage.dart';
-import 'package:walaa_pos/core/data/auth/source/local/profile_storage.dart';
-import 'package:walaa_pos/core/provider/auth_state_provider.dart';
+import 'package:wala_pos/core/data/auth/source/local/iprofile_storage.dart';
+import 'package:wala_pos/core/data/auth/source/local/profile_storage.dart';
+import 'package:wala_pos/core/provider/auth_state_provider.dart';
 import '/common/http_status/status_code.dart';
 import 'endpoint.dart';
 import '../token/itoken_service.dart';

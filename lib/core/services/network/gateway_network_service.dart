@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/core/features/settings/settings_storage.dart';
+import 'package:wala_pos/core/features/settings/settings_storage.dart';
 
 /// Reads the saved gateway IP from SharedPreferences.
 /// Expected format: "192.168.91.249"

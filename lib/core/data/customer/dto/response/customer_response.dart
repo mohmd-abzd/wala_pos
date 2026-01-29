@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:walaa_pos/features/customer/shared/customer_card.dart';
-import 'package:walaa_pos/features/customer/shared/customer_report.dart';
-import 'package:walaa_pos/features/customer/shared/reward_item.dart';
+import 'package:wala_pos/features/customer/shared/customer_card.dart';
+import 'package:wala_pos/features/customer/shared/customer_report.dart';
+import 'package:wala_pos/features/customer/shared/reward_item.dart';
 
 part 'customer_response.freezed.dart';
 part 'customer_response.g.dart';

@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:toastification/toastification.dart';
-import 'package:walaa_pos/features/transactions/presentation/controller/transactions_controller.dart';
+import 'package:wala_pos/features/transactions/presentation/controller/transactions_controller.dart';
 
 class TransactionsScreen extends ConsumerWidget {
   final int customerId;

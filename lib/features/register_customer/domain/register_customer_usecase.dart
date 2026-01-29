@@ -1,8 +1,8 @@
 // features/register_customer/domain/register_customer_use_case_provider.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/core/data/customer/repository/customer_repository.dart';
-import 'package:walaa_pos/core/data/customer/repository/icustomer_repository.dart';
-import 'package:walaa_pos/features/register_customer/shared/registration_result.dart';
+import 'package:wala_pos/core/data/customer/repository/customer_repository.dart';
+import 'package:wala_pos/core/data/customer/repository/icustomer_repository.dart';
+import 'package:wala_pos/features/register_customer/shared/registration_result.dart';
 
 /// DI: provide the use case (autoDispose like your login use case)
 final registerCustomerUseCaseProvider =

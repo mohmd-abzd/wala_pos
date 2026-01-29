@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/common/util/run_guarded.dart';
-import 'package:walaa_pos/features/register_customer/domain/register_customer_usecase.dart';
-import 'package:walaa_pos/features/register_customer/presentation/state/register_customer_state.dart';
-// import 'package:walaa_pos/features/register_customer/domain/register_customer_usecase.dart';
+import 'package:wala_pos/common/util/run_guarded.dart';
+import 'package:wala_pos/features/register_customer/domain/register_customer_usecase.dart';
+import 'package:wala_pos/features/register_customer/presentation/state/register_customer_state.dart';
+// import 'package:wala_pos/features/register_customer/domain/register_customer_usecase.dart';
 
 final registrationControllerProvider =
     AutoDisposeNotifierProvider<

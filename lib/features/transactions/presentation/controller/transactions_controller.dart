@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/common/util/run_guarded.dart';
-import 'package:walaa_pos/features/transactions/domain/refund_usecase.dart';
-import 'package:walaa_pos/features/transactions/presentation/state/transactions_state.dart';
+import 'package:wala_pos/common/util/run_guarded.dart';
+import 'package:wala_pos/features/transactions/domain/refund_usecase.dart';
+import 'package:wala_pos/features/transactions/presentation/state/transactions_state.dart';
 import '../../domain/get_transactions_usecase.dart';
 
 final transactionsControllerProvider =

@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:walaa_pos/core/data/invoice/dto/invoice.dart';
-import 'package:walaa_pos/core/services/network/gateway_network_service.dart';
+import 'package:wala_pos/core/data/invoice/dto/invoice.dart';
+import 'package:wala_pos/core/services/network/gateway_network_service.dart';
 
 part 'invoice_api.g.dart';
 

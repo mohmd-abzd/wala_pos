@@ -1,4 +1,4 @@
-# walaa_pos
+# wala_pos
 
 A new Flutter project.
 

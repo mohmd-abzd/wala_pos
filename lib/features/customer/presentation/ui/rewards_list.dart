@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:walaa_pos/core/provider/cache_manager_provider.dart';
-import 'package:walaa_pos/features/customer/presentation/controller/customer_controller.dart';
-import 'package:walaa_pos/features/customer/shared/customer_card.dart';
-import 'package:walaa_pos/features/customer/shared/reward_item.dart';
+import 'package:wala_pos/core/provider/cache_manager_provider.dart';
+import 'package:wala_pos/features/customer/presentation/controller/customer_controller.dart';
+import 'package:wala_pos/features/customer/shared/customer_card.dart';
+import 'package:wala_pos/features/customer/shared/reward_item.dart';
 
 class RewardsList extends ConsumerWidget {
   final CustomerCard c;
