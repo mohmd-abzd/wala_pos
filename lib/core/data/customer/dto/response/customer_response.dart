@@ -1,7 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wala_pos/features/customer/shared/customer_card.dart';
-import 'package:wala_pos/features/customer/shared/customer_report.dart';
-import 'package:wala_pos/features/customer/shared/reward_item.dart';
+import 'package:wala_pos/features/shared/customer_info.dart';
 
 part 'customer_response.freezed.dart';
 part 'customer_response.g.dart';
@@ -27,40 +25,16 @@ class CustomerData with _$CustomerData {
     required String cardNumber,
     required String merchantName,
     required DateTime? lastTransaction,
-    required List<RewardData> rewards,
   }) = _CustomerData;
 
   factory CustomerData.fromJson(Map<String, dynamic> json) =>
       _$CustomerDataFromJson(json);
 }
 
-@freezed
-class RewardData with _$RewardData {
-  const factory RewardData({
-    required int id,
-    required String name,
-    String? description,
-    String? imageUrl,
-    required int pointsRequired,
-    required String createdAt,
-    required bool redeemable,
-  }) = _RewardData;
-
-  factory RewardData.fromJson(Map<String, dynamic> json) =>
-      _$RewardDataFromJson(json);
-}
-
 /// --- MAPPERS: convert DTOs to your domain models ---
 
-extension CustomerResponseMapper on CustomerResponse {
-  CustomerReport toDomain() => CustomerReport(
-    customer: data.toDomain(),
-    rewards: data.rewards.map((r) => r.toDomain()).toList(),
-  );
-}
-
 extension CustomerDataMapper on CustomerData {
-  CustomerCard toDomain() => CustomerCard(
+  CustomerInfo toDomain() => CustomerInfo(
     id: id,
     name: name,
     phoneNumber: phoneNumber,
@@ -69,17 +43,5 @@ extension CustomerDataMapper on CustomerData {
     cardNumber: cardNumber,
     merchantName: merchantName,
     lastTransaction: lastTransaction,
-  );
-}
-
-extension RewardDataMapper on RewardData {
-  RewardItem toDomain() => RewardItem(
-    id: id,
-    name: name,
-    description: description,
-    imageUrl: imageUrl,
-    pointsRequired: pointsRequired,
-    createdAt: createdAt,
-    redeemable: redeemable,
   );
 }

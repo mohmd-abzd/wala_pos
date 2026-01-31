@@ -19,6 +19,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$SettingsState {
   String get systemIp => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
+  bool get acceptFirstInvoice => throw _privateConstructorUsedError;
 
   /// Create a copy of SettingsState
   /// with the given fields replaced by the non-null parameter values.
@@ -34,7 +35,7 @@ abstract class $SettingsStateCopyWith<$Res> {
     $Res Function(SettingsState) then,
   ) = _$SettingsStateCopyWithImpl<$Res, SettingsState>;
   @useResult
-  $Res call({String systemIp, bool loading});
+  $Res call({String systemIp, bool loading, bool acceptFirstInvoice});
 }
 
 /// @nodoc
@@ -51,7 +52,11 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? systemIp = null, Object? loading = null}) {
+  $Res call({
+    Object? systemIp = null,
+    Object? loading = null,
+    Object? acceptFirstInvoice = null,
+  }) {
     return _then(
       _value.copyWith(
             systemIp: null == systemIp
@@ -61,6 +66,10 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
             loading: null == loading
                 ? _value.loading
                 : loading // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            acceptFirstInvoice: null == acceptFirstInvoice
+                ? _value.acceptFirstInvoice
+                : acceptFirstInvoice // ignore: cast_nullable_to_non_nullable
                       as bool,
           )
           as $Val,
@@ -77,7 +86,7 @@ abstract class _$$SettingsStateImplCopyWith<$Res>
   ) = __$$SettingsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String systemIp, bool loading});
+  $Res call({String systemIp, bool loading, bool acceptFirstInvoice});
 }
 
 /// @nodoc
@@ -93,7 +102,11 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? systemIp = null, Object? loading = null}) {
+  $Res call({
+    Object? systemIp = null,
+    Object? loading = null,
+    Object? acceptFirstInvoice = null,
+  }) {
     return _then(
       _$SettingsStateImpl(
         systemIp: null == systemIp
@@ -104,6 +117,10 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
             ? _value.loading
             : loading // ignore: cast_nullable_to_non_nullable
                   as bool,
+        acceptFirstInvoice: null == acceptFirstInvoice
+            ? _value.acceptFirstInvoice
+            : acceptFirstInvoice // ignore: cast_nullable_to_non_nullable
+                  as bool,
       ),
     );
   }
@@ -112,7 +129,11 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$SettingsStateImpl implements _SettingsState {
-  _$SettingsStateImpl({this.systemIp = '', this.loading = true});
+  _$SettingsStateImpl({
+    this.systemIp = '',
+    this.loading = true,
+    this.acceptFirstInvoice = false,
+  });
 
   @override
   @JsonKey()
@@ -120,10 +141,13 @@ class _$SettingsStateImpl implements _SettingsState {
   @override
   @JsonKey()
   final bool loading;
+  @override
+  @JsonKey()
+  final bool acceptFirstInvoice;
 
   @override
   String toString() {
-    return 'SettingsState(systemIp: $systemIp, loading: $loading)';
+    return 'SettingsState(systemIp: $systemIp, loading: $loading, acceptFirstInvoice: $acceptFirstInvoice)';
   }
 
   @override
@@ -133,11 +157,14 @@ class _$SettingsStateImpl implements _SettingsState {
             other is _$SettingsStateImpl &&
             (identical(other.systemIp, systemIp) ||
                 other.systemIp == systemIp) &&
-            (identical(other.loading, loading) || other.loading == loading));
+            (identical(other.loading, loading) || other.loading == loading) &&
+            (identical(other.acceptFirstInvoice, acceptFirstInvoice) ||
+                other.acceptFirstInvoice == acceptFirstInvoice));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, systemIp, loading);
+  int get hashCode =>
+      Object.hash(runtimeType, systemIp, loading, acceptFirstInvoice);
 
   /// Create a copy of SettingsState
   /// with the given fields replaced by the non-null parameter values.
@@ -149,13 +176,18 @@ class _$SettingsStateImpl implements _SettingsState {
 }
 
 abstract class _SettingsState implements SettingsState {
-  factory _SettingsState({final String systemIp, final bool loading}) =
-      _$SettingsStateImpl;
+  factory _SettingsState({
+    final String systemIp,
+    final bool loading,
+    final bool acceptFirstInvoice,
+  }) = _$SettingsStateImpl;
 
   @override
   String get systemIp;
   @override
   bool get loading;
+  @override
+  bool get acceptFirstInvoice;
 
   /// Create a copy of SettingsState
   /// with the given fields replaced by the non-null parameter values.

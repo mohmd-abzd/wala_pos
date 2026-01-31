@@ -7,5 +7,6 @@ class SettingsState with _$SettingsState {
   factory SettingsState({
     @Default('') String systemIp,
     @Default(true) bool loading,
+    @Default(false) bool acceptFirstInvoice,
   }) = _SettingsState;
 }

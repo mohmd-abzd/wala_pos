@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'customer_response.dart';
+part of 'customer_info.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,186 +15,12 @@ final _privateConstructorUsedError = UnsupportedError(
   'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
 );
 
-CustomerResponse _$CustomerResponseFromJson(Map<String, dynamic> json) {
-  return _CustomerResponse.fromJson(json);
+CustomerInfo _$CustomerInfoFromJson(Map<String, dynamic> json) {
+  return _CustomerInfo.fromJson(json);
 }
 
 /// @nodoc
-mixin _$CustomerResponse {
-  @JsonKey(name: 'data')
-  CustomerData get data => throw _privateConstructorUsedError;
-
-  /// Serializes this CustomerResponse to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of CustomerResponse
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $CustomerResponseCopyWith<CustomerResponse> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $CustomerResponseCopyWith<$Res> {
-  factory $CustomerResponseCopyWith(
-    CustomerResponse value,
-    $Res Function(CustomerResponse) then,
-  ) = _$CustomerResponseCopyWithImpl<$Res, CustomerResponse>;
-  @useResult
-  $Res call({@JsonKey(name: 'data') CustomerData data});
-
-  $CustomerDataCopyWith<$Res> get data;
-}
-
-/// @nodoc
-class _$CustomerResponseCopyWithImpl<$Res, $Val extends CustomerResponse>
-    implements $CustomerResponseCopyWith<$Res> {
-  _$CustomerResponseCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of CustomerResponse
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? data = null}) {
-    return _then(
-      _value.copyWith(
-            data: null == data
-                ? _value.data
-                : data // ignore: cast_nullable_to_non_nullable
-                      as CustomerData,
-          )
-          as $Val,
-    );
-  }
-
-  /// Create a copy of CustomerResponse
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $CustomerDataCopyWith<$Res> get data {
-    return $CustomerDataCopyWith<$Res>(_value.data, (value) {
-      return _then(_value.copyWith(data: value) as $Val);
-    });
-  }
-}
-
-/// @nodoc
-abstract class _$$CustomerResponseImplCopyWith<$Res>
-    implements $CustomerResponseCopyWith<$Res> {
-  factory _$$CustomerResponseImplCopyWith(
-    _$CustomerResponseImpl value,
-    $Res Function(_$CustomerResponseImpl) then,
-  ) = __$$CustomerResponseImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({@JsonKey(name: 'data') CustomerData data});
-
-  @override
-  $CustomerDataCopyWith<$Res> get data;
-}
-
-/// @nodoc
-class __$$CustomerResponseImplCopyWithImpl<$Res>
-    extends _$CustomerResponseCopyWithImpl<$Res, _$CustomerResponseImpl>
-    implements _$$CustomerResponseImplCopyWith<$Res> {
-  __$$CustomerResponseImplCopyWithImpl(
-    _$CustomerResponseImpl _value,
-    $Res Function(_$CustomerResponseImpl) _then,
-  ) : super(_value, _then);
-
-  /// Create a copy of CustomerResponse
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? data = null}) {
-    return _then(
-      _$CustomerResponseImpl(
-        data: null == data
-            ? _value.data
-            : data // ignore: cast_nullable_to_non_nullable
-                  as CustomerData,
-      ),
-    );
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$CustomerResponseImpl implements _CustomerResponse {
-  const _$CustomerResponseImpl({@JsonKey(name: 'data') required this.data});
-
-  factory _$CustomerResponseImpl.fromJson(Map<String, dynamic> json) =>
-      _$$CustomerResponseImplFromJson(json);
-
-  @override
-  @JsonKey(name: 'data')
-  final CustomerData data;
-
-  @override
-  String toString() {
-    return 'CustomerResponse(data: $data)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CustomerResponseImpl &&
-            (identical(other.data, data) || other.data == data));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, data);
-
-  /// Create a copy of CustomerResponse
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$CustomerResponseImplCopyWith<_$CustomerResponseImpl> get copyWith =>
-      __$$CustomerResponseImplCopyWithImpl<_$CustomerResponseImpl>(
-        this,
-        _$identity,
-      );
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$CustomerResponseImplToJson(this);
-  }
-}
-
-abstract class _CustomerResponse implements CustomerResponse {
-  const factory _CustomerResponse({
-    @JsonKey(name: 'data') required final CustomerData data,
-  }) = _$CustomerResponseImpl;
-
-  factory _CustomerResponse.fromJson(Map<String, dynamic> json) =
-      _$CustomerResponseImpl.fromJson;
-
-  @override
-  @JsonKey(name: 'data')
-  CustomerData get data;
-
-  /// Create a copy of CustomerResponse
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CustomerResponseImplCopyWith<_$CustomerResponseImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-CustomerData _$CustomerDataFromJson(Map<String, dynamic> json) {
-  return _CustomerData.fromJson(json);
-}
-
-/// @nodoc
-mixin _$CustomerData {
+mixin _$CustomerInfo {
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get phoneNumber => throw _privateConstructorUsedError;
@@ -204,22 +30,22 @@ mixin _$CustomerData {
   String get merchantName => throw _privateConstructorUsedError;
   DateTime? get lastTransaction => throw _privateConstructorUsedError;
 
-  /// Serializes this CustomerData to a JSON map.
+  /// Serializes this CustomerInfo to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of CustomerData
+  /// Create a copy of CustomerInfo
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $CustomerDataCopyWith<CustomerData> get copyWith =>
+  $CustomerInfoCopyWith<CustomerInfo> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $CustomerDataCopyWith<$Res> {
-  factory $CustomerDataCopyWith(
-    CustomerData value,
-    $Res Function(CustomerData) then,
-  ) = _$CustomerDataCopyWithImpl<$Res, CustomerData>;
+abstract class $CustomerInfoCopyWith<$Res> {
+  factory $CustomerInfoCopyWith(
+    CustomerInfo value,
+    $Res Function(CustomerInfo) then,
+  ) = _$CustomerInfoCopyWithImpl<$Res, CustomerInfo>;
   @useResult
   $Res call({
     int id,
@@ -234,16 +60,16 @@ abstract class $CustomerDataCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$CustomerDataCopyWithImpl<$Res, $Val extends CustomerData>
-    implements $CustomerDataCopyWith<$Res> {
-  _$CustomerDataCopyWithImpl(this._value, this._then);
+class _$CustomerInfoCopyWithImpl<$Res, $Val extends CustomerInfo>
+    implements $CustomerInfoCopyWith<$Res> {
+  _$CustomerInfoCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of CustomerData
+  /// Create a copy of CustomerInfo
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -298,12 +124,12 @@ class _$CustomerDataCopyWithImpl<$Res, $Val extends CustomerData>
 }
 
 /// @nodoc
-abstract class _$$CustomerDataImplCopyWith<$Res>
-    implements $CustomerDataCopyWith<$Res> {
-  factory _$$CustomerDataImplCopyWith(
-    _$CustomerDataImpl value,
-    $Res Function(_$CustomerDataImpl) then,
-  ) = __$$CustomerDataImplCopyWithImpl<$Res>;
+abstract class _$$CustomerInfoImplCopyWith<$Res>
+    implements $CustomerInfoCopyWith<$Res> {
+  factory _$$CustomerInfoImplCopyWith(
+    _$CustomerInfoImpl value,
+    $Res Function(_$CustomerInfoImpl) then,
+  ) = __$$CustomerInfoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({
@@ -319,15 +145,15 @@ abstract class _$$CustomerDataImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$CustomerDataImplCopyWithImpl<$Res>
-    extends _$CustomerDataCopyWithImpl<$Res, _$CustomerDataImpl>
-    implements _$$CustomerDataImplCopyWith<$Res> {
-  __$$CustomerDataImplCopyWithImpl(
-    _$CustomerDataImpl _value,
-    $Res Function(_$CustomerDataImpl) _then,
+class __$$CustomerInfoImplCopyWithImpl<$Res>
+    extends _$CustomerInfoCopyWithImpl<$Res, _$CustomerInfoImpl>
+    implements _$$CustomerInfoImplCopyWith<$Res> {
+  __$$CustomerInfoImplCopyWithImpl(
+    _$CustomerInfoImpl _value,
+    $Res Function(_$CustomerInfoImpl) _then,
   ) : super(_value, _then);
 
-  /// Create a copy of CustomerData
+  /// Create a copy of CustomerInfo
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -342,7 +168,7 @@ class __$$CustomerDataImplCopyWithImpl<$Res>
     Object? lastTransaction = freezed,
   }) {
     return _then(
-      _$CustomerDataImpl(
+      _$CustomerInfoImpl(
         id: null == id
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
@@ -382,8 +208,8 @@ class __$$CustomerDataImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$CustomerDataImpl implements _CustomerData {
-  const _$CustomerDataImpl({
+class _$CustomerInfoImpl implements _CustomerInfo {
+  _$CustomerInfoImpl({
     required this.id,
     required this.name,
     required this.phoneNumber,
@@ -394,8 +220,8 @@ class _$CustomerDataImpl implements _CustomerData {
     required this.lastTransaction,
   });
 
-  factory _$CustomerDataImpl.fromJson(Map<String, dynamic> json) =>
-      _$$CustomerDataImplFromJson(json);
+  factory _$CustomerInfoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CustomerInfoImplFromJson(json);
 
   @override
   final int id;
@@ -416,14 +242,14 @@ class _$CustomerDataImpl implements _CustomerData {
 
   @override
   String toString() {
-    return 'CustomerData(id: $id, name: $name, phoneNumber: $phoneNumber, email: $email, totalPoints: $totalPoints, cardNumber: $cardNumber, merchantName: $merchantName, lastTransaction: $lastTransaction)';
+    return 'CustomerInfo(id: $id, name: $name, phoneNumber: $phoneNumber, email: $email, totalPoints: $totalPoints, cardNumber: $cardNumber, merchantName: $merchantName, lastTransaction: $lastTransaction)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CustomerDataImpl &&
+            other is _$CustomerInfoImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.phoneNumber, phoneNumber) ||
@@ -453,22 +279,22 @@ class _$CustomerDataImpl implements _CustomerData {
     lastTransaction,
   );
 
-  /// Create a copy of CustomerData
+  /// Create a copy of CustomerInfo
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$CustomerDataImplCopyWith<_$CustomerDataImpl> get copyWith =>
-      __$$CustomerDataImplCopyWithImpl<_$CustomerDataImpl>(this, _$identity);
+  _$$CustomerInfoImplCopyWith<_$CustomerInfoImpl> get copyWith =>
+      __$$CustomerInfoImplCopyWithImpl<_$CustomerInfoImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$CustomerDataImplToJson(this);
+    return _$$CustomerInfoImplToJson(this);
   }
 }
 
-abstract class _CustomerData implements CustomerData {
-  const factory _CustomerData({
+abstract class _CustomerInfo implements CustomerInfo {
+  factory _CustomerInfo({
     required final int id,
     required final String name,
     required final String phoneNumber,
@@ -477,10 +303,10 @@ abstract class _CustomerData implements CustomerData {
     required final String cardNumber,
     required final String merchantName,
     required final DateTime? lastTransaction,
-  }) = _$CustomerDataImpl;
+  }) = _$CustomerInfoImpl;
 
-  factory _CustomerData.fromJson(Map<String, dynamic> json) =
-      _$CustomerDataImpl.fromJson;
+  factory _CustomerInfo.fromJson(Map<String, dynamic> json) =
+      _$CustomerInfoImpl.fromJson;
 
   @override
   int get id;
@@ -499,10 +325,10 @@ abstract class _CustomerData implements CustomerData {
   @override
   DateTime? get lastTransaction;
 
-  /// Create a copy of CustomerData
+  /// Create a copy of CustomerInfo
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CustomerDataImplCopyWith<_$CustomerDataImpl> get copyWith =>
+  _$$CustomerInfoImplCopyWith<_$CustomerInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

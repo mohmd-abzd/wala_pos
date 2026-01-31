@@ -29,6 +29,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
 
+    // Pass the current state of the switch if your save method supports it
+    // Or call a specific method for IP
     await ref
         .read(settingsControllerProvider.notifier)
         .save(_controller.text.trim());
@@ -36,7 +38,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     if (!mounted) return;
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: Text('System IP saved')));
+    ).showSnackBar(const SnackBar(content: Text('Settings saved')));
   }
 
   String? _validateIp(String? value) {
@@ -48,9 +50,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(settingsControllerProvider);
 
-    // ✅ listen must be in build
     ref.listen<SettingsState>(settingsControllerProvider, (previous, next) {
-      // Only update controller when the value actually changes
       if (previous?.systemIp != next.systemIp) {
         _controller.text = next.systemIp;
       }
@@ -67,6 +67,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const Text(
+                      'Network Configuration',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
                     const Text('System IP', style: TextStyle(fontSize: 16)),
                     const SizedBox(height: 8),
                     TextFormField(
@@ -78,12 +86,37 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       keyboardType: TextInputType.text,
                       validator: _validateIp,
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 24),
+                    const Divider(),
+                    const Text(
+                      'Automation',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    // ✅ The New Switch for Auto-Accept
+                    SwitchListTile(
+                      title: const Text('Accept First Invoice Automatically'),
+                      subtitle: const Text('Bypasses the confirmation dialog'),
+                      value: state
+                          .acceptFirstInvoice, // Make sure this exists in SettingsState
+                      contentPadding: EdgeInsets.zero,
+                      onChanged: (bool value) {
+                        // Directly call a method in your notifier to update the bool
+                        ref
+                            .read(settingsControllerProvider.notifier)
+                            .updateAcceptFirstInvoice(value);
+                      },
+                    ),
+
+                    const SizedBox(height: 24),
                     Row(
                       children: [
                         ElevatedButton(
                           onPressed: state.loading ? null : _save,
-                          child: const Text('Save'),
+                          child: const Text('حفظ الاعدادات'),
                         ),
                         const SizedBox(width: 8),
                         TextButton(
@@ -101,7 +134,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                                     ),
                                   );
                                 },
-                          child: const Text('Clear'),
+                          child: const Text('Clear IP'),
                         ),
                       ],
                     ),

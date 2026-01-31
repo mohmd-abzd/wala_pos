@@ -4,7 +4,7 @@ const String laptopURL = 'http://172.20.10.14:2028/';
 
 const String serverURL = 'https://wala.ly/pos-api/';
 
-const String baseURL = serverURL;
+const String baseURL = emulatorURL;
 
 const String loginEndPoint = '/auth/login';
 const String changePasswordEndPoint = '/auth/change-password';

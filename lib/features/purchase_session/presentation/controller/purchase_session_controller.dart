@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wala_pos/common/util/run_guarded.dart';
 import 'package:wala_pos/core/data/invoice/dto/invoice.dart';
+import 'package:wala_pos/core/features/settings/settings_storage.dart';
 import 'package:wala_pos/features/purchase/domain/purchase_usecase.dart';
 import 'package:wala_pos/features/purchase_session/domain/get_latest_invoices.dart';
 import 'package:wala_pos/features/purchase_session/presentation/state/purchase_session_state.dart';
@@ -39,11 +40,16 @@ class PurchaseSessionController
   Timer? _timer;
   bool _fetching = false;
 
-  // Constant timestamp (since repo returns ALL invoices anyway)
-  static const String _allInvoicesSinceIso = '1970-01-01T00:00:00.000Z';
+  /// This timestamp is initialized once per session.
+  /// It ensures we only fetch invoices created after this screen was opened.
+  late final String _sessionStartIso;
 
   @override
   PurchaseSessionState build(PurchaseSessionKey key) {
+    // Initialize the session timestamp to "now"
+    // .toUtc() is usually safer for APIs to avoid timezone confusion
+    _sessionStartIso = DateTime.now().toUtc().toIso8601String();
+
     state = PurchaseSessionState(active: true);
 
     ref.onDispose(() {
@@ -51,8 +57,9 @@ class PurchaseSessionController
       _timer = null;
     });
 
+    // Start the polling timer
     _timer = Timer.periodic(const Duration(seconds: 1), (_) => _tick());
-    _tick(); // fetch immediately once
+    _tick(); // Initial fetch
 
     return state;
   }
@@ -61,6 +68,7 @@ class PurchaseSessionController
 
   void resume() => state = state.copyWith(active: true, error: null);
 
+  /// Called every second by the timer.
   Future<void> _tick() async {
     if (!state.active) return;
     if (_fetching) return;
@@ -74,34 +82,51 @@ class PurchaseSessionController
   }
 
   Future<void> _fetchAllInvoices() async {
-    // (Optional) show loading only on first load
-    if (state.invoices.isEmpty && !state.isLoading) {
+    if (state.invoices.isEmpty && !state.isLoading && state.error == null) {
       state = state.copyWith(isLoading: true, error: null);
     }
 
     final result = await runGuarded<List<Invoice>>(
       () => ref
           .read(getLatestInvoicesUseCaseProvider)
-          .execute(timeStamp: _allInvoicesSinceIso),
+          .execute(timeStamp: _sessionStartIso),
       (msg) => state = state.copyWith(isLoading: false, error: msg),
     );
 
     if (result == null) return;
 
-    // Keep newest on top (optional)
+    // 1. Sort newest first
     result.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
-    // Replace list (no timestamp/cursor tracking)
+    // 2. Update the state with the list
     state = state.copyWith(
       isLoading: false,
       error: null,
       invoices: result,
       lastUpdatedAt: DateTime.now(),
     );
+
+    // 3. CHECK SETTINGS FOR AUTO-SUBMIT
+    if (result.isNotEmpty && state.active) {
+      final storage = ref.read(settingsStorageProvider);
+      final bool autoAccept = await storage.readAcceptFirst();
+      print('Auto-accepting first invoice as per settings is .$autoAccept');
+
+      if (autoAccept) {
+        // Pause session immediately so we don't process more ticks while submitting
+        pause();
+
+        final firstInvoice = result.first;
+        await submit(
+          amount: firstInvoice.amount,
+          invoiceId: firstInvoice.invoiceId,
+        );
+      }
+    }
   }
 
   // -----------------------------
-  // Submit (kept here since you want it later)
+  // Submit Purchase
   // -----------------------------
   Future<void> submit({required double amount, String? invoiceId}) async {
     state = state.copyWith(
@@ -114,7 +139,7 @@ class PurchaseSessionController
       () => ref
           .read(createPurchaseUseCaseProvider)
           .execute(
-            customerId: arg.customerId, // ✅ was arg.customerId
+            customerId: arg.customerId,
             amount: amount,
             invoiceId: invoiceId,
           ),

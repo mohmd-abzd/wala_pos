@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:wala_pos/features/customer/shared/customer_card.dart';
-import 'package:wala_pos/features/customer/shared/reward_item.dart';
+import 'package:wala_pos/features/shared/customer_info.dart';
 
 part 'customer_state.freezed.dart';
 
@@ -11,7 +10,6 @@ class CustomerState with _$CustomerState {
     String? error,
     String? successMessage,
 
-    required CustomerCard customer,
-    required List<RewardItem> rewards,
+    required CustomerInfo customer,
   }) = _CustomerState;
 }

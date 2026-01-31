@@ -28,6 +28,9 @@ class CreatePurchaseUseCase {
     required double amount,
     String? invoiceId,
   }) {
+    print(
+      'Creating purchase for customerId: $customerId, amount: $amount, invoiceId: $invoiceId',
+    );
     return _repo.createPurchase(
       customerId: customerId,
       amount: amount,

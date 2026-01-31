@@ -99,33 +99,16 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
     );
 
     if (confirmed == true) {
-      _completeWith(inv);
+      // Close the session (no more new invoices)
+      _active = false;
+
+      final controller = ref.read(
+        purchaseSessionControllerProvider(_key).notifier,
+      );
+      controller.pause();
+
+      await controller.submit(amount: inv.amount, invoiceId: inv.invoiceId);
     }
-  }
-
-  void _completeWith(Invoice inv) {
-    // Close the session (no more new invoices)
-    _active = false;
-    ref.read(purchaseSessionControllerProvider(_key).notifier).pause();
-
-    // --- adjust if DTO differs ---
-    final id = inv.invoiceId;
-    final amount = inv.amount;
-    // ----------------------------
-
-    if (!mounted) return;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'تم تأكيد عملية ولاء للفاتورة $id بمبلغ ${amount.toStringAsFixed(2)} د.ل',
-        ),
-      ),
-    );
-
-    Future.delayed(const Duration(milliseconds: 350), () {
-      if (mounted) Navigator.of(context).pop(true);
-    });
   }
 
   @override
@@ -133,96 +116,80 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
     final session = ref.watch(purchaseSessionControllerProvider(_key));
     final invoices = session.invoices;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('جلسة ولاء – تدفق فواتير'),
-        actions: [
-          IconButton(
-            tooltip: _active ? 'إيقاف الجلسة' : 'استئناف الجلسة',
-            onPressed: () {
-              setState(() => _active = !_active);
+    ref.listen<String?>(
+      purchaseSessionControllerProvider(_key).select((s) => s.successMessage),
+      (_, msg) {
+        if (msg != null) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(msg)));
+          if (mounted) Navigator.of(context).pop(true);
+        }
+      },
+    );
 
-              final ctrl = ref.read(
-                purchaseSessionControllerProvider(_key).notifier,
-              );
+    return invoices.isEmpty
+        ? const _EmptyState()
+        : ListView.separated(
+            padding: const EdgeInsets.all(12),
+            itemCount: invoices.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 8),
+            itemBuilder: (_, i) {
+              final inv = invoices[i];
 
-              if (_active) {
-                ctrl.resume();
-              } else {
-                ctrl.pause();
-              }
-            },
-            icon: Icon(
-              _active ? Icons.pause_circle_filled : Icons.play_circle_fill,
-            ),
-          ),
-        ],
-      ),
-      body: invoices.isEmpty
-          ? const _EmptyState()
-          : ListView.separated(
-              padding: const EdgeInsets.all(12),
-              itemCount: invoices.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 8),
-              itemBuilder: (_, i) {
-                final inv = invoices[i];
+              // --- adjust if DTO differs ---
+              final id = inv.invoiceId;
+              final amount = inv.amount;
+              final closedAt = inv.createdAt;
+              // ----------------------------
 
-                // --- adjust if DTO differs ---
-                final id = inv.invoiceId;
-                final amount = inv.amount;
-                final closedAt = inv.createdAt;
-                // ----------------------------
-
-                return InkWell(
-                  onTap: () => _onInvoiceTap(inv),
-                  child: Card(
-                    elevation: 2,
-                    margin: EdgeInsets.zero,
-                    child: Padding(
-                      padding: const EdgeInsets.all(14),
-                      child: Row(
-                        children: [
-                          const CircleAvatar(child: Icon(Icons.receipt)),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'رقم الفاتورة: $id',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+              return InkWell(
+                onTap: () => _onInvoiceTap(inv),
+                child: Card(
+                  elevation: 2,
+                  margin: EdgeInsets.zero,
+                  child: Padding(
+                    padding: const EdgeInsets.all(14),
+                    child: Row(
+                      children: [
+                        const CircleAvatar(child: Icon(Icons.receipt)),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'رقم الفاتورة: $id',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
                                 ),
-                                const SizedBox(height: 6),
-                                Text(
-                                  'المبلغ: ${amount.toStringAsFixed(2)} د.ل',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary,
-                                  ),
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                'المبلغ: ${amount.toStringAsFixed(2)} د.ل',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'الوقت: ${TimeOfDay.fromDateTime(closedAt).format(context)}',
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                              ],
-                            ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'الوقت: ${TimeOfDay.fromDateTime(closedAt).format(context)}',
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ],
                           ),
-                          const Icon(Icons.chevron_left),
-                        ],
-                      ),
+                        ),
+                        const Icon(Icons.chevron_left),
+                      ],
                     ),
                   ),
-                );
-              },
-            ),
-    );
+                ),
+              );
+            },
+          );
   }
 }
 

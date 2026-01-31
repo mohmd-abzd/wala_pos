@@ -4,8 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:wala_pos/core/route/route_name.dart';
 import 'package:wala_pos/features/customer/presentation/controller/customer_controller.dart';
-import 'package:wala_pos/features/customer/presentation/ui/customer_card.dart';
-import 'package:wala_pos/features/customer/presentation/ui/rewards_list.dart';
+import 'package:wala_pos/features/customer/presentation/ui/customer_card_widget.dart';
+import 'package:wala_pos/features/purchase_session/presentation/ui/purchase_screen_session.dart';
+import 'package:wala_pos/features/rewards_list/presentation/ui/rewards_list_screen.dart';
 
 class CustomerScreen extends ConsumerWidget {
   const CustomerScreen({super.key, required this.vcid});
@@ -78,23 +79,9 @@ class CustomerScreen extends ConsumerWidget {
             }
 
             final c = state.customer;
-            final rewards = state.rewards;
-            final rewardsList = RewardsList(c: c, rewards: rewards, vcid: vcid);
 
             return LayoutBuilder(
               builder: (context, constraints) {
-                final isWide = constraints.maxWidth >= 900;
-
-                if (isWide) {
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(width: 340, child: const Text("Nothing here")),
-                      Expanded(child: rewardsList),
-                    ],
-                  );
-                }
-
                 return Column(
                   children: [
                     Container(
@@ -102,7 +89,7 @@ class CustomerScreen extends ConsumerWidget {
                         horizontal: 16,
                         vertical: 8,
                       ),
-                      child: CustomerCard(
+                      child: CustomerCardWidget(
                         merchantName: c.merchantName,
                         cardNumber: c.cardNumber,
                         points: c.totalPoints,
@@ -112,28 +99,60 @@ class CustomerScreen extends ConsumerWidget {
                     ),
 
                     /// ✅ Direct navigation to Purchase Session
-                    FilledButton.icon(
-                      icon: const Icon(Icons.shopping_cart_checkout),
-                      label: const Text('شراء'),
-                      onPressed: () async {
-                        final changed = await context.pushNamed<bool>(
-                          purchaseSessionRoute,
-                          pathParameters: {
-                            'vcid': vcid,
-                            'customerId': c.id.toString(),
-                          },
-                        );
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
+                          width: 200,
+                          child: FilledButton.icon(
+                            icon: const Icon(Icons.shopping_cart_checkout),
+                            label: const Text('ادخال يدوي'),
+                            onPressed: () async {
+                              final changed = await context.pushNamed<bool>(
+                                purchaseRoute,
+                                pathParameters: {
+                                  'vcid': vcid,
+                                  'customerId': c.id.toString(),
+                                },
+                              );
 
-                        if (changed == true) {
-                          ref
-                              .read(customerControllerProvider(vcid).notifier)
-                              .refresh();
-                        }
-                      },
+                              if (changed == true) {
+                                ref
+                                    .read(
+                                      customerControllerProvider(vcid).notifier,
+                                    )
+                                    .refresh();
+                              }
+                            },
+                          ),
+                        ),
+
+                        /// ✅ Direct navigation to Purchase Session
+                        SizedBox(
+                          width: 200,
+                          child: FilledButton.icon(
+                            icon: const Icon(Icons.shopping_cart_checkout),
+                            label: const Text('مكافآت'),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => RewardsListScreen(
+                                    c: state.customer,
+                                    vcid: vcid,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-
-                    const SizedBox(height: 12),
-                    Expanded(child: rewardsList),
+                    Expanded(
+                      child: PurchaseSessionScreen(
+                        vcid: vcid,
+                        customerId: c.id,
+                      ),
+                    ),
                   ],
                 );
               },

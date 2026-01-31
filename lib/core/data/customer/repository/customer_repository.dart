@@ -2,7 +2,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:wala_pos/core/data/customer/dto/request/register_customer_request.dart';
-import 'package:wala_pos/features/customer/shared/customer_report.dart';
+import 'package:wala_pos/features/shared/customer_info.dart';
 import 'package:wala_pos/core/data/customer/dto/response/customer_response.dart';
 import 'package:wala_pos/core/data/customer/repository/icustomer_repository.dart';
 import 'package:wala_pos/core/data/customer/source/remote/customer_api.dart';
@@ -25,12 +25,12 @@ class CustomerRepository
   CustomerRepository(this._api);
 
   @override
-  Future<CustomerReport> fetchCustomerReport(String vcid) async {
+  Future<CustomerInfo> fetchCustomerInfo(String vcid) async {
     try {
-      final customerResp = await _api.getCustomerReport(vcid);
+      final customerResp = await _api.getCustomerInfo(vcid);
 
       // Map DTO → domain
-      return customerResp.toDomain();
+      return customerResp.data.toDomain();
     } on DioException catch (e, st) {
       throw mapDioExceptionToFailure(e, st);
     } catch (e, st) {

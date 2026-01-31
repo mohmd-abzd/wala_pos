@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wala_pos/common/util/run_guarded.dart';
 import 'package:wala_pos/features/kiosk/customer/domain/redemption_usecase.dart';
-import 'package:wala_pos/features/customer/shared/customer_card.dart';
+import 'package:wala_pos/features/shared/customer_info.dart';
 import 'package:wala_pos/features/kiosk/customer/domain/get_customer_usecase.dart';
 import 'package:wala_pos/features/kiosk/customer/presentation/state/customer_state.dart';
 
@@ -22,7 +22,7 @@ class CustomerController
     // initial state (no UI yet)
     return CustomerState(
       isLoading: true,
-      customer: CustomerCard(
+      customer: CustomerInfo(
         id: 0,
         name: '',
         email: '',
@@ -32,7 +32,6 @@ class CustomerController
         merchantName: '',
         lastTransaction: DateTime.now(),
       ),
-      rewards: const [],
     );
   }
 
@@ -43,12 +42,7 @@ class CustomerController
     );
 
     if (report != null) {
-      state = state.copyWith(
-        isLoading: false,
-        customer: report.customer,
-        rewards: report.rewards,
-        error: null,
-      );
+      state = state.copyWith(isLoading: false, customer: report, error: null);
     }
   }
 

@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wala_pos/core/data/redemptions/repoistory/iredemptions_repository.dart';
 import 'package:wala_pos/core/data/redemptions/repoistory/redemptions_repository.dart';
-import 'package:wala_pos/features/customer/shared/create_redemption_result.dart';
+import 'package:wala_pos/features/shared/create_redemption_result.dart';
 
 /// Use-case: Create a new redemption (redeem a reward)
 class CreateRedemptionUseCase {

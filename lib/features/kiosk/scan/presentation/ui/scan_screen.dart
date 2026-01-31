@@ -150,6 +150,15 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
               ),
             ),
           ),
+
+          // Emulator shortcut (optional)
+          ElevatedButton.icon(
+            onPressed: () => _goToCustomer("8S7WymqI0p6gHz-Sph59CQ"),
+            icon: const Icon(Icons.developer_mode),
+            label: const Text("Emulator's Scan"),
+          ),
+
+          const SizedBox(height: 24),
         ],
       ),
     );

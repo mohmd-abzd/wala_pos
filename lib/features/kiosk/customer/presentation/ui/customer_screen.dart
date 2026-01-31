@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:wala_pos/features/kiosk/customer/presentation/controller/customer_controller.dart';
-import 'package:wala_pos/features/kiosk/customer/presentation/ui/customer_card.dart';
+import 'package:wala_pos/features/kiosk/customer/presentation/ui/customer_card_widget.dart';
 import 'package:wala_pos/features/kiosk/customer/presentation/ui/rewards_list.dart';
 
 class CustomerScreen extends ConsumerWidget {
@@ -76,8 +76,7 @@ class CustomerScreen extends ConsumerWidget {
             }
 
             final c = state.customer;
-            final rewards = state.rewards;
-            final rewardsList = RewardsList(c: c, rewards: rewards, vcid: vcid);
+            final rewardsList = RewardsList(c: c, vcid: vcid);
 
             return LayoutBuilder(
               builder: (context, constraints) {
@@ -100,7 +99,7 @@ class CustomerScreen extends ConsumerWidget {
                         horizontal: 16,
                         vertical: 8,
                       ),
-                      child: CustomerCard(
+                      child: CustomerInfo(
                         merchantName: c.merchantName,
                         cardNumber: c.cardNumber,
                         points: c.totalPoints,

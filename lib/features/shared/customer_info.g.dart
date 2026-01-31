@@ -1,23 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'customer_response.dart';
+part of 'customer_info.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$CustomerResponseImpl _$$CustomerResponseImplFromJson(
-  Map<String, dynamic> json,
-) => _$CustomerResponseImpl(
-  data: CustomerData.fromJson(json['data'] as Map<String, dynamic>),
-);
-
-Map<String, dynamic> _$$CustomerResponseImplToJson(
-  _$CustomerResponseImpl instance,
-) => <String, dynamic>{'data': instance.data};
-
-_$CustomerDataImpl _$$CustomerDataImplFromJson(Map<String, dynamic> json) =>
-    _$CustomerDataImpl(
+_$CustomerInfoImpl _$$CustomerInfoImplFromJson(Map<String, dynamic> json) =>
+    _$CustomerInfoImpl(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       phoneNumber: json['phoneNumber'] as String,
@@ -30,7 +20,7 @@ _$CustomerDataImpl _$$CustomerDataImplFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['lastTransaction'] as String),
     );
 
-Map<String, dynamic> _$$CustomerDataImplToJson(_$CustomerDataImpl instance) =>
+Map<String, dynamic> _$$CustomerInfoImplToJson(_$CustomerInfoImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,

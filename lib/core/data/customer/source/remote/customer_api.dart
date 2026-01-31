@@ -21,7 +21,7 @@ abstract class CustomerApi {
   factory CustomerApi(Dio dio) = _CustomerApi;
 
   @GET(customerEndPoint)
-  Future<CustomerResponse> getCustomerReport(@Path('vcid') String vcid);
+  Future<CustomerResponse> getCustomerInfo(@Path('vcid') String vcid);
 
   @POST('/customers/register') // adjust if your route differs
   @Headers(<String, dynamic>{"Content-Type": "application/json"})

@@ -13,12 +13,19 @@ class SettingsController extends StateNotifier<SettingsState> {
   SettingsController(this.ref) : super(SettingsState()) {
     load();
   }
-
   Future<void> load() async {
     state = state.copyWith(loading: true);
     final storage = ref.read(settingsStorageProvider);
+
+    // ✅ Fetch BOTH values from storage
     final ip = await storage.readSystemIp();
-    state = state.copyWith(systemIp: ip ?? '', loading: false);
+    final acceptFirst = await storage.readAcceptFirst();
+
+    state = state.copyWith(
+      systemIp: ip ?? '',
+      acceptFirstInvoice: acceptFirst, // ✅ Load the persisted boolean
+      loading: false,
+    );
   }
 
   Future<void> save(String ip) async {
@@ -33,5 +40,13 @@ class SettingsController extends StateNotifier<SettingsState> {
     final storage = ref.read(settingsStorageProvider);
     await storage.clearSystemIp();
     state = state.copyWith(systemIp: '', loading: false);
+  }
+
+  Future<void> updateAcceptFirstInvoice(bool value) async {
+    state = state.copyWith(loading: true);
+    final storage = ref.read(settingsStorageProvider);
+
+    await storage.saveAcceptFirst(value);
+    state = state.copyWith(loading: false, acceptFirstInvoice: value);
   }
 }

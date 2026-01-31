@@ -1,34 +1,41 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wala_pos/core/data/rewards/dtos/reward_response.dart';
 import 'package:wala_pos/core/provider/cache_manager_provider.dart';
-import 'package:wala_pos/features/kiosk/customer/presentation/controller/customer_controller.dart';
-import 'package:wala_pos/features/customer/shared/customer_card.dart';
-import 'package:wala_pos/features/customer/shared/reward_item.dart';
+import 'package:wala_pos/features/customer/presentation/controller/customer_controller.dart';
+import 'package:wala_pos/features/rewards_list/presentation/controller/rewards_controller.dart';
+import 'package:wala_pos/features/shared/customer_info.dart';
 
 class RewardsList extends ConsumerWidget {
-  final CustomerCard c;
-  final List<RewardItem> rewards;
+  final CustomerInfo c;
   final String vcid;
 
-  const RewardsList({
-    super.key,
-    required this.c,
-    required this.rewards,
-    required this.vcid,
-  });
+  const RewardsList({super.key, required this.c, required this.vcid});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cacheManager = ref.watch(imageCacheManagerProvider);
+    final state = ref.watch(rewardsControllerProvider);
+
+    if (state.isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    // --- Error ---
+    if (state.error != null) {
+      return Scaffold(body: Center(child: Text(state.error!)));
+    }
+
+    final rewards = state.rewards;
 
     return ListView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: rewards.length,
+      itemCount: state.rewards.length,
       itemBuilder: (ctx, i) {
         final r = rewards[i];
-        final hasEnough = c.totalPoints >= r.pointsRequired;
-        final progress = (c.totalPoints / r.pointsRequired).clamp(0.0, 1.0);
+        final hasEnough = c.totalPoints >= r.points;
+        final progress = (c.totalPoints / r.points).clamp(0.0, 1.0);
 
         return Card(
           margin: const EdgeInsets.only(bottom: 16),
@@ -60,7 +67,7 @@ class RewardsList extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      r.name,
+                      r.title,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 8),
@@ -74,7 +81,7 @@ class RewardsList extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${c.totalPoints} / ${r.pointsRequired}',
+                          '${c.totalPoints} / ${r.points}',
                           style: TextStyle(
                             color: hasEnough ? Colors.deepPurple : Colors.grey,
                             fontWeight: FontWeight.w600,
@@ -130,7 +137,7 @@ class RewardsList extends ConsumerWidget {
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(
-          r.name,
+          r.title,
           textAlign: TextAlign.center,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),

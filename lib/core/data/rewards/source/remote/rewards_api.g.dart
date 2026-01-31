@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'customer_api.dart';
+part of 'rewards_api.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'customer_api.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter
 
-class _CustomerApi implements CustomerApi {
-  _CustomerApi(this._dio, {this.baseUrl, this.errorLogger});
+class _RewardsApi implements RewardsApi {
+  _RewardsApi(this._dio, {this.baseUrl, this.errorLogger});
 
   final Dio _dio;
 
@@ -18,60 +18,25 @@ class _CustomerApi implements CustomerApi {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<CustomerResponse> getCustomerInfo(String vcid) async {
+  Future<RewardResponse> getRewards() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<CustomerResponse>(
+    final _options = _setStreamType<RewardResponse>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/customers/${vcid}',
+            '/rewards',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late CustomerResponse _value;
+    late RewardResponse _value;
     try {
-      _value = CustomerResponse.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
-  Future<RegisterCustomerResponse> registerCustomer(
-    RegisterCustomerRequest body,
-  ) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Content-Type': 'application/json'};
-    _headers.removeWhere((k, v) => v == null);
-    final _data = body;
-    final _options = _setStreamType<RegisterCustomerResponse>(
-      Options(
-            method: 'POST',
-            headers: _headers,
-            extra: _extra,
-            contentType: 'application/json',
-          )
-          .compose(
-            _dio.options,
-            '/customers/register',
-            queryParameters: queryParameters,
-            data: _data,
-          )
-          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
-    );
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late RegisterCustomerResponse _value;
-    try {
-      _value = RegisterCustomerResponse.fromJson(_result.data!);
+      _value = RewardResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
