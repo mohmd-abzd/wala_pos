@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/features/settings/settings_storage.dart';
 import '../state/settings_state.dart';
+// Adjust this import to your actual storage provider path
+import '../../../../core/features/settings/settings_storage.dart';
 
 final settingsControllerProvider =
     StateNotifierProvider.autoDispose<SettingsController, SettingsState>((ref) {
@@ -13,40 +14,48 @@ class SettingsController extends StateNotifier<SettingsState> {
   SettingsController(this.ref) : super(SettingsState()) {
     load();
   }
+
   Future<void> load() async {
     state = state.copyWith(loading: true);
     final storage = ref.read(settingsStorageProvider);
 
-    // ✅ Fetch BOTH values from storage
     final ip = await storage.readSystemIp();
     final acceptFirst = await storage.readAcceptFirst();
+    // Assuming you add these methods to your storage class:
+    final vid = await storage.readPrinterVid();
+    final pid = await storage.readPrinterPid();
 
     state = state.copyWith(
       systemIp: ip ?? '',
-      acceptFirstInvoice: acceptFirst, // ✅ Load the persisted boolean
+      acceptFirstInvoice: acceptFirst,
+      printerVendorId: vid,
+      printerProductId: pid,
       loading: false,
     );
   }
 
   Future<void> save(String ip) async {
     state = state.copyWith(loading: true);
-    final storage = ref.read(settingsStorageProvider);
-    await storage.saveSystemIp(ip);
+    await ref.read(settingsStorageProvider).saveSystemIp(ip);
     state = state.copyWith(systemIp: ip, loading: false);
   }
 
-  Future<void> clear() async {
-    state = state.copyWith(loading: true);
-    final storage = ref.read(settingsStorageProvider);
-    await storage.clearSystemIp();
-    state = state.copyWith(systemIp: '', loading: false);
+  Future<void> updateAcceptFirstInvoice(bool value) async {
+    await ref.read(settingsStorageProvider).saveAcceptFirst(value);
+    state = state.copyWith(acceptFirstInvoice: value);
   }
 
-  Future<void> updateAcceptFirstInvoice(bool value) async {
-    state = state.copyWith(loading: true);
+  Future<void> updatePrinterSettings(String vid, String pid) async {
     final storage = ref.read(settingsStorageProvider);
+    // Add these to your storage class to persist the selection
+    await storage.savePrinterVid(vid);
+    await storage.savePrinterPid(pid);
 
-    await storage.saveAcceptFirst(value);
-    state = state.copyWith(loading: false, acceptFirstInvoice: value);
+    state = state.copyWith(printerVendorId: vid, printerProductId: pid);
+  }
+
+  Future<void> clear() async {
+    await ref.read(settingsStorageProvider).clearSystemIp();
+    state = state.copyWith(systemIp: '', loading: false);
   }
 }

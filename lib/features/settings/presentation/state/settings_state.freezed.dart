@@ -20,6 +20,8 @@ mixin _$SettingsState {
   String get systemIp => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
   bool get acceptFirstInvoice => throw _privateConstructorUsedError;
+  String? get printerVendorId => throw _privateConstructorUsedError; // ✅ Added
+  String? get printerProductId => throw _privateConstructorUsedError;
 
   /// Create a copy of SettingsState
   /// with the given fields replaced by the non-null parameter values.
@@ -35,7 +37,13 @@ abstract class $SettingsStateCopyWith<$Res> {
     $Res Function(SettingsState) then,
   ) = _$SettingsStateCopyWithImpl<$Res, SettingsState>;
   @useResult
-  $Res call({String systemIp, bool loading, bool acceptFirstInvoice});
+  $Res call({
+    String systemIp,
+    bool loading,
+    bool acceptFirstInvoice,
+    String? printerVendorId,
+    String? printerProductId,
+  });
 }
 
 /// @nodoc
@@ -56,6 +64,8 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
     Object? systemIp = null,
     Object? loading = null,
     Object? acceptFirstInvoice = null,
+    Object? printerVendorId = freezed,
+    Object? printerProductId = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -71,6 +81,14 @@ class _$SettingsStateCopyWithImpl<$Res, $Val extends SettingsState>
                 ? _value.acceptFirstInvoice
                 : acceptFirstInvoice // ignore: cast_nullable_to_non_nullable
                       as bool,
+            printerVendorId: freezed == printerVendorId
+                ? _value.printerVendorId
+                : printerVendorId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            printerProductId: freezed == printerProductId
+                ? _value.printerProductId
+                : printerProductId // ignore: cast_nullable_to_non_nullable
+                      as String?,
           )
           as $Val,
     );
@@ -86,7 +104,13 @@ abstract class _$$SettingsStateImplCopyWith<$Res>
   ) = __$$SettingsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String systemIp, bool loading, bool acceptFirstInvoice});
+  $Res call({
+    String systemIp,
+    bool loading,
+    bool acceptFirstInvoice,
+    String? printerVendorId,
+    String? printerProductId,
+  });
 }
 
 /// @nodoc
@@ -106,6 +130,8 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
     Object? systemIp = null,
     Object? loading = null,
     Object? acceptFirstInvoice = null,
+    Object? printerVendorId = freezed,
+    Object? printerProductId = freezed,
   }) {
     return _then(
       _$SettingsStateImpl(
@@ -121,6 +147,14 @@ class __$$SettingsStateImplCopyWithImpl<$Res>
             ? _value.acceptFirstInvoice
             : acceptFirstInvoice // ignore: cast_nullable_to_non_nullable
                   as bool,
+        printerVendorId: freezed == printerVendorId
+            ? _value.printerVendorId
+            : printerVendorId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        printerProductId: freezed == printerProductId
+            ? _value.printerProductId
+            : printerProductId // ignore: cast_nullable_to_non_nullable
+                  as String?,
       ),
     );
   }
@@ -133,6 +167,8 @@ class _$SettingsStateImpl implements _SettingsState {
     this.systemIp = '',
     this.loading = true,
     this.acceptFirstInvoice = false,
+    this.printerVendorId,
+    this.printerProductId,
   });
 
   @override
@@ -144,10 +180,15 @@ class _$SettingsStateImpl implements _SettingsState {
   @override
   @JsonKey()
   final bool acceptFirstInvoice;
+  @override
+  final String? printerVendorId;
+  // ✅ Added
+  @override
+  final String? printerProductId;
 
   @override
   String toString() {
-    return 'SettingsState(systemIp: $systemIp, loading: $loading, acceptFirstInvoice: $acceptFirstInvoice)';
+    return 'SettingsState(systemIp: $systemIp, loading: $loading, acceptFirstInvoice: $acceptFirstInvoice, printerVendorId: $printerVendorId, printerProductId: $printerProductId)';
   }
 
   @override
@@ -159,12 +200,22 @@ class _$SettingsStateImpl implements _SettingsState {
                 other.systemIp == systemIp) &&
             (identical(other.loading, loading) || other.loading == loading) &&
             (identical(other.acceptFirstInvoice, acceptFirstInvoice) ||
-                other.acceptFirstInvoice == acceptFirstInvoice));
+                other.acceptFirstInvoice == acceptFirstInvoice) &&
+            (identical(other.printerVendorId, printerVendorId) ||
+                other.printerVendorId == printerVendorId) &&
+            (identical(other.printerProductId, printerProductId) ||
+                other.printerProductId == printerProductId));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, systemIp, loading, acceptFirstInvoice);
+  int get hashCode => Object.hash(
+    runtimeType,
+    systemIp,
+    loading,
+    acceptFirstInvoice,
+    printerVendorId,
+    printerProductId,
+  );
 
   /// Create a copy of SettingsState
   /// with the given fields replaced by the non-null parameter values.
@@ -180,6 +231,8 @@ abstract class _SettingsState implements SettingsState {
     final String systemIp,
     final bool loading,
     final bool acceptFirstInvoice,
+    final String? printerVendorId,
+    final String? printerProductId,
   }) = _$SettingsStateImpl;
 
   @override
@@ -188,6 +241,10 @@ abstract class _SettingsState implements SettingsState {
   bool get loading;
   @override
   bool get acceptFirstInvoice;
+  @override
+  String? get printerVendorId; // ✅ Added
+  @override
+  String? get printerProductId;
 
   /// Create a copy of SettingsState
   /// with the given fields replaced by the non-null parameter values.

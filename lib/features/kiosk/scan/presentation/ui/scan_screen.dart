@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pos_printer_platform_image_3/flutter_pos_printer_platform_image_3.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
 
 import 'package:wala_pos/core/route/route_name.dart';
 import 'package:wala_pos/features/kiosk/scan/presentation/controller/scan_controller.dart';
+import 'package:wala_pos/features/settings/presentation/controller/settings_controller.dart';
 import 'barcode_scanner_screen.dart'; // Import the helper screen
 
 class ScanScreen extends ConsumerStatefulWidget {
@@ -19,6 +22,55 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
   StreamSubscription? _qrSub;
   late final ProviderSubscription<String?> _errorSub;
   late final StreamSubscription<bool> _keyboardSubscription;
+
+  _printTestReceipt() async {
+    // 1. Get the printer info from your settings state
+    final settings = ref.read(settingsControllerProvider);
+
+    if (settings.printerVendorId == null || settings.printerProductId == null) {
+      _showError("يرجى إعداد الطابعة في الإعدادات أولاً");
+      return;
+    }
+
+    // 2. Connect using the saved IDs
+    final success = await PrinterManager.instance.connect(
+      type: PrinterType.usb,
+      model: UsbPrinterInput(
+        vendorId: settings.printerVendorId,
+        productId: settings.printerProductId,
+      ),
+    );
+
+    if (!success) {
+      _showError("تعذر الاتصال بالطابعة");
+      return;
+    }
+
+    // 3. Generate Receipt
+    final profile = await CapabilityProfile.load();
+    final generator = Generator(PaperSize.mm80, profile);
+    List<int> bytes = [];
+
+    bytes += generator.text(
+      "WALA POS",
+      styles: const PosStyles(
+        bold: true,
+        align: PosAlign.center,
+        height: PosTextSize.size2,
+      ),
+    );
+    bytes += generator.text("Date: ${DateTime.now().toString().split('.')[0]}");
+    bytes += generator.hr();
+    bytes += generator.text(
+      "Test Print Successful!",
+      styles: const PosStyles(align: PosAlign.center),
+    );
+    bytes += generator.feed(3);
+    bytes += generator.cut();
+
+    // 4. Send to printer
+    await PrinterManager.instance.send(type: PrinterType.usb, bytes: bytes);
+  }
 
   bool _navigating = false; // Navigation Guard
 
@@ -96,7 +148,6 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(scanControllerProvider);
-
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -150,15 +201,22 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
               ),
             ),
           ),
+          const SizedBox(height: 24),
 
           // Emulator shortcut (optional)
+          ElevatedButton.icon(
+            onPressed: () => _printTestReceipt(),
+            icon: const Icon(Icons.print),
+            label: const Text("scan printer"),
+          ),
+
+          const SizedBox(height: 24),
+
           ElevatedButton.icon(
             onPressed: () => _goToCustomer("8S7WymqI0p6gHz-Sph59CQ"),
             icon: const Icon(Icons.developer_mode),
             label: const Text("Emulator's Scan"),
           ),
-
-          const SizedBox(height: 24),
         ],
       ),
     );

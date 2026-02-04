@@ -8,5 +8,7 @@ class SettingsState with _$SettingsState {
     @Default('') String systemIp,
     @Default(true) bool loading,
     @Default(false) bool acceptFirstInvoice,
+    String? printerVendorId, // ✅ Added
+    String? printerProductId, // ✅ Added
   }) = _SettingsState;
 }

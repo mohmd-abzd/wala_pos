@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pos_printer_platform_image_3/flutter_pos_printer_platform_image_3.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../controller/settings_controller.dart';
 import '../state/settings_state.dart';
@@ -13,11 +14,14 @@ class SettingsScreen extends ConsumerStatefulWidget {
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _controller;
+  List<UsbPrinterInput> _usbDevices = []; // Removed 'final' to allow updates
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    // Scan for devices as soon as the screen opens
+    _scanDevices();
   }
 
   @override
@@ -26,24 +30,42 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     super.dispose();
   }
 
+  // Logic to fill the _usbDevices list
+  // Update your scan logic in settings_screen.dart
+  Future<void> _scanDevices() async {
+    setState(() {
+      _usbDevices.clear(); // Clear existing list before scanning
+    });
+
+    // This package uses a Stream for discovery
+    PrinterManager.instance.discovery(type: PrinterType.usb).listen((device) {
+      // Only add if it's not already in the list
+      if (!_usbDevices.any(
+        (d) => d.vendorId == device.vendorId && d.productId == device.productId,
+      )) {
+        setState(() {
+          // Cast the discovered device to UsbPrinterInput
+          _usbDevices.add(
+            UsbPrinterInput(
+              name: device.name,
+              vendorId: device.vendorId,
+              productId: device.productId,
+            ),
+          );
+        });
+      }
+    });
+  }
+
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
-
-    // Pass the current state of the switch if your save method supports it
-    // Or call a specific method for IP
     await ref
         .read(settingsControllerProvider.notifier)
         .save(_controller.text.trim());
-
     if (!mounted) return;
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(const SnackBar(content: Text('Settings saved')));
-  }
-
-  String? _validateIp(String? value) {
-    if (value == null || value.trim().isEmpty) return 'Please enter system IP';
-    return null;
   }
 
   @override
@@ -60,7 +82,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       appBar: AppBar(title: const Text('Settings')),
       body: state.loading
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
+          : SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Form(
                 key: _formKey,
@@ -75,16 +97,70 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    const Text('System IP', style: TextStyle(fontSize: 16)),
-                    const SizedBox(height: 8),
                     TextFormField(
                       controller: _controller,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: 'e.g. 192.168.1.100',
+                        labelText: 'System IP',
                       ),
-                      keyboardType: TextInputType.text,
-                      validator: _validateIp,
+                    ),
+                    const SizedBox(height: 24),
+                    const Divider(),
+                    const Text(
+                      'Printer Selection',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const Text(
+                      'Pick your printer (Avoid the camera device)',
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DropdownButtonFormField<UsbPrinterInput>(
+                            isExpanded: true,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                            ),
+                            hint: const Text("Select USB Printer"),
+                            value:
+                                _usbDevices.any(
+                                  (d) => d.vendorId == state.printerVendorId,
+                                )
+                                ? _usbDevices.firstWhere(
+                                    (d) => d.vendorId == state.printerVendorId,
+                                  )
+                                : null,
+                            items: _usbDevices.map((device) {
+                              return DropdownMenuItem(
+                                value: device,
+                                // Provide a fallback name if device.name is null
+                                child: Text(
+                                  "${device.name ?? 'Unknown USB Device'} (VID: ${device.vendorId})",
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (selected) {
+                              if (selected != null) {
+                                ref
+                                    .read(settingsControllerProvider.notifier)
+                                    .updatePrinterSettings(
+                                      selected.vendorId!,
+                                      selected.productId!,
+                                    );
+                              }
+                            },
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: _scanDevices,
+                          icon: const Icon(Icons.refresh),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 24),
                     const Divider(),
@@ -95,45 +171,26 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-
-                    // ✅ The New Switch for Auto-Accept
                     SwitchListTile(
                       title: const Text('Accept First Invoice Automatically'),
-                      subtitle: const Text('Bypasses the confirmation dialog'),
-                      value: state
-                          .acceptFirstInvoice, // Make sure this exists in SettingsState
+                      value: state.acceptFirstInvoice,
                       contentPadding: EdgeInsets.zero,
-                      onChanged: (bool value) {
-                        // Directly call a method in your notifier to update the bool
-                        ref
-                            .read(settingsControllerProvider.notifier)
-                            .updateAcceptFirstInvoice(value);
-                      },
+                      onChanged: (val) => ref
+                          .read(settingsControllerProvider.notifier)
+                          .updateAcceptFirstInvoice(val),
                     ),
-
                     const SizedBox(height: 24),
                     Row(
                       children: [
                         ElevatedButton(
-                          onPressed: state.loading ? null : _save,
+                          onPressed: _save,
                           child: const Text('حفظ الاعدادات'),
                         ),
                         const SizedBox(width: 8),
                         TextButton(
-                          onPressed: state.loading
-                              ? null
-                              : () async {
-                                  _controller.clear();
-                                  await ref
-                                      .read(settingsControllerProvider.notifier)
-                                      .clear();
-                                  if (!context.mounted) return;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('System IP cleared'),
-                                    ),
-                                  );
-                                },
+                          onPressed: () => ref
+                              .read(settingsControllerProvider.notifier)
+                              .clear(),
                           child: const Text('Clear IP'),
                         ),
                       ],

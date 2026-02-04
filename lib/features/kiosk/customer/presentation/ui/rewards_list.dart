@@ -1,10 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pos_printer_platform_image_3/flutter_pos_printer_platform_image_3.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wala_pos/core/data/rewards/dtos/reward_response.dart';
 import 'package:wala_pos/core/provider/cache_manager_provider.dart';
 import 'package:wala_pos/features/customer/presentation/controller/customer_controller.dart';
 import 'package:wala_pos/features/rewards_list/presentation/controller/rewards_controller.dart';
+import 'package:wala_pos/features/settings/presentation/controller/settings_controller.dart';
 import 'package:wala_pos/features/shared/customer_info.dart';
 
 class RewardsList extends ConsumerWidget {
@@ -19,12 +22,12 @@ class RewardsList extends ConsumerWidget {
     final state = ref.watch(rewardsControllerProvider);
 
     if (state.isLoading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      return Center(child: CircularProgressIndicator());
     }
 
     // --- Error ---
     if (state.error != null) {
-      return Scaffold(body: Center(child: Text(state.error!)));
+      return Center(child: Text(state.error!));
     }
 
     final rewards = state.rewards;
@@ -173,5 +176,68 @@ class RewardsList extends ConsumerWidget {
     await ref
         .read(customerControllerProvider(vcid).notifier)
         .redeemReward(rewardId: r.id);
+  }
+
+  // Inside RewardsList class:
+  Future<void> _printRedemptionReceipt(
+    WidgetRef ref,
+    RewardItem reward,
+    CustomerInfo customer,
+  ) async {
+    final settings = ref.read(settingsControllerProvider);
+
+    if (settings.printerVendorId == null || settings.printerProductId == null) {
+      // Optional: Show a snackbar saying printer not configured
+      return;
+    }
+
+    // 1. Connect
+    final success = await PrinterManager.instance.connect(
+      type: PrinterType.usb,
+      model: UsbPrinterInput(
+        vendorId: settings.printerVendorId,
+        productId: settings.printerProductId,
+      ),
+    );
+
+    if (!success) return;
+
+    // 2. Generate Receipt
+    final profile = await CapabilityProfile.load();
+    final generator = Generator(PaperSize.mm80, profile);
+    List<int> bytes = [];
+
+    // Title
+    bytes += generator.text(
+      "WALA POS",
+      styles: const PosStyles(
+        bold: true,
+        align: PosAlign.center,
+        height: PosTextSize.size2,
+      ),
+    );
+    bytes += generator.text(
+      "Redemption Receipt",
+      styles: const PosStyles(align: PosAlign.center),
+    );
+    bytes += generator.hr();
+
+    // Content
+    bytes += generator.text("Customer: ${customer.name}");
+    bytes += generator.text("Reward: ${reward.title}");
+    bytes += generator.text("Points Used: ${reward.points}");
+    bytes += generator.text("Date: ${DateTime.now().toString().split('.')[0]}");
+
+    bytes += generator.hr();
+    bytes += generator.text(
+      "THANK YOU",
+      styles: const PosStyles(align: PosAlign.center, bold: true),
+    );
+
+    bytes += generator.feed(3);
+    bytes += generator.cut();
+
+    // 3. Send to printer
+    await PrinterManager.instance.send(type: PrinterType.usb, bytes: bytes);
   }
 }

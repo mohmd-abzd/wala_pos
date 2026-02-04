@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "walaa_pos",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--web-browser-flag=--disable-web-security"
+            ]
+        },
+        {
+            "name": "walaa_pos (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "walaa_pos (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

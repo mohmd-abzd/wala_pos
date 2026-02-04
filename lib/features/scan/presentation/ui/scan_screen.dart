@@ -140,7 +140,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
           const Icon(Icons.qr_code, size: 200),
           const SizedBox(height: 16),
           const Text(
-            "وجّه العميل لوضع الكود نحو القارئ \n واضغط الزر الجانبي",
+            "وجّهسسسسس العميل لوضع الكود نحو القارئ \n واضغط الزر الجانبي",
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 18),
           ),

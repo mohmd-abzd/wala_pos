@@ -18,6 +18,9 @@ class InvoiceRepository with DioExceptionMapper implements IInvoiceRepository {
 
   @override
   Future<List<Invoice>> getLatestInvoice({required String timeStamp}) async {
+    print(
+      'InvoiceRepository: getLatestInvoice called with timeStamp: $timeStamp',
+    );
     try {
       final api = await _ref.read(
         invoiceApiProvider.future,
@@ -25,6 +28,7 @@ class InvoiceRepository with DioExceptionMapper implements IInvoiceRepository {
       final resp = await api
           .getLatestInvoice(timeStamp)
           .timeout(const Duration(seconds: 10));
+      print("InvoiceRepository: getLatestInvoice response: $resp");
       return resp;
     } on DioException catch (e, st) {
       throw mapDioExceptionToFailure(e, st);
